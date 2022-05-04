@@ -9,7 +9,9 @@ Links to tutorials and information used (try [web archive](https://archive.org/)
 ##### [#how_to_deploy](https://riptutorial.com/websphere-liberty/example/25243/deploying-a-simple-application-on-the-command-line)
 ##### [#mr_baeldung](https://www.baeldung.com/intro-to-servlets)
 
-## Dear diary,
+## Setting up a liberty server that works
+
+### Dear diary,
 
 I started off by adding the gradle dependency from [#ibm_basic](#ibm_basic).
 Well, too bad, it doesn't work. You also have to add the 'liberty' gradle plugin.
@@ -121,3 +123,24 @@ It is getting a bit tiring to type all those 'gradlew' commands though. Batch fi
 That's much simpler.
 
 Also, Main class is overrated.
+
+But wait! There's more! You can even remove the liberty runtime from dependencies!
+It still works! God IBM tutorial sucks :D
+
+I even tried removing more. If I touch the location of the application, however,
+it runs, but it gives massive NullPointerException. I'd say that's not good.
+
+### In summary
+
+1. Create your basic gradle project.
+2. Add 'war' plugin.
+3. Add 'liberty' plugin as described in [#gradle_plugin](#gradle_plugin).
+4. Add 'liberty' task configuration. [#ibm_gradle](#ibm_gradle) has a broken example
+   that you can update using [#gradle_plugin_deeper](#gradle_plugin_deeper).
+   The only things you need are config directory for server.xml file and bootstrap
+   application name property to war.archiveName so you can refer to it in server.xml.
+5. Create 'server.xml' in the server config directory. All it needs is 'application' tag.
+   This tag should have location attribute set to ${property you bootstrapped}.
+6. To have the application do stuff, add features & classes. [#how_to_deploy](#how_to_deploy)
+   (server.xml example) and [#mr_baeldung](#mr_baeldung) should have you covered.
+7. 'gradlew libertyRun' or 'gradlew libertyStart' (start runs in background).
