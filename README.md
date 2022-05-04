@@ -41,3 +41,32 @@ At least that makes sense, because I never did any war to begin with.
 [#gradle_plugin_deeper](#gradle_plugin_deeper) suggests the property
 is not needed when using 'war' plugin.
 Turns out to be true and all is well in the project again!
+
+The next step seems to be running 'gradlew installApps'. Except that doesn't work.
+The task 'installApps' could not be found.
+Google results for 'Task "installApps" not found in root project' also could not be found.
+Also, 'installApps' could not be found anywhere in [#gradle_plugin](#gradle_plugin) project.
+Uh oh.
+Well, let's experiment. How about 'gradlew install'?
+Ambiguous. Candidates are: 'installFeature', 'installLiberty'.
+Wait a minute, one of those is awfully familiar... let's try that.
+Well, it runs. Does it do the thing? Nobody knows.
+
+I'm really tired of your shit, [#ibm_gradle](#ibm_gradle).
+What do you mean, import your project to eclipse? I'm not using eclipse. Cmon.
+Looks like all the rest of the info which I could try to use to verify if the
+previous step worked is entirely dependent on an IDE I don't use.
+Or the nebulous phrase 'manually create a runtime and server'. OK then.
+I'll go and do that. Somehow. Bye.
+
+Let's go back to [#how_to_deploy](#how_to_deploy).
+Since we're using 'war' plugin, we can run 'gradlew war'
+which will produce a '.war' file in the build directory.
+I'd say that qualifies for step 2.
+
+Step 3 - add the application to your server! Aha.
+So it's the same type of useless information as the previous one. Good to know.
+
+Regardless, I'm starting to get the impression we're gonna something else installed
+or prepared *outside* of the project, like a virtual environment or something.
+You know, like that thing python people do. No idea how they put up with that shit.
