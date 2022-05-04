@@ -189,3 +189,9 @@ If I understand correctly, and I don't, we need a couple things running on this 
 Like, a ticketing service and authentication service. Which may come bundled, honestly.
 That only makes sense. But let's not get ahead of ourselves. Look! A guide how to install
 Kerberos server [#not_on_windows](#not_on_windows). I hate my life.
+
+Here's the thing. It feels like Kerberos is often mentioned with Windows in the same sentence.
+Well, it really isn't, but nonetheless, windows uses Kerberos somehow. Maybe I don't need
+to install it. Or maybe windows can install it for me. Let's just hope that won't be
+a broken ass installation that will not configurable or something. Regardless, I will
+pursue this quest tomorrow.
