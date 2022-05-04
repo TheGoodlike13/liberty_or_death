@@ -8,6 +8,7 @@ Links to tutorials and information used (try [web archive](https://archive.org/)
 ##### [#gradle_plugin_deeper](https://github.com/OpenLiberty/ci.gradle/blob/main/docs/libertyExtensions.md)
 ##### [#how_to_deploy](https://riptutorial.com/websphere-liberty/example/25243/deploying-a-simple-application-on-the-command-line)
 ##### [#mr_baeldung](https://www.baeldung.com/intro-to-servlets)
+##### [#spnego_sad](https://www.ibm.com/docs/en/was-liberty/base?topic=liberty-configuring-spnego-authentication-in)
 
 ## Setting up a liberty server that works
 
@@ -155,4 +156,15 @@ it runs, but it gives a massive NullPointerException. I'd say that's not good.
 
 ### If it ain't broke, then how do you know you can fix it?
 
+Let us begin with a quote from [#spnego_sad](#spnego_sad):
+"Liberty supports SPNEGO for IWA but not Kerberos and NT LAN Manager (NTLM)."
+Setting aside the fact that half of the words in it are made up or make no sense,
+I have it on good authority that SPNEGO and Kerberos works with Liberty.
+Where, do you ask, have I procured such divine knowledge? Oh, it's just **the task that
+was assigned to me**. Because **some other projects did it**.
 
+Look, it's entirely possible I've been bamboozled by my colleagues who know even less
+than I do about the subject. But regardless, that's not what you want to see when you
+open the first page about the thing you're gonna do. I'll just pretend it's a figment
+of my imagination for now, and go forward, recklessly. You know, even more recklessly
+than following IBM tutorials *apparently* is.
