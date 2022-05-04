@@ -119,3 +119,5 @@ I'll add it if I need it later.
 
 It is getting a bit tiring to type all those 'gradlew' commands though. Batch files go!
 That's much simpler.
+
+Also, Main class is overrated.
