@@ -93,3 +93,14 @@ There's some weirdly formatted text, a message you would typically expect someon
 namely 'The defaultServer server is ready to run a smarter planet.' and that's it.
 Notably missing is 'Web application available', as expected by [#how_to_deploy](#how_to_deploy).
 Maybe I shouldn't have messed with those files :(
+
+I restore the original httpEndpoint configuration, but that seems to have no effect.
+I stop with 'gradlew libertyStop' and start again to no avail.
+Looks like its time to run away! Yes, that's right! 'gradlew libertyRun' works!
+I think both of the options work, but 'start' just launches it in the background,
+whereas 'run' hooks right onto it. It only prints the info into the console if it's hooked.
+But that's just a guess. Don't take my word for it.
+
+But what's this? "The class eu.goodlike.TestServlet has a @WebServlet annotation
+but does not implement the javax.servlet.http.HttpServlet interface."
+Looks like I should've done more copy paste. Again. Be right back.

@@ -4,7 +4,7 @@
         <feature>jsp-2.3</feature>
     </featureManager>
 
-    <httpEndpoint httpsPort="8080" id="doesThisEvenMatter?"/>
+    <httpEndpoint httpPort="9080" httpsPort="9443" id="defaultHttpEndpoint"/>
 
     <application name="oh-boy-here-comes-sso" location="${appLocation}" type="war"/>
 </server>
