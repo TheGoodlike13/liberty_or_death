@@ -104,3 +104,15 @@ But that's just a guess. Don't take my word for it.
 But what's this? "The class eu.goodlike.TestServlet has a @WebServlet annotation
 but does not implement the javax.servlet.http.HttpServlet interface."
 Looks like I should've done more copy paste. Again. Be right back.
+
+I just can't stop myself from tinkering with this stuff.
+So I keep changing the server.xml file to see if it still works.
+Well, turns out it doesn't work if you use a question mark in the ID.
+Might have something to do with being part of some URL, which would make sense.
+What doesn't make sense is why does the port of the URL which point to my servlet
+ignores this configuration. What's it even for then???
+
+I remove it completely with no consequence. Next you'll tell me I didn't need JSP either???
+Thanks a lot, [#ibm_gradle](#ibm_gradle). Useless.
+I suspect that if we didn't have a servlet it might have had some use, but we do, so fuck it.
+I'll add it if I need it later.
