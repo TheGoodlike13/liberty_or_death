@@ -128,7 +128,7 @@ But wait! There's more! You can even remove the liberty runtime from dependencie
 It still works! God IBM tutorial sucks :D
 
 I even tried removing more. If I touch the location of the application, however,
-it runs, but it gives massive NullPointerException. I'd say that's not good.
+it runs, but it gives a massive NullPointerException. I'd say that's not good.
 
 ### In summary
 
