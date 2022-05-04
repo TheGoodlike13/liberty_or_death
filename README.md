@@ -15,6 +15,9 @@ Links to tutorials and information used (try [web archive](https://archive.org/)
 
 I didn't know shit, so I google'd some stuff and found some of the links above.
 Others, well, I found them along the way.
+Before getting started, I copied over a gradle setup from a different personal project
+and cleaned it up. This took some effort because things never work quite out of the box
+with old software, but with some finessing, I was able to get gradle 6.9.2 to work.
 
 I started off by adding the gradle dependency from [#ibm_basic](#ibm_basic).
 Well, too bad, it doesn't work. You also have to add the 'liberty' gradle plugin.
