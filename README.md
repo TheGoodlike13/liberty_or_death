@@ -13,7 +13,7 @@ Links to tutorials and information used (try [web archive](https://archive.org/)
 
 ### Dear diary,
 
-I didn't know shit, so I google some stuff and found some of the links above.
+I didn't know shit, so I google'd some stuff and found some of the links above.
 Others, well, I found them along the way.
 
 I started off by adding the gradle dependency from [#ibm_basic](#ibm_basic).
