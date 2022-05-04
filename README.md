@@ -13,6 +13,9 @@ Links to tutorials and information used (try [web archive](https://archive.org/)
 
 ### Dear diary,
 
+I didn't know shit, so I google some stuff and found some of the links above.
+Others, well, I found them along the way.
+
 I started off by adding the gradle dependency from [#ibm_basic](#ibm_basic).
 Well, too bad, it doesn't work. You also have to add the 'liberty' gradle plugin.
 Thankfully, at least the instructions in [#gradle_plugin](#gradle_plugin) work.
@@ -144,3 +147,9 @@ it runs, but it gives a massive NullPointerException. I'd say that's not good.
 6. To have the application do stuff, add features & classes. [#how_to_deploy](#how_to_deploy)
    (server.xml example) and [#mr_baeldung](#mr_baeldung) should have you covered.
 7. 'gradlew libertyRun' or 'gradlew libertyStart' ('start' runs in background).
+
+## The journey to authentication
+
+### If it ain't broke, then how do you know you can fix it?
+
+
