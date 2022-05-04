@@ -157,7 +157,8 @@ it runs, but it gives a massive NullPointerException. I'd say that's not good.
 ### If it ain't broke, then how do you know you can fix it?
 
 Let us begin with a quote from [#spnego_sad](#spnego_sad):
-"Liberty supports SPNEGO for IWA but not Kerberos and NT LAN Manager (NTLM)."
+"Liberty **supports** SPNEGO for IWA but **not Kerberos** and NT LAN Manager (NTLM)."
+Emphasis mine.
 Setting aside the fact that half of the words in it are made up or make no sense,
 I have it on good authority that SPNEGO and Kerberos works with Liberty.
 Where, do you ask, have I procured such divine knowledge? Oh, it's just **the task that
