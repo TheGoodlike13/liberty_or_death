@@ -83,7 +83,7 @@ What can I say. Engineering works in mysterious ways.
 Time to proceed onwards with step 4. We're on [#how_to_deploy](#how_to_deploy) if you're lost.
 I add the servlet feature to the server.xml file.
 
-Step 5. Run the server. I don't trust this page anymore, so I'll refer to
+Step 5. Start the server. I don't trust this page anymore, so I'll refer to
 [#gradle_plugin](#gradle_plugin) instead. That's where all the cool kids look for documentation.
 I'm a bit perplexed, as there seems to be a difference between 'running' and 'starting'.
 Let's try to use the specific wording from the guide and run 'gradlew libertyStart'.
