@@ -9,6 +9,8 @@ Links to tutorials and information used (try [web archive](https://archive.org/)
 ##### [#how_to_deploy](https://riptutorial.com/websphere-liberty/example/25243/deploying-a-simple-application-on-the-command-line)
 ##### [#mr_baeldung](https://www.baeldung.com/intro-to-servlets)
 ##### [#spnego_sad](https://www.ibm.com/docs/en/was-liberty/base?topic=liberty-configuring-spnego-authentication-in)
+##### [#mad-dog](https://www.techtarget.com/searchsecurity/definition/Kerberos)
+##### [#not-on-windows](https://www2.microstrategy.com/producthelp/Current/InstallConfig/en-us/Content/installing_kerberos_authentication_service.htm)
 
 ## Setting up a liberty server that works
 
@@ -173,3 +175,17 @@ than following IBM tutorials *apparently* is.
 It doesn't help that there are not one, but **TWO** bloody links that say "Kerberos"
 under the "SPNEGO" subsection, on the left. This is just a gift that keeps on giving,
 isn't it.
+
+The first step asks us to create a *Kerberos* service principal name, SPN for short.
+Normally I don't like acronyms, but in this case I don't understand the meaning of
+the full words anyway, so I guess it doesn't really matter, does it.
+In any case, this mean we need Kerberos next! Let's step away from IBM for a moment, then.
+
+Well, well, well! Turns out Kerberos isn't a *thing*, it's a protocol! In other words,
+it's a bunch of things. Each with their own acronym and stuff. If you do not value your life
+you are free to go read up on it at [#mad_dog](#mad_dog).
+
+If I understand correctly, and I don't, we need a couple things running on this here machine.
+Like, a ticketing service and authentication service. Which may come bundled, honestly.
+That only makes sense. But let's not get ahead of ourselves. Look! A guide how to install
+Kerberos server [#not_on_windows](#not_on_windows). I hate my life.
