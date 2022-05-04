@@ -9,8 +9,8 @@ Links to tutorials and information used (try [web archive](https://archive.org/)
 ##### [#how_to_deploy](https://riptutorial.com/websphere-liberty/example/25243/deploying-a-simple-application-on-the-command-line)
 ##### [#mr_baeldung](https://www.baeldung.com/intro-to-servlets)
 ##### [#spnego_sad](https://www.ibm.com/docs/en/was-liberty/base?topic=liberty-configuring-spnego-authentication-in)
-##### [#mad-dog](https://www.techtarget.com/searchsecurity/definition/Kerberos)
-##### [#not-on-windows](https://www2.microstrategy.com/producthelp/Current/InstallConfig/en-us/Content/installing_kerberos_authentication_service.htm)
+##### [#mad_dog](https://www.techtarget.com/searchsecurity/definition/Kerberos)
+##### [#not_on_windows](https://www2.microstrategy.com/producthelp/Current/InstallConfig/en-us/Content/installing_kerberos_authentication_service.htm)
 
 ## Setting up a liberty server that works
 
