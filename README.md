@@ -143,4 +143,4 @@ it runs, but it gives massive NullPointerException. I'd say that's not good.
    This tag should have location attribute set to ${property you bootstrapped}.
 6. To have the application do stuff, add features & classes. [#how_to_deploy](#how_to_deploy)
    (server.xml example) and [#mr_baeldung](#mr_baeldung) should have you covered.
-7. 'gradlew libertyRun' or 'gradlew libertyStart' (start runs in background).
+7. 'gradlew libertyRun' or 'gradlew libertyStart' ('start' runs in background).
