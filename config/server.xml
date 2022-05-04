@@ -1,0 +1,9 @@
+<server>
+    <featureManager>
+        <feature>jsp-2.3</feature>
+    </featureManager>
+
+    <httpEndpoint httpsPort="8080" id="doesThisEvenMatter?"/>
+
+    <application name="oh-boy-here-comes-sso" location="${appLocation}" type="war"/>
+</server>
