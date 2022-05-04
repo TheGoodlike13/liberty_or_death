@@ -168,3 +168,7 @@ than I do about the subject. But regardless, that's not what you want to see whe
 open the first page about the thing you're gonna do. I'll just pretend it's a figment
 of my imagination for now, and go forward, recklessly. You know, even more recklessly
 than following IBM tutorials *apparently* is.
+
+It doesn't help that there are not one, but **TWO** bloody links that say "Kerberos"
+under the "SPNEGO" subsection, on the left. This is just a gift that keeps on giving,
+isn't it.
