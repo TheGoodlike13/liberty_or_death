@@ -1,0 +1,115 @@
+import java.nio.file.Files
+import java.nio.file.StandardCopyOption
+
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath ('io.openliberty.tools:liberty-ant-tasks:1.9.7')
+        classpath ('io.openliberty.tools:ci.common:1.8.13')
+    }
+}
+
+plugins {
+    id 'java'
+    id 'idea'
+    id 'io.openliberty.tools.gradle.Liberty' version '3.1.2'
+
+    // requires compatible gradle version
+    id 'com.github.ben-manes.versions' version '0.42.0'
+}
+
+dependencies {
+    libertyRuntime group: 'com.ibm.websphere.appserver.runtime', name: 'wlp-kernel', version: '22.0.0.4'
+}
+
+project.buildDir = '.build'
+def projectPath = project.rootDir.toPath()
+
+sourceSets {
+    main {
+        java {
+            srcDirs = ['src']
+        }
+        resources {
+            srcDirs = ['config']
+        }
+    }
+    test {
+        java {
+            srcDirs = ['test']
+        }
+        resources {
+            srcDirs = ['test']
+            excludes = ["**/*.java"]
+        }
+    }
+}
+
+tasks.wrapper {
+    distributionType = Wrapper.DistributionType.ALL
+    gradleVersion = '7.4.2'
+    jarFile = projectPath.resolve('.wrapper').resolve('gradle-wrapper.jar').toFile()
+}
+
+tasks.dependencyUpdates {
+    outputDir = '/.build/dependencyUpdates'
+
+    def isStable = { String version ->
+        def hasStableKeyword = ['RELEASE', 'FINAL', 'GA'].any { key -> version.toUpperCase().contains(key) }
+        def matchesGenericStableVersion = /^[0-9,.v-]+(-r)?$/
+        return hasStableKeyword || version ==~ matchesGenericStableVersion
+    }
+
+    rejectVersionIf {
+        isStable(it.currentVersion) && !isStable(it.candidate.version)
+    }
+}
+
+// as much as I like new stuff, my IDE has not been updated since 2018 and doesn't handle new JAVA well
+// I will not update my IDE because I dislike some changes that were made in future versions
+// it is far easier to deal with the older version of the language than newer version of the IDE...
+sourceCompatibility = JavaVersion.VERSION_1_8
+
+repositories {
+    mavenCentral()
+}
+
+test {
+    useJUnitPlatform()
+}
+
+idea {
+    module {
+        excludeDirs += file('.build')
+        excludeDirs += file('.gradle')
+        excludeDirs += file('.idea')
+        excludeDirs += file('.wrapper')
+
+        inheritOutputDirs = true
+
+        iml {
+            generateTo = file('.idea')
+        }
+    }
+
+    project {
+        outputFile = new File('.idea', outputFile.getName())
+    }
+}
+
+tasks.idea {
+    doLast {
+        def iwsFile = projectPath.resolve(rootProject.name + '.iws')
+        if (Files.exists(iwsFile)) {
+            Files.move(iwsFile, iwsFile.getParent().resolve('.idea').resolve(iwsFile.getFileName()),
+                    StandardCopyOption.REPLACE_EXISTING)
+        }
+    }
+}
+
+tasks.withType(JavaCompile) {
+    options.compilerArgs << '-Xlint:unchecked' << '-Xlint:deprecation'
+    options.encoding = 'UTF-8'
+}
