@@ -1,6 +1,6 @@
 # Trying to setup SSO for a liberty application (from zero)
 
-Links to tutorials and information used:
+Links to tutorials and information used (try [web archive](https://archive.org/) if down):
 
 ##### [#ibm_basic](https://www.ibm.com/support/pages/websphere-liberty-developers)
 ##### [#ibm_gradle](https://www.ibm.com/docs/en/wasdtfe?topic=projects-developing-liberty-gradle-plug-in)
@@ -70,3 +70,26 @@ So it's the same type of useless information as the previous one. Good to know.
 Regardless, I'm starting to get the impression we're gonna something else installed
 or prepared *outside* of the project, like a virtual environment or something.
 You know, like that thing python people do. No idea how they put up with that shit.
+
+At this point, I realized that all of this 'documentation' would do anyone no good
+if the pages I refer to would stop working.
+So I decided to save them to the [web archive](https://archive.org/). Take that!
+
+As I was doing this, I scrolled past some of the documentation in [#gradle_plugin](#gradle_plugin).
+I noticed there should be a task called 'libertyCreate' which supposedly creates
+a server. It also ran and did something. Could this be the thing I needed? My god...
+What can I say. Engineering works in mysterious ways.
+
+Time to proceed onwards with step 4. We're on [#how_to_deploy](#how_to_deploy) if you're lost.
+I add the servlet feature to the server.xml file.
+
+Step 5. Run the server. I don't trust this page anymore, so I'll refer to
+[#gradle_plugin](#gradle_plugin) instead. That's where all the cool kids look for documentation.
+I'm a bit perplexed, as there seems to be a difference between 'running' and 'starting'.
+Let's try to use the specific wording from the guide and run 'gradlew libertyStart'.
+Looks like it succeeded. But I'm not sure at what.
+
+There's some weirdly formatted text, a message you would typically expect someone to put there,
+namely 'The defaultServer server is ready to run a smarter planet.' and that's it.
+Notably missing is 'Web application available', as expected by [#how_to_deploy](#how_to_deploy).
+Maybe I shouldn't have messed with those files :(
