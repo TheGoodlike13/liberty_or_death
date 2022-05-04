@@ -116,3 +116,6 @@ I remove it completely with no consequence. Next you'll tell me I didn't need JS
 Thanks a lot, [#ibm_gradle](#ibm_gradle). Useless.
 I suspect that if we didn't have a servlet it might have had some use, but we do, so fuck it.
 I'll add it if I need it later.
+
+It is getting a bit tiring to type all those 'gradlew' commands though. Batch files go!
+That's much simpler.
