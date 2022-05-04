@@ -154,7 +154,7 @@ it runs, but it gives a massive NullPointerException. I'd say that's not good.
    (server.xml example) and [#mr_baeldung](#mr_baeldung) should have you covered.
 7. 'gradlew libertyRun' or 'gradlew libertyStart' ('start' runs in background).
 
-## The journey to authentication
+## The journey to ~~authentication~~ hell
 
 ### If it ain't broke, then how do you know you can fix it?
 
