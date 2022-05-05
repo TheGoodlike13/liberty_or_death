@@ -16,6 +16,9 @@ Links to tutorials and information used (try [web archive](https://archive.org/)
 ##### [#the_void](https://serverfault.com/questions/561536/setup-kerberos-on-windows-7)
 ##### [#ubuntu_tryhard](https://ubuntu.com/blog/how-to-upgrade-from-windows-7-to-ubuntu-installation)
 ##### [#black_ubuntu](https://forums.virtualbox.org/viewtopic.php?t=98281)
+##### [#vm_list](https://www.parallels.com/tips/virtualbox/alternative/)
+##### [#vm_ubuntus](https://www.blackdown.org/best-linux-distros-for-virtualbox/)
+##### [#dynasty_warriors](https://lubuntu.net/)
 
 ## Setting up a liberty server that works
 
@@ -362,3 +365,27 @@ What about KB947821 update? Bupkis. All 1GB of useless junk that gets stuck in
 
 I can't be the only person thinking this now: we really need a second opinion.
 That's right! Let's try a different VM software and see if we get similar results!
+
+First on the [#vm_list](#vm_list) is VMware Workstation Player. Latest version doesn't work.
+Well, it might work somewhere, but this is Windows 7. It needs Windows 8.
+Why would you need something that's consigned to forgotten history? Nobody knows.
+
+How about a previous version? Well, the earliest they offer is 16.0.0, and it also
+requires Windows 8. Hurray.
+
+Any older versions? Definitely doesn't seem like it. But I did stumble upon this
+[page](https://docs.vmware.com/en/VMware-Workstation-Player/15/rn/player-15-release-notes.html).
+It's an old feature page which had an uncanny part referring to, and I quote,
+"New Guest operating systems support" followed by a list containing "Ubuntu 18.04".
+It strikes me that I've been trying to get the LATEST ubuntu to launch as VM, but
+what if some weird shenanigan is preventing that from working? I mean, at some point
+I would've gone and tried a different version of linux, so I guess this is as good
+an excuse as any.
+
+On a whim I decided to try googling for "best ubuntu for VM", which led me to
+[#vm_ubuntus](#vm_ubuntus) and the glorious top leader [#dynasty_warriors](#dynasty_warriors)
+ubuntu version. What could possibly go more wrong than it already has?
+
+Well, for starters, the link to the download of the latest version juuuuuust might
+respond with HTTP404. For no reason. Great start! Is there anything in this world left
+that just works, for goodness sake???
