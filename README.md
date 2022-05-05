@@ -11,6 +11,7 @@ Links to tutorials and information used (try [web archive](https://archive.org/)
 ##### [#spnego_sad](https://www.ibm.com/docs/en/was-liberty/base?topic=liberty-configuring-spnego-authentication-in)
 ##### [#mad_dog](https://www.techtarget.com/searchsecurity/definition/Kerberos)
 ##### [#not_on_windows](https://www2.microstrategy.com/producthelp/Current/InstallConfig/en-us/Content/installing_kerberos_authentication_service.htm)
+##### [#i_dont_wanna_go_back_to_university](https://uit.stanford.edu/service/ess/pc/docs/kerberos)
 
 ## Setting up a liberty server that works
 
@@ -198,5 +199,16 @@ pursue this quest tomorrow.
 
 I start the next day by shaving my massive beard and busting out some fried bread.
 Now you know it's serious, you know it's personal.
+
+On the installation front, we have [#i_dont_wanna_go_back_to_university](#i_dont_wanna_go_back_to_university)
+which, with my admittedly limited knowledge, looks like a package installation for
+specifically that university's version of Kerberos. Whatever that even means.
+
+It looks like it has nothing to do with the server side of things, instead it's
+somehow the client side of things. Usually when you have a protocol, you don't NEED
+a client. Like, imagine needing a client to send HTTP requests. And I know, I know,
+everyone uses a browser, which technically is a client, but that's for convenience.
+All I'm asking here for is some honesty about what exactly is it that you're asking
+me or any other poor person to install.
 
 
