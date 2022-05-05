@@ -15,6 +15,7 @@ Links to tutorials and information used (try [web archive](https://archive.org/)
 ##### [#ibm_kerberos](https://www.ibm.com/docs/en/sgklm/4.1.1?topic=server-configuring-kerberos-stand-alone-windows)
 ##### [#the_void](https://serverfault.com/questions/561536/setup-kerberos-on-windows-7)
 ##### [#ubuntu_tryhard](https://ubuntu.com/blog/how-to-upgrade-from-windows-7-to-ubuntu-installation)
+##### [#black_ubuntu](https://forums.virtualbox.org/viewtopic.php?t=98281)
 
 ## Setting up a liberty server that works
 
@@ -324,3 +325,40 @@ This time the virtual machine launches successfully. BUT! Not so fast! It asks m
 to select a boot option, and I select "Try or install Ubuntu". Then it leaves me with
 a black console screen. That feels like the opposite of trying or installing Ubuntu,
 doesn't it? Ugh.
+
+Time to try some of the things suggest by [#black_ubuntu](#black_ubuntu)!
+Setting the OS to 64-bit and giving it 128 MB VRAM? No dice.
+
+What if we raise the RAM to 8GB and give it an extra processor? That's illegal!
+Or at least invalid. Some other option has to be enabled, a notification says.
+I/O APIC. Not quite epic, I see. Well, does it work? No.
+
+Turn ON accelerate 3D graphics, despite the comment saying "no, don't!" No effect.
+
+Logs just kinda stop after I get the install selection. Nothing happens, until I shut it down.
+
+I try every option under the sun. No effect. Time to change the approach. If everything is
+failing, then maybe the option I am choosing is wrong!
+
+Ubuntu (safe graphics) does not work.
+OEM install (for manufacturers) does not work.
+Test memory... uh... well it gives me something. It starts running something that looks like...
+like a... like a... test! Imagine that.
+
+I ran memtest86 for 20 minutes. Nothing.
+
+There's some hint that some windows feature might be enabled, called Hyper-V that's
+stealing the glory of VM. I can't find anything in the logs to indicate that, but hey,
+might as well grasp at straws.
+
+And straws they are, as I can't even SEE the features as expected in control panel.
+I get a blank box. The fix from [windows tips](https://www.wintips.org/fix-windows-features-list-blank-or-empty-windows-7/)
+doesn't work. Well, the first one. I suppose there's 2 more?
+
+SFC /SCANNOW found no problems in safe mode! Woweeeeeee!
+
+What about KB947821 update? Bupkis. All 1GB of useless junk that gets stuck in
+"initializing" stage. With no good way to fix it. Nothing I'm about to do.
+
+I can't be the only person thinking this now: we really need a second opinion.
+That's right! Let's try a different VM software and see if we get similar results!
