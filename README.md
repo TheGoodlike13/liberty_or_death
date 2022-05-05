@@ -193,5 +193,10 @@ Kerberos server [#not_on_windows](#not_on_windows). I hate my life.
 Here's the thing. It feels like Kerberos is often mentioned with Windows in the same sentence.
 Well, it really isn't, but nonetheless, windows uses Kerberos somehow. Maybe I don't need
 to install it. Or maybe windows can install it for me. Let's just hope that won't be
-a broken ass installation that will not configurable or something. Regardless, I will
+a broken ass installation that will not be configurable or something. Regardless, I will
 pursue this quest tomorrow.
+
+I start the next day by shaving my massive beard and busting out some fried bread.
+Now you know it's serious, you know it's personal.
+
+
