@@ -235,6 +235,17 @@ because of the OS of the machine the Kerberos server is running on.
 And ultimately, that's the goal of this whole shebang.
 I do hope we can get away with not running multiple VMs though...
 
+### Virtual Machine Arc
+
+*cue the music, you know the one*
+
+Last time, Goodlike finally succeeded in defeating Libertto in the grand martial tournament.
+But before he could receive his award, a three-headed dog alien snatched it from right
+under his nose.
+To defeat this new menace, Goodlike will have to train in the Virtual Machine Chamber,
+which eats away at all the time that it takes to get inside it before you even notice.
+Let us begin this episode of Dragon Ball VM with a flashback.
+
 I vaguely recall having no luck whatsoever with running a VM on this computor over here.
 And when I don't have luck with something, I purge it from existence.
 Therefore we must start from the beginning. Again. I found this website:
@@ -286,3 +297,30 @@ has successfully prevented any issues in the few remaining cases.
 
 The point of this aside is, great, now something might fuck up my network.
 I just love installing shit that can fuck up my network. Lovely.
+
+Installation has succeeded, so far. I'm following the steps. Unfortunately they are not
+specific enough. For example, when creating a virtual hard drive, you actually have
+3 options. VDI, VHD and VMDK. I guess I'll just stick to defaults and see what happens.
+
+Dynamically allocated! 10 GB! 1GB RAM! Let's go!
+
+It seems that the optical drive was already created by default. Huh.
+I can't seem to find a way to select the Ubuntu ISO, so I just start the machine.
+
+Immediately it tells me to select the thing to put into a drive. Good boy!
+Now that's more like it! I keep clicking add buttons until I can select it in files.
+
+Aaaand it crashes. Immediately. VT-x is disabled in the BIOS for all CPU modes.
+Sounds pretty familiar, probably the thing that prevented me from doing the VM
+thing before. But let's keep going.
+
+[Stackoverflow](https://stackoverflow.com/questions/33304393/vt-x-is-disabled-in-the-bios-for-both-all-cpu-modes-verr-vmx-msr-all-vmx-disabl)
+graciously provides an answer that actually works too this time!
+Suspicious... if it's as easy as enabling some option in BIOS that has "virtualization"
+written next to it, sounds like a lot less than it would take to stop me from
+trying it... hmm...
+
+This time the virtual machine launches successfully. BUT! Not so fast! It asks me
+to select a boot option, and I select "Try or install Ubuntu". Then it leaves me with
+a black console screen. That feels like the opposite of trying or installing Ubuntu,
+doesn't it? Ugh.
