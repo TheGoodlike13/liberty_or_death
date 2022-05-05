@@ -97,7 +97,7 @@ So I decided to save them to the [web archive](https://archive.org/). Take that!
 As I was doing this, I scrolled past some of the documentation in [#gradle_plugin](#gradle_plugin).
 I noticed there should be a task called 'libertyCreate' which supposedly creates
 a server. It also ran and did something. Could this be the thing I needed? My god...
-What can I say. Engineering works in mysterious ways.
+What can I say. Software engineering works in mysterious ways.
 
 Time to proceed onwards with step 4. We're on [#how_to_deploy](#how_to_deploy) if you're lost.
 I add the servlet feature to the server.xml file.
@@ -128,7 +128,7 @@ I just can't stop myself from tinkering with this stuff.
 So I keep changing the server.xml file to see if it still works.
 Well, turns out it doesn't work if you use a question mark in the ID.
 Might have something to do with being part of some URL, which would make sense.
-What doesn't make sense is why does the port of the URL which point to my servlet
+What doesn't make sense is why does the port of the URL which points to my servlet
 ignores this configuration. What's it even for then???
 
 I remove it completely with no consequence. Next you'll tell me I didn't need JSP either???
@@ -137,15 +137,14 @@ I suspect that if we didn't have a servlet it might have had some use, but we do
 I'll add it if I need it later.
 
 It is getting a bit tiring to type all those 'gradlew' commands though. Batch files go!
-That's much simpler.
-
-Also, Main class is overrated.
+That's much simpler. Also, Main class is overrated.
 
 But wait! There's more! You can even remove the liberty runtime from dependencies!
 It still works! God IBM tutorial sucks :D
 
-I even tried removing more. If I touch the location of the application, however,
-it runs, but it gives a massive NullPointerException. I'd say that's not good.
+I tried to remove even more configuration. However, if I touch the location of
+the application, I can get it to run, but it produces a massive NullPointerException.
+I'd say that's not good.
 
 ### In summary
 
@@ -187,7 +186,7 @@ isn't it.
 The first step asks us to create a *Kerberos* service principal name, SPN for short.
 Normally I don't like acronyms, but in this case I don't understand the meaning of
 the full words anyway, so I guess it doesn't really matter, does it.
-In any case, this mean we need Kerberos next! Let's step away from IBM for a moment, then.
+In any case, this means we need Kerberos next! Let's step away from IBM for a moment, then.
 
 Well, well, well! Turns out Kerberos isn't a *thing*, it's a protocol! In other words,
 it's a bunch of things. Each with their own acronym and stuff. If you do not value your life
@@ -259,8 +258,8 @@ offer advice on how to run it on a VM. That sounds good enough.
 
 As an aside, my download hard-drive (so, the hard-drive where downloads go by default)
 is getting quite full. All those backup youtube videos downloaded with youtube-dl are
-starting to take tool, if you catch my meaning. Thankfully it's just about enough to
-fit the latest ubuntu ISO. Hurray!
+starting to take a toll, if you catch my meaning. Thankfully it's just about enough to
+fit the latest Ubuntu ISO. Hurray!
 
 [VirtualBox](https://www.virtualbox.org/wiki/Downloads) is the next step.
 Their website says something or other about only older versions supporting certain
@@ -273,7 +272,7 @@ network connection. From time to time it just refuses to consume DHCP responses.
 DHCP is, uh, I guess since it ends with 'P', a protocol? Uh, it's how your computer
 gets its IP address. You send out a DHCP message (of some kind) into the world.
 The DHCP server, I guess? It, uh, sends back a message with an IP address you can use.
-But then you have respond with an acknowledgement that you're gonna use the IP address.
+But then you have to respond with an acknowledgement that you're gonna use the IP address.
 It's something like that.
 
 This process is considered 'leasing' the IP address for a little while, so you kinda
@@ -283,9 +282,9 @@ beginning.
 
 Well my stupid network adapter tries to renew the bloody thing... but when it gets
 the response, it pretends it didn't. So it just spams the server a few times and
-gives up for that time. It repeats this procedure at intervals until the lease expires.
-Then it finally 'gets' it, restarts the process from the beginning, and now that
-it's not an extension, correctly handles it an restores the connection.
+gives up for a while. It repeats this procedure at intervals until the lease expires.
+Then it has to restart the process from the beginning, and now that it's not an extension
+of the lease, correctly handles it and restores the connection.
 Doesn't sound that bad, right?
 
 Well, setting aside spontaneous disconnections from *everything*, at some point
@@ -326,8 +325,7 @@ trying it... hmm...
 
 This time the virtual machine launches successfully. BUT! Not so fast! It asks me
 to select a boot option, and I select "Try or install Ubuntu". Then it leaves me with
-a black console screen. That feels like the opposite of trying or installing Ubuntu,
-doesn't it? Ugh.
+a black console screen. I know it's linux, but surely it can't be THAT bad? Ugh.
 
 Time to try some of the things suggest by [#black_ubuntu](#black_ubuntu)!
 Setting the OS to 64-bit and giving it 128 MB VRAM? No dice.
@@ -361,7 +359,7 @@ doesn't work. Well, the first one. I suppose there's 2 more?
 SFC /SCANNOW found no problems in safe mode! Woweeeeeee!
 
 What about KB947821 update? Bupkis. All 1GB of useless junk that gets stuck in
-"initializing" stage. With no good way to fix it. Nothing I'm about to do.
+"initializing" stage. With no good way to fix it. Nothing I'm about to bother doing, anyway.
 
 I can't be the only person thinking this now: we really need a second opinion.
 That's right! Let's try a different VM software and see if we get similar results!
@@ -377,27 +375,27 @@ Any older versions? Definitely doesn't seem like it. But I did stumble upon this
 [page](https://docs.vmware.com/en/VMware-Workstation-Player/15/rn/player-15-release-notes.html).
 It's an old feature page which had an uncanny part referring to, and I quote,
 "New Guest operating systems support" followed by a list containing "Ubuntu 18.04".
-It strikes me that I've been trying to get the LATEST ubuntu to launch as VM, but
+It strikes me that I've been trying to get the LATEST Ubuntu to launch as VM, but
 what if some weird shenanigan is preventing that from working? I mean, at some point
-I would've gone and tried a different version of linux, so I guess this is as good
+I would've gone and tried a different version of linux anyway, so I guess this is as good
 an excuse as any.
 
 On a whim I decided to try googling for "best ubuntu for VM", which led me to
 [#vm_ubuntus](#vm_ubuntus) and the glorious top leader [#dynasty_warriors](#dynasty_warriors)
-ubuntu version. What could possibly go more wrong than it already has?
+Ubuntu version. What could possibly go more wrong than it already has?
 
 Well, for starters, the link to the download of the latest version juuuuuust might
 respond with HTTP404. For no reason. Great start! Is there anything in this world left
 that just works, for goodness sake???
 
 Their older versions seem to not work either. But there's torrent links, that could work!
-But then... it doesn't! Well, technically, it did open just like the normal ubuntu.
+But then... it doesn't! Well, technically, it did open just like the normal Ubuntu.
 But it also gave me a message! "This kernel requires an x86-64 CPU, but only detected
 an i686 CPU." So it's unable to boot and tells me to use the correct kernel.
 Which is what I thought I did. But apparently, I have i686 CPU. Whatever the fuck
 that is.
 
-I don't think that what that is. There's some weirdness with how this is going.
+I don't think that's the problem. There's some weirdness with how this is going.
 Some random google search suggests that's a 32-bit architecture. I picked a 32-bit
 architecture at start, because I couldn't find 64-bit, but changed it later.
 Perhaps that change was invalid or ignored somehow? Hmm...
@@ -405,7 +403,7 @@ Perhaps that change was invalid or ignored somehow? Hmm...
 Remarkably, restarting the process and picking 64-bit from the beginning
 this time has allowed me to run Lubuntu without error (so far)!
 Following this great success I use the same exact procedure to run the newest Ubuntu
-as well. Seriously? Give me a break...
+as well. Seriously? That's all I had to do to fix it? Give me a break...
 
 Looks like stars are starting to align. Installation is proceeding smoothly, and one of
 the options even says "Use Active Directory". While I assume that's what we need for
