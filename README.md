@@ -1,6 +1,6 @@
 # Trying to setup SSO for a liberty application (from zero)
 
-Links to tutorials and information used (try [web archive](https://archive.org/) if down):
+Links to various links referred to (try [web archive](https://archive.org/) if down):
 
 ##### [#ibm_basic](https://www.ibm.com/support/pages/websphere-liberty-developers)
 ##### [#ibm_gradle](https://www.ibm.com/docs/en/wasdtfe?topic=projects-developing-liberty-gradle-plug-in)
