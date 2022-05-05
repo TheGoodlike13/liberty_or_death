@@ -14,6 +14,7 @@ Links to tutorials and information used (try [web archive](https://archive.org/)
 ##### [#i_dont_wanna_go_back_to_university](https://uit.stanford.edu/service/ess/pc/docs/kerberos)
 ##### [#ibm_kerberos](https://www.ibm.com/docs/en/sgklm/4.1.1?topic=server-configuring-kerberos-stand-alone-windows)
 ##### [#the_void](https://serverfault.com/questions/561536/setup-kerberos-on-windows-7)
+##### [#ubuntu_tryhard](https://ubuntu.com/blog/how-to-upgrade-from-windows-7-to-ubuntu-installation)
 
 ## Setting up a liberty server that works
 
@@ -233,3 +234,10 @@ I can't imagine the configuration on the liberty side would be any different
 because of the OS of the machine the Kerberos server is running on.
 And ultimately, that's the goal of this whole shebang.
 I do hope we can get away with not running multiple VMs though...
+
+I vaguely recall having no luck whatsoever with running a VM on this computor over here.
+And when I don't have luck with something, I purge it from existence.
+Therefore we must start from the beginning. Again. I found this website:
+[#ubuntu_tryhard](#ubuntu_tryhard).
+They are just obsessed with people migrating from windows 7, but they do reluctantly
+offer advice on how to run it on a VM. That sounds good enough.
