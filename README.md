@@ -257,7 +257,7 @@ They are just obsessed with people migrating from windows 7, but they do relucta
 offer advice on how to run it on a VM. That sounds good enough.
 
 As an aside, my download hard-drive (so, the hard-drive where downloads go by default)
-is getting quite full. All those backup youtube videos downloaded with [youtube-dl](https://github.com/yt-dlp/yt-dlp)
+is getting quite full. All those videos downloaded with [youtube-dl](https://github.com/yt-dlp/yt-dlp)
 are starting to take a toll, if you catch my meaning. Thankfully it's just about enough to
 fit the latest Ubuntu ISO. Hurray!
 
