@@ -241,3 +241,48 @@ Therefore we must start from the beginning. Again. I found this website:
 [#ubuntu_tryhard](#ubuntu_tryhard).
 They are just obsessed with people migrating from windows 7, but they do reluctantly
 offer advice on how to run it on a VM. That sounds good enough.
+
+As an aside, my download hard-drive (so, the hard-drive where downloads go by default)
+is getting quite full. All those backup youtube videos downloaded with youtube-dl are
+starting to take tool, if you catch my meaning. Thankfully it's just about enough to
+fit the latest ubuntu ISO. Hurray!
+
+[VirtualBox](https://www.virtualbox.org/wiki/Downloads) is the next step.
+Their website says something or other about only older versions supporting certain
+features. Well, I haven't been told anything about which features I would need or not,
+so latest version it is.
+
+Uh oh. There's some network feature that we probably need if we are to have any hope
+of using our VM as a Kerberos server. I've actually had a lot of problems with my
+network connection. From time to time it just refuses to consume DHCP responses.
+DHCP is, uh, I guess since it ends with 'P', a protocol? Uh, it's how your computer
+gets its IP address. You send out a DHCP message (of some kind) into the world.
+The DHCP server, I guess? It, uh, sends back a message with an IP address you can use.
+But then you have respond with an acknowledgement that you're gonna use the IP address.
+It's something like that.
+
+This process is considered 'leasing' the IP address for a little while, so you kinda
+have to keep pinging the server every now and then for an extension. If you don't,
+you lose your IP & the network connection drops until the process is restarted from
+beginning.
+
+Well my stupid network adapter tries to renew the bloody thing... but when it gets
+the response, it pretends it didn't. So it just spams the server a few times and
+gives up for that time. It repeats this procedure at intervals until the lease expires.
+Then it finally 'gets' it, restarts the process from the beginning, and now that
+it's not an extension, correctly handles it an restores the connection.
+Doesn't sound that bad, right?
+
+Well, setting aside spontaneous disconnections from *everything*, at some point
+the DHCP server has had enough of my adapter's shit and just stops responding altogether.
+Then the connection disappears until that server has calmed down.
+
+My process of fixing this has been along the lines of 'delete or disable everything
+related to networking that you don't need' and 'do not install anything that touches it
+or anything related to it whatsoever' and finally 'if all else fails, reset IP stack
+and restart the computer'. The first 2 steps seem to have significantly reduced the
+rate of these events. From sporadic to barely once a month, if that. The last step
+has successfully prevented any issues in the few remaining cases.
+
+The point of this aside is, great, now something might fuck up my network.
+I just love installing shit that can fuck up my network. Lovely.
