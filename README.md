@@ -12,6 +12,7 @@ Links to tutorials and information used (try [web archive](https://archive.org/)
 ##### [#mad_dog](https://www.techtarget.com/searchsecurity/definition/Kerberos)
 ##### [#not_on_windows](https://www2.microstrategy.com/producthelp/Current/InstallConfig/en-us/Content/installing_kerberos_authentication_service.htm)
 ##### [#i_dont_wanna_go_back_to_university](https://uit.stanford.edu/service/ess/pc/docs/kerberos)
+##### [#ibm_kerberos](https://www.ibm.com/docs/en/sgklm/4.1.1?topic=server-configuring-kerberos-stand-alone-windows)
 
 ## Setting up a liberty server that works
 
@@ -211,4 +212,13 @@ everyone uses a browser, which technically is a client, but that's for convenien
 All I'm asking here for is some honesty about what exactly is it that you're asking
 me or any other poor person to install.
 
+What if we look for specifically server installation? Uh oh. [#ibm_kerberos](#ibm_kerberos)
+pops up. Just to give you some perspective on what we're dealing with here. Other pages
+when sent to [web archive](https://archive.org/) just say they take a snapshot.
+Every single IBM page has never ever been snapshot. That should tell you everything
+you need to know about the travesties we're about to face here.
 
+Looking over the steps, they first ask to create an Active Directory setup.
+But just to be sure, I check further in. And of course, it's some IBM specific thing.
+"IBM Security Guardium Key Lifecycle Manager server" they call it. Well, I don't have that.
+Probably. I just have a computor. With windows. 7. NEXT!
