@@ -389,3 +389,37 @@ ubuntu version. What could possibly go more wrong than it already has?
 Well, for starters, the link to the download of the latest version juuuuuust might
 respond with HTTP404. For no reason. Great start! Is there anything in this world left
 that just works, for goodness sake???
+
+Their older versions seem to not work either. But there's torrent links, that could work!
+But then... it doesn't! Well, technically, it did open just like the normal ubuntu.
+But it also gave me a message! "This kernel requires an x86-64 CPU, but only detected
+an i686 CPU." So it's unable to boot and tells me to use the correct kernel.
+Which is what I thought I did. But apparently, I have i686 CPU. Whatever the fuck
+that is.
+
+I don't think that what that is. There's some weirdness with how this is going.
+Some random google search suggests that's a 32-bit architecture. I picked a 32-bit
+architecture at start, because I couldn't find 64-bit, but changed it later.
+Perhaps that change was invalid or ignored somehow? Hmm...
+
+Remarkably, restarting the process and picking 64-bit from the beginning
+this time has allowed me to run Lubuntu without error (so far)!
+Following this great success I use the same exact procedure to run the newest Ubuntu
+as well. Seriously? Give me a break...
+
+Looks like stars are starting to align. Installation is proceeding smoothly, and one of
+the options even says "Use Active Directory". While I assume that's what we need for
+Kerberos, I'm also gonna assume that's not what we mean by "we need it" and this is
+just some extra stuff. In any case, it's a VM, I can just make another one if I have to.
+So no Active Directory. Not yet.
+
+While it's installing I'll clean up the other VM which had half started Lubuntu.
+The truth is, I got an error half way through the installation, something about
+hard drive being too small or whatever, and I thought, maybe Ubuntu won't do this to me.
+And it didn't! Don't worry guys, I'll still seed the Lubuntu ISO. For a bit.
+
+Looks like we have a working Ubuntu. Wow. Never thought I'd see the day!
+Now the next question is, will it work enough to get Kerberos on it?
+Find out tomorrow on the next episode of Dragon Ball VM!
+
+*cue the music, you know, the other one*
