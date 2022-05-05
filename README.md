@@ -227,3 +227,9 @@ Probably. I just have a computor. With windows. 7. NEXT!
 Hey! It's my long lost brother speaking to [#the_void](#the_void)!
 Excellent to see how many resources are out there!
 There's so many it's hard to choose one from them :D
+
+Well, if we're gonna need a virtual machine, it may as well be linux.
+I can't imagine the configuration on the liberty side would be any different
+because of the OS of the machine the Kerberos server is running on.
+And ultimately, that's the goal of this whole shebang.
+I do hope we can get away with not running multiple VMs though...
