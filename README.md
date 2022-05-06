@@ -19,6 +19,7 @@ Links to various links referred to (try [web archive](https://archive.org/) if d
 ##### [#vm_list](https://www.parallels.com/tips/virtualbox/alternative/)
 ##### [#vm_ubuntus](https://www.blackdown.org/best-linux-distros-for-virtualbox/)
 ##### [#dynasty_warriors](https://lubuntu.net/)
+##### [#it_was_aliens](http://manpages.ubuntu.com/manpages/bionic/man1/alien.1p.html)
 
 ## Setting up a liberty server that works
 
@@ -467,3 +468,41 @@ Let's leverage our options here. Number one, I continue trying to follow a guide
 the very thing they suggest me I use warns me against doing. Number two, I try to follow
 the instructions of my new polite AI companion/overlord. I'm leaning towards number two,
 and it's because it has an Alien in it. At least it'll be, dunno, interesting or funny.
+
+The first page I find on [#it_was_aliens](#it_was_aliens) seems to imply its some kind of
+converter between types of packages, which I assume refers to the format in which
+applications are stored so they can be install into linux, particularly via command line.
+
+Well, why don't we try running 'alien --to-rpm <that thing with the version and stuff>'.
+Well, I'd love to, but my Ubuntu has locked the screen. Now, I remember the password,
+but it would be really annoying to constantly get locked because I tab out to check
+something elsewhere. It's a VM, who cares.
+
+[Stackoverflow](https://superuser.com/questions/155881/how-do-i-prevent-ubuntu-from-putting-my-monitor-to-sleep)
+suggests looking at the 'preferences'. What I found instead was 'settings'. Except they
+don't fit all in the screen. You see, the VM by default is in a tiny screen.
+Something like 640x480 or whatever. I guess we should at least make it widescreen before
+we continue.
+
+I right click the desktop and select display settings, which includes resolution.
+It was actually 800x600. And the lowest widescreen is... 1280x720. Quite the jump. Oh well.
+Somehow the 'x' which closes the windows is still partially offscreen, but I guess
+that's not a big issue.
+
+Interestingly enough, the screen options for locking are under the 'privacy' tab in settings.
+I suppose it makes sense, as privacy would be one, if not primary reason to lock the screen,
+but somehow I didn't make that connection logically as I was just browsing randomly.
+Anyhow, we've got ourselves a lock-less screen! Success!
+
+Unsurprisingly, our alien command doesn't work. Because alien was not installed either.
+More 'sudo apt'! But, of course, it still doesn't work.
+
+It complains about not running as 'root' and that the ownership of files might be wrong?
+I guess that's just because I didn't prefix it with sudo. You know what, I'll just
+prefix everything with sudo from now on. I'm sure that's a good and helpful idea and
+doesn't break the security model that was intended whatsoever. Well, they should've
+thought of it sooner.
+
+But the fundamental problem is the same. There is no 'krb5-server-1.10.3-10.el6_4.6.x86_64.rpm'.
+Therefore I assume we must find a new version. Maybe if I remove the version it will
+figure it out by itself? Nope. That was admittedly probably too much to ask :D
