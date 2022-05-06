@@ -20,6 +20,7 @@ Links to various links referred to (try [web archive](https://archive.org/) if d
 ##### [#vm_ubuntus](https://www.blackdown.org/best-linux-distros-for-virtualbox/)
 ##### [#dynasty_warriors](https://lubuntu.net/)
 ##### [#it_was_aliens](http://manpages.ubuntu.com/manpages/bionic/man1/alien.1p.html)
+##### [#ubuntu_kerberos](https://linuxconfig.org/how-to-install-kerberos-kdc-server-and-client-on-ubuntu-18-04)
 
 ## Setting up a liberty server that works
 
@@ -506,3 +507,55 @@ thought of it sooner.
 But the fundamental problem is the same. There is no 'krb5-server-1.10.3-10.el6_4.6.x86_64.rpm'.
 Therefore I assume we must find a new version. Maybe if I remove the version it will
 figure it out by itself? Nope. That was admittedly probably too much to ask :D
+
+Looking for something like a version, I find [#ubuntu_kerberos](#ubuntu_kerberos) instead.
+This guide seems a lot more well intentioned than the previous one AND it doesn't have
+random versions in it! Let's play along for now!
+
+I'll note that they make a really poor decision when it comes to their approach.
+If the command can be run either with administrative privilege or with 'sudo',
+why not just 'sudo' prefix all commands that need the privilege anyway?
+If you don't need 'sudo', you can just copy the command *after* sudo.
+Right now, I'm copying commands after '#'. Whether it was '#' or 'sudo' would make
+no difference to me, but it would probably be much easier to explain than a random
+symbol. Just saying.
+
+Running the install command succeeds, but we're met with an installation dialogue.
+This is somewhat different than the previous guide, which explains the difference in
+approach. I guess if you installed the package with 'rpm', you'd be manually configuring it.
+Now that I installed it via 'apt', I have to deal with whatever somebody thought
+would be a good wizard implementation for installation. At least the guide knows this
+and gives us help, even with screenshots! Very nice!
+
+I'm going to try to explain every step the way I understood it (oh boy).
+This is in the interest of perspective. And maybe even learning something!
+
+To begin, I assume that at the end of this wizard we should have a working
+Kerberos server installed. It may or may not run, but it definitely can be started.
+
+First we are asked for the default realm. Now what exactly is a realm?
+Let us speculate based on an entirely surface understanding of the question :D
+
+It seems like it's something like a common name for a grouping of services
+that run under the same authentication setup. So, like, if I had REALM1 and
+REALM2, APP1 could perhaps only be accessed under REALM1 and APP2 only under
+REALM2. And any particular user, perhaps, would only have access to REALM1 or
+REALM2. There seems to be a hierarchy for realms, along the lines of the
+hierarchy of a hostname in a URL, but who knows what that implies.
+
+The above is just a possible example of what could happen, I'm sure you can
+configure it whatever which way. If I am correct, then you have to specify
+which realm is the relevant one for the process of a specific instance of authentication.
+Then the default realm would just be a stand-in for cases where users don't
+specify one.
+
+Sounds logical enough. In our case, we will have exactly one application, exactly
+one setup for it and attempt to connect to it from exactly one client in exactly
+one particular way. Which means we can probably always use this default realm.
+That being said, it's probably not the case in actual production systems that
+there's only one realm (or maybe it is, who knows?) In any case, I will adopt
+a policy of at least trying to avoid 'default' value approach when configuring this
+just in case.
+
+For now, let's call this 'GOODLIKE.EU' by mimicking the guide. I hope I don't
+*actually* need to own a domain to make this work...
