@@ -559,3 +559,33 @@ just in case.
 
 For now, let's call this 'GOODLIKE.EU' by mimicking the guide. I hope I don't
 *actually* need to own a domain to make this work...
+
+Next up is the Kerberos server hostname. Well hold on just a cotton-pickin' minute!
+I thought we're setting up the server right now. So the hostname would just be...
+the localhost? Is it needed for someone else to be able to refer to it? It would
+really help if I'd know what was the purpose for which I'm specifying the thing
+you are asking me to specify.
+
+Well, this is just a VM. We can always start fresh again. Or, hopefully, change things
+if we get it wrong! So let's start with localhost, or maybe the IP address?
+Eh, localhost will do for now.
+
+Next is the administrative (password changing) server. I didn't even know Kerberos had that.
+I thought it has the basic server and the ticker server. Which one is the administrative then?
+Which one did we provide in the previous step then? Oh boy... well, in any case, the example
+uses the same hostname, and it's not like I'll have multiple places to put this anyway.
+Localhost again.
+
+The next thing is just an info box which informs me that this only installs the tools
+to run the server. Which is referred to as the master server. How does this fit in with
+the other servers, e.g. ticket, administrative, etc.? Who knows.
+
+It tells me that I'll need to setup a new realm later. Then why did you need the default
+one? Just in case, I guess? The command to setup is 'krb5_newrealm'.
+
+It finally tells me to read the fucking documentation in a README file found in
+'usr/share/doc/krb5-kc/' and the administration guide in the 'krb5-doc' package
+which I guess just floats somewhere in the aether. Well, OK then, I will read those.
+Maybe they will answer my questions! I will press OK for now though.
+
+Installation succeeds! Does it work? I suppose we'll have to find out next time :D
