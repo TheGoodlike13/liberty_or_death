@@ -421,3 +421,49 @@ Now the next question is, will it work enough to get Kerberos on it?
 Find out tomorrow on the next episode of Dragon Ball VM!
 
 *cue the music, you know, the other one*
+
+### Ubuntu Online
+
+Now that I'm in this whole new world of ~~fantasy~~ linux, I can start my life anew!
+A brand new day marks a brand new adventure! That being said, the guide for [#not_on_windows](#not_on_windows)
+seemed to be quite reasonable. At a glance. Perhaps all will be well.
+
+*Morgan Freeman voice*: It was not all well.
+
+By the way, on the network front, we only have minor signs of impending disaster.
+Like, websites randomly broke twice yesterday. But let's not jump to conclusions.
+That could've been anything.
+
+Well, our first hurdle is to actually open the command line on ~~linux~~ Ubuntu.
+You'd think linux would be like "here! open this! it's the thing!", but no,
+I find no reference to it on the Ubuntu start screen.
+Quick google search tells me it's CTRL + ALT + T.
+
+I'm perplexed by the first command on [#not_on_windows](#not_on_windows) because
+it seems to have very specific version information. But you know what, I've had
+enough fiddling with things along the way, I'm following this bitch to the letter.
+
+First hurdle: how to copy the damn command? It doesn't work between my PC and VM
+out of the box. Looks like some [plugin](https://superuser.com/questions/42134/how-do-i-enable-the-shared-clipboard-in-virtualbox)
+might be required. What if I just open the page in a browser inside a VM though?
+
+Success! It took a little effort to find the page, as they also have their product
+specific pages online, but I can copy the command now! Hurray! Except it doesn't work.
+
+The command uses rpm, which I assume is a client for some place that you can download from.
+Well, this fresh Ubuntu ain't got that. But at least it tells me this! And even tells me
+how to install it! 'sudo apt install rpm'. It installs without a hitch.
+So how about running the command now? It doesn't work.
+
+First thing that rpm does is immediately reprimand me for doing something I don't what it is.
+'You should use Alien instead!' Oh yeah, I'll just take it up with the guys who wrote
+the guide. I'm sure they can point me to an alien or two.
+
+While at it, turns out there is no file named 'krb5-server-1.10.3-10.el6_4.6.x86_64.rpm'.
+What a surprise, using exact version number in your guide, then removing that version,
+breaks the guide.
+
+Let's leverage our options here. Number one, I continue trying to follow a guide that
+the very thing they suggest me I use warns me against doing. Number two, I try to follow
+the instructions of my new polite AI companion/overlord. I'm leaning towards number two,
+and it's because it has an Alien in it. At least it'll be, dunno, interesting or funny.
