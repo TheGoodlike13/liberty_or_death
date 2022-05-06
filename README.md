@@ -21,6 +21,7 @@ Links to various links referred to (try [web archive](https://archive.org/) if d
 ##### [#dynasty_warriors](https://lubuntu.net/)
 ##### [#it_was_aliens](http://manpages.ubuntu.com/manpages/bionic/man1/alien.1p.html)
 ##### [#ubuntu_kerberos](https://linuxconfig.org/how-to-install-kerberos-kdc-server-and-client-on-ubuntu-18-04)
+##### [#entirely_unrelated_but_fun](https://www.youtube.com/watch?v=PwY-jVSM-f0)
 
 ## Setting up a liberty server that works
 
