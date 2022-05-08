@@ -55,8 +55,8 @@ sourceSets {
 }
 
 tasks.wrapper {
-    distributionType = Wrapper.DistributionType.ALL
-    gradleVersion = '7.4.2'
+    distributionType = Wrapper.DistributionType.BIN
+    gradleVersion = '6.9.2'
     jarFile = projectPath.resolve('.wrapper').resolve('gradle-wrapper.jar').toFile()
 }
 
