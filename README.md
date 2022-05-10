@@ -25,6 +25,8 @@ Links to various links referred to (try [web archive](https://archive.org/) if d
 ##### [#sharing_is_caring](https://helpdeskgeek.com/virtualization/virtualbox-share-folder-host-guest/)
 ##### [#i_cant_believe_youve_done_this](https://superuser.com/questions/1319503/shared-folders-not-appearing-in-media-in-ubuntu-guest-on-oracle-virtual-box)
 ##### [#who_needs_gui_anyway](https://www.techrepublic.com/article/how-to-install-virtualbox-guest-additions-on-a-gui-less-ubuntu-server-host/)
+##### [#thats_kinda_small](https://www.howtogeek.com/124622/how-to-enlarge-a-virtual-machines-disk-in-virtualbox-or-vmware/)
+##### [#join_the_partitions](https://fedingo.com/how-to-resize-partition-in-ubuntu/)
 
 ## Setting up a liberty server that works
 
@@ -726,3 +728,38 @@ with my mouse... and it works! I can see inside the folder! Ye gods!
  8. Run 'sudo adduser <your username> vboxsf'.
  9. Open the file explorer, select 'Other locations'
 10. Click on your shared folder, enter your password and enjoy.
+
+#### HDD addendum
+
+Because of the above, the HDD started running out of space.
+Foolishly I pushed it to the absolute limit and the OS did NOT like that :D
+It bricked, and upon restart would give me '/dev/sda3: recovering journal' error.
+This was not ideal, so I set out to increase the HDD size.
+
+First on the list is [#thats_kinda_small](#thats_kinda_small).
+Thankfully the Virtual Media Manager allows me to adjust the HDD size under properties.
+Problem solved!
+
+Except it doesn't work. Because while the HDD is bigger, the partition which is used
+by the OS is not. So nothing has changed.
+
+Thankfully the process for increasing the partition is pretty straightforward.
+I'm ready to [#join_the_partitions](#join_the_partitions) together.
+
+I insert the Ubuntu .iso file into the VM. This causes it to be used instead of the
+installation. I choose to try Ubuntu instead of installing it. That boots me right up.
+
+I search for and launch GParted. It gives me some error about 'sda3' not using all
+the space that it could. I agree to fix the issue which does nothing, as far as I can tell.
+
+I right click on '/dev/sda3', which now I can see is the primary partition for
+non-system files. 'sda1' and 'sda2' are reserved for that shit.
+I choose the option to 'Resize/Move'. This presents me with a very neat UI element
+which I can use to drag or adjust the size of the partition. I maximize it.
+
+For some reason 1MB is still not allocated, even if I repeat the process. Oh well.
+I apply the operation, which had remained pending. I am warned about possible data loss.
+I proceed forward recklessly. Success? Let's find out.
+I shut off the VM and restart. At some point the .iso was ejected automatically.
+
+It works! And it even booted in the correct resolution again! Hurray!
