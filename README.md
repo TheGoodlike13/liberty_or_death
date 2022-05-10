@@ -149,7 +149,7 @@ I tried to remove even more configuration. However, if I touch the location of
 the application, I can get it to run, but it produces a massive NullPointerException.
 I'd say that's not good.
 
-### In summary
+#### Liberty in summary
 
 1. Create your basic gradle project.
 2. Add 'war' plugin.
@@ -424,6 +424,19 @@ Now the next question is, will it work enough to get Kerberos on it?
 Find out tomorrow on the next episode of Dragon Ball VM!
 
 *cue the music, you know, the other one*
+
+#### VM in summary
+
+ 1. Before beginning, restart your PC and go into BIOS. BIOS is different for everyone.
+ 2. In BIOS, find the 'virtualization/VT-x' setting for CPU and enable it.
+ 3. Save the changes and restart your PC normally.
+ 4. Download an image of your favorite linux (.iso file), like [Ubuntu](https://ubuntu.com/download/desktop) or something.
+ 5. Download and install and run [VirtualBox](https://www.virtualbox.org/wiki/Downloads). I chose latest version at the time: 6.1.34 r 150626 (Qt5.6.2).
+ 6. Create a new VM config. 
+ 7. **Make sure you select the correct version in the first window (linux 64-bit in my case).**
+ 8. The other settings are probably fine, but you can also increase them. 10GB HDD in particular was pushing it in my case.
+ 9. Run the VM & make sure to select the downloaded .iso file to be inserted into the drive.
+10. Install & enjoy.
 
 ### Ubuntu Online
 
