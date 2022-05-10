@@ -22,6 +22,9 @@ Links to various links referred to (try [web archive](https://archive.org/) if d
 ##### [#it_was_aliens](http://manpages.ubuntu.com/manpages/bionic/man1/alien.1p.html)
 ##### [#ubuntu_kerberos](https://linuxconfig.org/how-to-install-kerberos-kdc-server-and-client-on-ubuntu-18-04)
 ##### [#entirely_unrelated_but_fun](https://www.youtube.com/watch?v=PwY-jVSM-f0)
+##### [#sharing_is_caring](https://helpdeskgeek.com/virtualization/virtualbox-share-folder-host-guest/)
+##### [#i_cant_believe_youve_done_this](https://superuser.com/questions/1319503/shared-folders-not-appearing-in-media-in-ubuntu-guest-on-oracle-virtual-box)
+##### [#who_needs_gui_anyway](https://www.techrepublic.com/article/how-to-install-virtualbox-guest-additions-on-a-gui-less-ubuntu-server-host/)
 
 ## Setting up a liberty server that works
 
@@ -603,3 +606,123 @@ which I guess just floats somewhere in the aether. Well, OK then, I will read th
 Maybe they will answer my questions! I will press OK for now though.
 
 Installation succeeds! Does it work? I suppose we'll have to find out next time :D
+
+### Side story to share
+
+Before anything else, let me say, yes, network issues continue to occur.
+Another page or two broke randomly. Only once though.
+I even encountered the DHCP issue I described before once.
+But it is still too soon to panic. Could be a coincidence.
+Could be.
+
+At work, I've been distracted by other matters and the fact we're moving office.
+Just to a nearby building, but it's still something to consider and take time with.
+
+But life finds a way. For my personal reasons, I needed to connect a shared
+folder to the VM. Mostly to try something in linux.
+
+You can probably guess how this goes. Yes, more pages to the web archive.
+
+First I try to follow the guide [#sharing_is_caring](#sharing_is_caring).
+Emphasis on try, as I am mostly skimming through it. This does not bode well.
+For example, I immediately skip the part where they tell me to install
+the guest additions CD. Who needs that, amirite?
+
+Well, unsurprisingly, nothing works. I added the folder I wanted to share
+to shared folders, and it is not shared. But, there's a problem even greater.
+You see, far from being shared, I don't even know if it's shared or not.
+Because the guide at [#sharing_is_caring](#sharing_is_caring) fails to inform
+in any way, shape or form what the successful result of their process would
+look like.
+
+One might say, perhaps in their hubris they believe that their guide is so
+flawless as to be impossible to not follow through successfully, after which
+the fact of the matter of shared folder would be apparent.
+
+One might also say, that is bullshit. You see, after I noticed this obvious
+issue (not without going through every other folder in the VM first, sadly),
+I consulted two [youtube](https://www.youtube.com/watch?v=KPtcGHDdcTk)
+[videos](https://www.youtube.com/watch?v=9-teQnZ8LEY), second in particular
+displaying how a successful shared folder should look like.
+Now, I can't archive these (as far as I know), but the gist of it is,
+you need to insert the guest additions CD and then **install** these additions.
+
+While it is true that [#sharing_is_caring](#sharing_is_caring) mentions this
+fact, they gloss over it by saying, "ah, autorun will take care of it".
+Autorun did not, in fact, take care of it. I had to run it manually.
+
+What to run manually, you say? Well, lets just consult the videos again...
+Uh oh. The first video shows the person running a windows file.
+Because their VM is Windows. Can't do that.
+
+The second video... doesn't do that, because presumably they already did.
+Or their version of VirtualBox is different and does not come with this
+crippling limitation.
+
+Well, maybe I can take a guess. How about 'VBoxLinuxAdditions.run'?
+Sounds about right. It succeeds. I restart. I don't have a shared folder. Yay.
+
+[#i_cant_believe_youve_done_this](#i_cant_believe_youve_done_this) is another
+resource which mentions that I should expect the shared folder under /media.
+It's not under /media. But the question is about fixing it, so I guess if I
+follow the instructions, I should be good to go!
+
+First, I need to install the additions. Already done that. Next step.
+
+Second, I need to run the command 'sudo adduser <username> vboxsf'.
+I run this command. It doesn't work. "The group 'vboxsf' does not exist."
+Maybe I didn't install the additions after all :(
+
+Upon further inspection, the answer contains a link to [#who_needs_gui_anyway](#who_needs_gui_anyway)
+which reveals a secret additional step of running
+'sudo apt-get install -y dkms build-essential linux-headers-generic linux-headers-$(uname -r)'
+which supposedly will install the pre-requisites for running the actual .run file.
+Either I'm being hard trolled right now, or some dummy really fucked up by
+**not** adding that command to the run file. Or this is just stupid for some
+other stupid reason.
+
+I run the command. It doesn't work. "Bad substitution". Fine then. I'll just
+type out the outcome of what I assume to be another command myself.
+
+Finally the command succeeds, I proceed to run the .run file. I had to run it
+with 'sudo', because it required admin privileges. Maybe that's why it failed
+to achieve anything. I think I would've noticed that, but at this point the only
+thing preventing my rage from manifesting is the very sentence you are reading
+right now, so maybe that has something to do with it. Maybe.
+
+Looks like it is successful. It does tell me that I might need to run
+'/sbin/rcvboxadd quicksetup all' to build some kind of modules for kernels.
+No idea what's that about. I'll run it if things don't work.
+
+Oh, new problem. Low Disk Space! On filesystem root! Whatever. You're a VM.
+Deal with it.
+
+I restart Ubuntu. It restarts in the wrong resolution. That's a good sign :D
+And still no shared folder on desktop. How about /media?
+
+Before I even get there, the file explorer shows me "sf_shared", which is my
+shared folder. But I can't access it because I don't have rights.
+Wait. I remember something like that... wasn't there 'vboxsf' group?
+Let's try that.
+
+I added myself to the group! Yes! Finally! I can see the fo... it doesn't work.
+Still does not give me access. Well, shit.
+
+In frustration, I click the 'other locations' button where I can also see the
+shared folder. But this time when I try to enter it, I am greeted with a password
+prompt. So I enter the password and press enter... and nothing happens.
+So I enter the password and manually click the button which is not 'cancel'
+with my mouse... and it works! I can see inside the folder! Ye gods!
+
+#### Shared folder in summary
+
+ 1. Run your VM, let it load.
+ 2. Select Devices -> Insert guest additions CD image...
+ 3. Even though it has '...', it will not open a menu, it will just insert the drive.
+ 4. Run console command 'sudo apt-get install -y dkms build-essential linux-headers-generic linux-headers-$(uname -r)'.
+ 5. If it fails, replace the $(uname -r) part with output from running 'uname -r' manually.
+ 6. Run 'sudo /media/<your username>/<Virtual Box CD name>/VBoxLinuxAdditions.run'.
+ 7. Restart your VM.
+ 8. Run 'sudo adduser <your username> vboxsf'.
+ 9. Open the file explorer, select 'Other locations'
+10. Click on your shared folder, enter your password and enjoy.
