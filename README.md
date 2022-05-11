@@ -35,7 +35,7 @@ Links to various links referred to (try [web archive](https://archive.org/) if d
 I didn't know shit, so I google'd some stuff and found some of the links above.
 Others, well, I found them along the way.
 Before getting started, I copied over a gradle setup from a different personal project
-and cleaned it up. This took some effort because things never work quite out of the box
+and cleaned it up. This took some effort because things never quite work out of the box
 with old software, but with some finessing, I was able to get gradle 6.9.2 to work.
 
 I started off by adding the gradle dependency from [#ibm_basic](#ibm_basic).
@@ -435,7 +435,7 @@ Find out tomorrow on the next episode of Dragon Ball VM!
  1. Before beginning, restart your PC and go into BIOS. BIOS is different for everyone.
  2. In BIOS, find the 'virtualization/VT-x' setting for CPU and enable it.
  3. Save the changes and restart your PC normally.
- 4. Download an image of your favorite linux (.iso file), like [Ubuntu](https://ubuntu.com/download/desktop) or something.
+ 4. Download an image of your favorite linux (.iso file), like [Ubuntu 22.04 LTS](https://ubuntu.com/download/desktop) or something.
  5. Download and install and run [VirtualBox](https://www.virtualbox.org/wiki/Downloads). I chose latest version at the time: 6.1.34 r 150626 (Qt5.6.2).
  6. Create a new VM config. 
  7. **Make sure you select the correct version in the first window (linux 64-bit in my case).**
@@ -476,7 +476,7 @@ Well, this fresh Ubuntu ain't got that. But at least it tells me this! And even 
 how to install it! 'sudo apt install rpm'. It installs without a hitch.
 So how about running the command now? It doesn't work.
 
-First thing that rpm does is immediately reprimand me for doing something I don't what it is.
+First thing that rpm does is immediately reprimand me for doing something I don't know what it is.
 'You should use Alien instead!' Oh yeah, I'll just take it up with the guys who wrote
 the guide. I'm sure they can point me to an alien or two.
 
@@ -491,9 +491,9 @@ and it's because it has an Alien in it. At least it'll be, dunno, interesting or
 
 The first page I find on [#it_was_aliens](#it_was_aliens) seems to imply its some kind of
 converter between types of packages, which I assume refers to the format in which
-applications are stored so they can be install into linux, particularly via command line.
+applications are stored so they can be installed into linux, particularly via command line.
 
-Well, why don't we try running 'alien --to-rpm <that thing with the version and stuff>'.
+Well, why don't we try running 'alien --to-rpm {that thing with the version and stuff}'.
 Well, I'd love to, but my Ubuntu has locked the screen. Now, I remember the password,
 but it would be really annoying to constantly get locked because I tab out to check
 something elsewhere. It's a VM, who cares.
@@ -603,7 +603,7 @@ It tells me that I'll need to setup a new realm later. Then why did you need the
 one? Just in case, I guess? The command to setup is 'krb5_newrealm'.
 
 It finally tells me to read the fucking documentation in a README file found in
-'usr/share/doc/krb5-kc/' and the administration guide in the 'krb5-doc' package
+'usr/share/doc/krb5-kdc/' and the administration guide in the 'krb5-doc' package
 which I guess just floats somewhere in the aether. Well, OK then, I will read those.
 Maybe they will answer my questions! I will press OK for now though.
 
@@ -671,7 +671,7 @@ follow the instructions, I should be good to go!
 
 First, I need to install the additions. Already done that. Next step.
 
-Second, I need to run the command 'sudo adduser <username> vboxsf'.
+Second, I need to run the command 'sudo adduser {username} vboxsf'.
 I run this command. It doesn't work. "The group 'vboxsf' does not exist."
 Maybe I didn't install the additions after all :(
 
@@ -688,15 +688,15 @@ type out the outcome of what I assume to be another command myself.
 
 Finally the command succeeds, I proceed to run the .run file. I had to run it
 with 'sudo', because it required admin privileges. Maybe that's why it failed
-to achieve anything. I think I would've noticed that, but at this point the only
-thing preventing my rage from manifesting is the very sentence you are reading
+to achieve anything before. I think I would've noticed that, but at this point the only
+thing preventing my rage from manifesting is the typing of the very sentence you are reading
 right now, so maybe that has something to do with it. Maybe.
 
 Looks like it is successful. It does tell me that I might need to run
 '/sbin/rcvboxadd quicksetup all' to build some kind of modules for kernels.
 No idea what's that about. I'll run it if things don't work.
 
-Oh, new problem. Low Disk Space! On filesystem root! Whatever. You're a VM.
+Oh, a new problem. Low Disk Space! On filesystem root! Whatever. You're a VM.
 Deal with it.
 
 I restart Ubuntu. It restarts in the wrong resolution. That's a good sign :D
@@ -723,9 +723,9 @@ with my mouse... and it works! I can see inside the folder! Ye gods!
  3. Even though it has '...', it will not open a menu, it will just insert the drive.
  4. Run console command 'sudo apt-get install -y dkms build-essential linux-headers-generic linux-headers-$(uname -r)'.
  5. If it fails, replace the $(uname -r) part with output from running 'uname -r' manually.
- 6. Run 'sudo /media/<your username>/<Virtual Box CD name>/VBoxLinuxAdditions.run'.
+ 6. Run 'sudo /media/{your username}/{Virtual Box CD name}/VBoxLinuxAdditions.run'.
  7. Restart your VM.
- 8. Run 'sudo adduser <your username> vboxsf'.
+ 8. Run 'sudo adduser {your username} vboxsf'.
  9. Open the file explorer, select 'Other locations'
 10. Click on your shared folder, enter your password and enjoy.
 
