@@ -1008,3 +1008,7 @@ Well, that was a bit much to expect, I suppose.
 In a twist of fate, [#ibm_security](#ibm_security) actually does contain some info.
 I need to setup a user registry of some kind. I assume in my examples the LDAP takes care of that,
 and we don't have nothin' here.
+
+I can't seem to find any resources online that would help. The impression I get is that
+far from being anywhere near done, we need to setup a bunch of framework shenanigans.
+It might be time to shelve Kerberos progress for now and proceed onto Active Directory/LDAP.
