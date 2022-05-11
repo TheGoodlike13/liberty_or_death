@@ -28,6 +28,7 @@ Links to various links referred to (try [web archive](https://archive.org/) if d
 ##### [#thats_kinda_small](https://www.howtogeek.com/124622/how-to-enlarge-a-virtual-machines-disk-in-virtualbox-or-vmware/)
 ##### [#join_the_partitions](https://fedingo.com/how-to-resize-partition-in-ubuntu/)
 ##### [#bad_faith](https://stackoverflow.com/questions/35333503/client-not-found-in-kerberos-database-while-initializing-kadmin-interface)
+##### [#localization](https://kerberos.mit.narkive.com/DYakl8d9/permission-denied-while-initializing-kadmin-local-interface)
 
 ## Setting up a liberty server that works
 
@@ -849,3 +850,60 @@ Ah, except the 'kadmin.local' command doesn't work. It authenticated me as my us
 you know, the one I used as username when installing the Ubuntu itself. But then that
 user gets denied access to the DB2 database. So what is happening? Do I already have
 a {user}/admin principal? Or do I not have it, and that's why I'm denied permission?
+
+I try all other commands listed with similar results. I think my user is not a principal
+at all. Which begs the question, why is it even trying to pretend it is instead of,
+dunno, giving me an error about it. Whatever. I'm so tired of this shit I take a nap.
+
+I find another [page](https://stackoverflow.com/questions/60273441/kerberos-service-started-with-error-cannot-open-db2-database-on-ubuntu-18)
+with some commands, but they don't seem to be related. I don't need a new realm,
+I already got one. I just can't do anything with it. Restarting the service doesn't
+do anything.
+
+In an act of sheer madness I prefix sudo with all the commands and we finally get somewhere.
+'sudo kadmin' doesn't work because it can't find root/admin (wait who the hell is root?)
+'sudo kadmin.local' just works. Because of course it does. The command I tried was
+the most inconsequential one (as far as I thought) - list_principles. But instead I'm
+greeter with a list of 4 principals. None of which were my user or root. So how on earth
+is this working???
+
+Alright, so one of the principals is 'kadmin/admin'. So I try to use 'kadmin/admin' with
+'sudo kadmin', but now it doesn't find the principal.
+
+If I pass this into 'sudo kadmin.local' instead, and misspell it, it still works.
+I don't get it. So anything and everything works if I use .local regardless of principal.
+Nothing works without .local regardless of principal. Also I hate them for using that
+word because I keep misspelling it as principle.
+
+I read about it in [#localization](#localization), but it doesn't give much explanation.
+It seems like 'kadmin' is intended for modification of the database file, which I assume
+contains information about principals. 'kadmin.local' is some sort bypass for that which
+just allows you to do whatever you want. As long as you run it with 'sudo' and that works.
+
+Fine. Let's not get ahead of ourselves. We figured out how to make it work.
+Let's return to [#ubuntu_kerberos](#ubuntu_kerberos) and proceed onwards.
+
+So I use 'kadmin.local' to hack straight into the database and add the 'goodlike' principal.
+But wait. I have to set the password? What? Why would the person on the server set the
+password for the user? How does that make any sense? I mean, luckily, I'm both the server
+and the client, so it works, but how is this supposed to work normally? Is the practice
+something like "generate random password and give it to the user so they can change it later"?
+I would assume you'd automate that away if that was the case... Well, whatever. Let's go.
+
+For the sake of security (lol) I use the same password as for everything else in this project.
+Principal. Created! Cool, can I, uh, do anything with it? Probably nothing in 'kadmin'.
+Let's continue.
+
+'sudo kinit goodlike' almost sounds like a spell to banish the Necronomicon. I almost missed
+sudo again, because, like I said, this guide was written by geniuses who think replacing
+'sudo' with '#' in their notes is a good idea. Anyway, I enter the password and nothing happens,
+which I think means something happened, and it just didn't tell me. Well, one way to find out.
+
+'sudo klist' actually list my ticket, nice. I'll note that if you extremely carefully inspect
+the guide there's blocks of text that actually technically tell you how to do everything in
+detail. And by detail I mean you can't tell that's what they do at a glance, which makes them
+pretty bad. And they **still** replace 'sudo' with '#' in those. Only by collecting the
+puzzle pieces from everywhere else do I now understand that's their purpose. Still, now
+that we made it so far, surely we can blitz through the rest of it, right? Right?
+
+'sudo kadmin.local -q "getprinc goodlike"' works too. Looking good.
