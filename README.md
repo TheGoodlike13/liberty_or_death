@@ -907,3 +907,44 @@ puzzle pieces from everywhere else do I now understand that's their purpose. Sti
 that we made it so far, surely we can blitz through the rest of it, right? Right?
 
 'sudo kadmin.local -q "getprinc goodlike"' works too. Looking good.
+
+The next section seems to deal with keytab creation. This piques interest, as keytab seemed to be
+a key configuration in whatever the hell those other projects did to make this shit work.
+It's a file that's supposed to be under 'kerberos' folder in the config. So encountering it here
+makes sense.
+
+It seems that it's a sort of a database containing username-password pairs in whatever weird
+format Kerberos does things in. Or something. So given this knowledge, let's try to guess.
+If I create this file and put it into a system that knows what Kerberos is, it will automatically
+take these pairs and forward them to Kerberos for authentication, maybe? Something? Wishful
+thinking probably. But let's try to make one and see what we can make from one.
+
+One more note that disturbs me though: changing keytab file when passwords change. That doesn't
+seem very configuration-like. Oh well. Maybe if you do something you don't have to change it.
+Whatever.
+
+We're using 'sudo ktutil' which seems to rob the terminal of its control, somehow. Anyway, I almost
+forget 'sudo' *again*. Thanks guide. I enter there commands:
+
+'add_entry -password -p goodlike@GOODLIKE.EU -k 1 -e aes256-cts-hmac-sha1-96'
+
+'add_entry -password -p goodlike@GOODLIKE.EU -k 1 -e aes128-cts-hmac-sha1-96'
+
+They might seem like they're exactly the same, but actually one of them is 'aes256' and the other
+is 'aes128'. They seem to relate to the keys printed by 'getprinc goodlike' earlier. Some kind
+of encrypted shenanigans.
+
+I think it's safe that 'ktutil' acts like a builder. We called #addEntry twice and now we need
+to call #build. Like this: 'wkt goodlike.keytab'. This build the file in working directory,
+I guess. Then we enter 'q' to escape ktutil's grasp.
+
+Hey guess what! I forgot 'sudo' on the next command again! 'sudo klist -kte goodlike.keytab' prints
+the shizz. As expected.
+
+'sudo kinit -k -t goodlike.keytab goodlike' also works, although prints nothing.
+'sudo klist' shows information. What the guide people didn't expect is that I would run it *before*
+'sudo kinit' as well as *after*. Thus being able to see the difference and determining that
+calling 'sudo kinit' also refreshes the ticket. Using the keytab file instead meant I didn't
+have to use the password. Which makes perfect sense. So if somebody is calling 'sudo kinit' logic,
+but like a client, they can use the keytab file instead of a password. I wonder if we can hook
+this damn file to Liberty somehow, that'd be amazing.
