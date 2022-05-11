@@ -29,6 +29,8 @@ Links to various links referred to (try [web archive](https://archive.org/) if d
 ##### [#join_the_partitions](https://fedingo.com/how-to-resize-partition-in-ubuntu/)
 ##### [#bad_faith](https://stackoverflow.com/questions/35333503/client-not-found-in-kerberos-database-while-initializing-kadmin-interface)
 ##### [#localization](https://kerberos.mit.narkive.com/DYakl8d9/permission-denied-while-initializing-kadmin-local-interface)
+##### [#open_your_heart](https://openliberty.io/docs/22.0.0.2/kerberos-authentication.html)
+##### [#ibm_no_redemption](https://www.ibm.com/docs/en/was-liberty/base?topic=management-liberty-features)
 
 ## Setting up a liberty server that works
 
@@ -954,3 +956,33 @@ I had misspelled 'kadmin/admin' as 'kadmin/kadmin' (can you blame me) when runni
 program too. This explains why it didn't work. It doesn't explain how it's supposed to work, because
 I tried the **ONLY** password I used in **EVERY** circumstance and it still was wrong. Fuck it.
 I'll just hack away with 'sudo kadmin.local' like a pleb. If I even need to do anything else anymore.
+
+Now, before we return to [#spnego_sad](#spnego_sad) or any similar resource, let's try to just
+hook normal authentication through Kerberos. That seems like a logical idea.
+Particularly with our track record, if something doesn't work, I'd like to flush it out now
+rather than getting distracted for a week again.
+
+First non-IBM page I encounter is [#open_your_heart](#open_your_heart). It seems to relate specifically
+to some sort of *open* implementation of liberty. It can't be something all that different, because
+it seems to use the familiar format in configuration. That being said, there's no knowing if
+this work or not with what I'm doing. It does give some hints, like features being able to use
+Kerberos credentials. In their example, a database connection is configured that way (I think).
+
+That's not quite what I need, but we can try to investigate all possible features we could
+add to server.xml. Maybe one of them will be so obviously related to authentication, we will
+be able to use Kerberos with it. Plus, I can compare this to existing working configuration
+in other projects.
+
+IBM seems to have a list, but that's it. It's literally a list: [#ibm_no_redemption](#ibm_no_redemption).
+It fails to elucidate anyone to anything about any of the features. Great.
+
+Clicking on random features I notice that they link to config elements, such as [kerberos](https://www.ibm.com/docs/en/was-liberty/base?topic=configuration-kerberos).
+I guess this means that configuration for kerberos once will work for everything.
+I'll note that this config is usually attached to SPNEGO in working examples that I do have,
+so adding this element won't be the end of it by far, but it's a good start :D
+
+We could try adding this element, even if it would be ignored due to lack of a specific
+feature which uses it, but we need a .conf file first. From my examples it seems like
+a client version of the .conf file we saw back when setting up a server. But of course,
+none of the properties are explained. So I won't be able to confirm or verify if I got it
+right or not. Not unless we find a feature that uses Kerberos first.
