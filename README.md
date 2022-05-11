@@ -1,6 +1,6 @@
 # Trying to setup SSO for a liberty application (from zero)
 
-Links to various links referred to (try [web archive](https://archive.org/) if down):
+Links to various resources referred to (try [web archive](https://archive.org/) if down, should work for most):
 
 ##### [#ibm_basic](https://www.ibm.com/support/pages/websphere-liberty-developers)
 ##### [#ibm_gradle](https://www.ibm.com/docs/en/wasdtfe?topic=projects-developing-liberty-gradle-plug-in)
@@ -31,6 +31,8 @@ Links to various links referred to (try [web archive](https://archive.org/) if d
 ##### [#localization](https://kerberos.mit.narkive.com/DYakl8d9/permission-denied-while-initializing-kadmin-local-interface)
 ##### [#open_your_heart](https://openliberty.io/docs/22.0.0.2/kerberos-authentication.html)
 ##### [#ibm_no_redemption](https://www.ibm.com/docs/en/was-liberty/base?topic=management-liberty-features)
+##### [#im_the_captain_now](https://linuxize.com/post/linux-chown-command/)
+##### [#ibm_security](https://www.ibm.com/docs/en/was-liberty/base?topic=features-application-security-20)
 
 ## Setting up a liberty server that works
 
@@ -986,3 +988,23 @@ feature which uses it, but we need a .conf file first. From my examples it seems
 a client version of the .conf file we saw back when setting up a server. But of course,
 none of the properties are explained. So I won't be able to confirm or verify if I got it
 right or not. Not unless we find a feature that uses Kerberos first.
+
+From working examples, 'appSecurity-2.0' seems like it could work. Let's go with that.
+
+But not so fast! Ubuntu is not quite ready to give up yet. The keytab file was created
+by root, so I have no rights to it, because of course. I guess I have to take ownership of it
+somehow first.
+
+Looks like [#im_the_captain_now](#im_the_captain_now). Simply 'sudo chown {user} goodlike.keytab' works.
+
+My shared folder now comes in handy. I can move the file through it. Fun fact: the link
+on explorer now just works, so I don't have to go all the way around through 'other locations'.
+
+So, I run the application, it installs the mother of all features first, creates a keystone,
+LTPA.keys and an SSL certificate. All under 'defaultServer/resources/security/'. Nothing about
+Kerberos though. And clicking the link for my application does not ask me for a password.
+Well, that was a bit much to expect, I suppose.
+
+In a twist of fate, [#ibm_security](#ibm_security) actually does contain some info.
+I need to setup a user registry of some kind. I assume in my examples the LDAP takes care of that,
+and we don't have nothin' here.
