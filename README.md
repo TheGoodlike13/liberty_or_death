@@ -27,6 +27,7 @@ Links to various links referred to (try [web archive](https://archive.org/) if d
 ##### [#who_needs_gui_anyway](https://www.techrepublic.com/article/how-to-install-virtualbox-guest-additions-on-a-gui-less-ubuntu-server-host/)
 ##### [#thats_kinda_small](https://www.howtogeek.com/124622/how-to-enlarge-a-virtual-machines-disk-in-virtualbox-or-vmware/)
 ##### [#join_the_partitions](https://fedingo.com/how-to-resize-partition-in-ubuntu/)
+##### [#bad_faith](https://stackoverflow.com/questions/35333503/client-not-found-in-kerberos-database-while-initializing-kadmin-interface)
 
 ## Setting up a liberty server that works
 
@@ -763,3 +764,88 @@ I proceed forward recklessly. Success? Let's find out.
 I shut off the VM and restart. At some point the .iso was ejected automatically.
 
 It works! And it even booted in the correct resolution again! Hurray!
+
+### Rising of the Gibberish README
+
+Early morning start today, trying to get something done for a change. *yaaaaaawn*
+
+If I recall correctly, last time we installed Kerberos server by pressing random buttons.
+More or less. Well, let's continue with [#ubuntu_kerberos](#ubuntu_kerberos).
+
+Next step appears to be the new realm setup. I thought we had a default realm already.
+Well, whatever. I enter the command and it outputs cryptic gibberish to me.
+
+"It's much more important that your password is secure than that you remember it.
+But if you forget it, you can no longer use the database or something."
+That's some hardcode mixed messaging. Thankfully, we don't actually need our password
+to be secure, since, you know, we're only setting up a toy here. I'll make it the same
+as the 'sudo' password for simplicity.
+
+"It is important that you NOT FORGET this password." Yeah, yeah. Whatever you say,
+Mr. President. I enter the password, twice. More cryptic gibberish.
+
+"You may want to create an administrative principal using the addprinc subcommand
+of the kadmin.local program. Then, this principal can be added to /etc/krb56kdc/kadm5.acl ..."
+You know, I vaguely recall being asked to read the fucking manual last time, maybe
+I should spend some time on that. One last note before I go: it asks me to setup DNS
+information. Yeah, right, I'll definitely do that with all those domains I don't have.
+
+Well, I find the README file and... it doesn't work. It opens in some weird program
+which just says that "resource is missing" or something. I forcibly open it with
+a text editor. That works.
+
+The first few paragraphs harp on about master and slave servers, so they are completely
+irrelevant. There will be only one server. One.
+
+For some inexplicable reason the README explains how to make your server less secure.
+Because people have always suffered from that particular level of lessened security.
+Bold move, but your problem is, this is planet Earth. No, seriously, how about explaining
+more what the hell are you talking about???
+
+My overall impression of the README is, this guy has no idea how to write a README.
+Compared to my prowess, as displayed by this gigantic never ending wall of text, this
+person has years of training to yet undergo. Pathetic.
+
+All I've learned is that there's some config files that I might wanna "adjust appropriately".
+Well, let's take a look at them.
+
+The folder and even the file are protected by password (similar to shared folder).
+I don't get the obsession with asking me to enter the password twice, though.
+I don't mean, once for folder, then another time for the file, although that's a bit
+of a bitch too. No, I mean, I literally have to enter it twice to enter the folder.
+Come on. Give me a break. I'm so glad my password is weak, or else I'd be stuck entering
+it for half a year here.
+
+The config itself looks normal. By that I mean I cannot see any immediate shenanigans
+that would make me cringe, and the rest of it looks like any other random config file
+for random application you don't understand. I suppose a few of these properties are
+somewhat parsable. But if I had to guess what the hell any of them do, I'd start commenting
+them out and see what breaks. And I don't even know how to check if something is broken
+yet. So I think I'll leave it alone for now.
+
+Notably, I can't see any 'localhost' in here. That does not bode well :D
+
+Next up, I edit the kadm5.acl file as described in [#ubuntu_kerberos](#ubuntu_kerberos).
+That's just removing one '#', so pretty easy. I guess this is the list of usernames,
+which they insist calling principals for some reason, which have admin access. Whatever
+that give them. I'll keep it in mind. Goodlike/admin sounds pretty good :D
+
+And of course, the next step is the setup for Kerberos client. I'm gonna go ahead and
+try to setup it on the **same** machine as the server. What could possibly go wrong? :D
+
+Uh oh. It says it is set to manually installed. What? I didn't get no prompts.
+Now the prompts I'm supposed to expect are the same as the server ones. Maybe at the time
+I was actually installing the client besides the server? That would be funny.
+Let's pretend that's what happened.
+
+With that step skipped, we go back to the server. Time to add a ~~username~~ principal!
+There's just a small tiny issue. 'addprinc' is not found. Great.
+
+Well, well, well, looks like my issue was that I was following the guide in good faith.
+Should've gone with [#bad_faith](#bad_faith) instead. Apparently some commands have to
+be executed under 'kadmin' command. Glad I've been informed of this. By someone else!@!
+
+Ah, except the 'kadmin.local' command doesn't work. It authenticated me as my user/admin,
+you know, the one I used as username when installing the Ubuntu itself. But then that
+user gets denied access to the DB2 database. So what is happening? Do I already have
+a {user}/admin principal? Or do I not have it, and that's why I'm denied permission?
