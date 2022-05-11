@@ -948,3 +948,9 @@ calling 'sudo kinit' also refreshes the ticket. Using the keytab file instead me
 have to use the password. Which makes perfect sense. So if somebody is calling 'sudo kinit' logic,
 but like a client, they can use the keytab file instead of a password. I wonder if we can hook
 this damn file to Liberty somehow, that'd be amazing.
+
+Things have started to calm down, so I reviewed some of the process so far. Turns out that
+I had misspelled 'kadmin/admin' as 'kadmin/kadmin' (can you blame me) when running the 'sudo kadmin'
+program too. This explains why it didn't work. It doesn't explain how it's supposed to work, because
+I tried the **ONLY** password I used in **EVERY** circumstance and it still was wrong. Fuck it.
+I'll just hack away with 'sudo kadmin.local' like a pleb. If I even need to do anything else anymore.
