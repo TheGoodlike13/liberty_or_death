@@ -877,7 +877,7 @@ Alright, so one of the principals is 'kadmin/admin'. So I try to use 'kadmin/adm
 If I pass this into 'sudo kadmin.local' instead, and misspell it, it still works.
 I don't get it. So anything and everything works if I use .local regardless of principal.
 Nothing works without .local regardless of principal. Also I hate them for using that
-word because I keep misspelling it as principle.
+word because I keep misspelling it as 'princip**le**'.
 
 I read about it in [#localization](#localization), but it doesn't give much explanation.
 It seems like 'kadmin' is intended for modification of the database file, which I assume
