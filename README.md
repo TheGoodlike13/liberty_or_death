@@ -34,6 +34,10 @@ Links to various resources referred to (try [web archive](https://archive.org/) 
 ##### [#im_the_captain_now](https://linuxize.com/post/linux-chown-command/)
 ##### [#ibm_security](https://www.ibm.com/docs/en/was-liberty/base?topic=features-application-security-20)
 ##### [#holy_trinity](https://en.wikipedia.org/wiki/Active_Directory)
+##### [#mandela_effect](https://www.quora.com/Is-there-an-Active-Directory-equivalent-for-Linux-system)
+##### [#slapped](https://web.mit.edu/rhel-doc/5/RHEL-5-manual/Deployment_Guide-en-US/s1-ldap-quickstart.html)
+##### [#slapped_8](https://www.openldap.org/doc/admin26/quickstart.html)
+##### [#not_so_apt](https://www.openldap.org/software/download/)
 
 ## Setting up a liberty server that works
 
@@ -1033,4 +1037,34 @@ At least we can see the familiar faces like LDAP and Kerberos mentioned here.
 Although I'm not very happy when it says "Microsoft's version of Kerberos".
 I'd be pretty mad if my linux setup was all a wild goose chase.
 
+At first I thought my problem was that I was reading wikipedia.
+Or that I had just recently waken up from a headache induced nap.
+But it seems that everyone agrees on AD being a Windows thing.
+This is some serious [#mandela_effect](#mandela_effect) bullshit.
 
+Fuck it! We will trust this random person on the internet and put AD aside.
+Let's focus on setting up LDAP. Whatever that looks like.
+
+According to [#slapped](#slapped) I need to start off by installing OpenLDAP.
+That's the key to LDAP in linux. They even provides links for more details
+if things go south. Let's get started!
+
+I just gotta do that 'sudo apt install openldap' and... it doesn't work.
+Admittedly, that is not a command that I've been tasked to run, so I can't
+exactly blame them. On the other hand, if the command that I should have to run
+is so specific, it baffles me why it was not provided explicitly...
+
+So, 'openldap' package does not exist. I guess it's time to consult the
+[#slapped_8](#slapped_8).
+
+"If you intend to run OpenLDAP Software seriously,
+you should review all of this document before attempting to install the software."
+Why so serious? I'll just ignore that.
+
+Immediately we're sent to [#not_so_apt](#not_so_apt) to download things.
+Normally, I'd love this shit, but I'm trying to get this done on a linux VM here.
+What happened to all the slick one liner programs that just magically install shit?
+Wasn't that part of the appeal? I feel like my illusion has been shattered.
+
+In my stupor, I click on the first download link which is in USA, but it downloads
+very fast anyways. It's kinda small, actually.
