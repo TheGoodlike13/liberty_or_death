@@ -33,6 +33,7 @@ Links to various resources referred to (try [web archive](https://archive.org/) 
 ##### [#ibm_no_redemption](https://www.ibm.com/docs/en/was-liberty/base?topic=management-liberty-features)
 ##### [#im_the_captain_now](https://linuxize.com/post/linux-chown-command/)
 ##### [#ibm_security](https://www.ibm.com/docs/en/was-liberty/base?topic=features-application-security-20)
+##### [#holy_trinity](https://en.wikipedia.org/wiki/Active_Directory)
 
 ## Setting up a liberty server that works
 
@@ -1012,3 +1013,24 @@ and we don't have nothin' here.
 I can't seem to find any resources online that would help. The impression I get is that
 far from being anywhere near done, we need to setup a bunch of framework shenanigans.
 It might be time to shelve Kerberos progress for now and proceed onto Active Directory/LDAP.
+
+The network on my PC continues to deteriorate. Long loading times.
+Multiple DHCP problems. Just a random network death.
+But! I did get a message from my network provider that they will be doing some maintenance!
+So who knows. Maybe there's still some hope.
+Remind me to reset my hardware come tomorrow morning.
+
+[#holy_trinity](#holy_trinity) tells us all about Active Directory.
+The first thing that immediately pops out is the extreme focus on Windows.
+That's strange. After all, when I was installing Ubuntu it offered to install
+something or other called "Active Directory". If it was something exclusively
+related to Windows, surely that would not be possible. Surely the installation
+would just offer me some other equally bizarrely named linux alternative.
+Is this a case for the Mobius chair to explain how there are actually two
+active directories all along?
+
+At least we can see the familiar faces like LDAP and Kerberos mentioned here.
+Although I'm not very happy when it says "Microsoft's version of Kerberos".
+I'd be pretty mad if my linux setup was all a wild goose chase.
+
+
