@@ -903,8 +903,8 @@ sudo again, because, like I said, this guide was written by geniuses who think r
 'sudo' with '#' in their notes is a good idea. Anyway, I enter the password and nothing happens,
 which I think means something happened, and it just didn't tell me. Well, one way to find out.
 
-'sudo klist' actually list my ticket, nice. I'll note that if you extremely carefully inspect
-the guide there's blocks of text that actually technically tell you how to do everything in
+'sudo klist' actually lists my ticket, nice. I'll note that if you inspect the guide extremely
+carefully, there's blocks of text that actually technically tell you how to do everything in
 detail. And by detail I mean you can't tell that's what they do at a glance, which makes them
 pretty bad. And they **still** replace 'sudo' with '#' in those. Only by collecting the
 puzzle pieces from everywhere else do I now understand that's their purpose. Still, now
@@ -928,7 +928,7 @@ seem very configuration-like. Oh well. Maybe if you do something you don't have 
 Whatever.
 
 We're using 'sudo ktutil' which seems to rob the terminal of its control, somehow. Anyway, I almost
-forget 'sudo' *again*. Thanks guide. I enter there commands:
+forget 'sudo' *again*. Thanks guide. I enter these commands:
 
 'add_entry -password -p goodlike@GOODLIKE.EU -k 1 -e aes256-cts-hmac-sha1-96'
 
@@ -938,7 +938,7 @@ They might seem like they're exactly the same, but actually one of them is 'aes2
 is 'aes128'. They seem to relate to the keys printed by 'getprinc goodlike' earlier. Some kind
 of encrypted shenanigans.
 
-I think it's safe that 'ktutil' acts like a builder. We called #addEntry twice and now we need
+I think it's safe to say that 'ktutil' is a builder. We called #addEntry twice and now we need
 to call #build. Like this: 'wkt goodlike.keytab'. This build the file in working directory,
 I guess. Then we enter 'q' to escape ktutil's grasp.
 
@@ -967,7 +967,7 @@ rather than getting distracted for a week again.
 First non-IBM page I encounter is [#open_your_heart](#open_your_heart). It seems to relate specifically
 to some sort of *open* implementation of liberty. It can't be something all that different, because
 it seems to use the familiar format in configuration. That being said, there's no knowing if
-this work or not with what I'm doing. It does give some hints, like features being able to use
+this will work or not with what I'm doing. It does give some hints, like features being able to use
 Kerberos credentials. In their example, a database connection is configured that way (I think).
 
 That's not quite what I need, but we can try to investigate all possible features we could
