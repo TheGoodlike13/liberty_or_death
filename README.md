@@ -39,6 +39,11 @@ Links to various resources referred to (try [web archive](https://archive.org/) 
 ##### [#slapped_8](https://www.openldap.org/doc/admin26/quickstart.html)
 ##### [#not_so_apt](https://www.openldap.org/software/download/)
 ##### [#dummy_slap](https://linuxhint.com/openldap-beginner-guide/)
+##### [#slut_network](https://www.youtube.com/watch?v=04pAiANkr_s)
+##### [#old_but_bold](https://www.tecmint.com/network-between-guest-vm-and-host-virtualbox/)
+##### [#wrong_linux](https://marcus.4christies.com/2019/01/how-to-create-a-virtualbox-vm-with-a-static-ip-and-internet-access/)
+##### [#the_batman](http://manpages.ubuntu.com/manpages/jammy/en/man5/interfaces.5.html)
+##### [#because_of_course](https://superuser.com/questions/1423959/ubuntu-server-fail-to-restart-networking-service-unit-network-service-not-foun)
 
 ## Setting up a liberty server that works
 
@@ -1083,8 +1088,9 @@ Well, why didn't you say so in the first place? Let's follow this instead.
 I think it's the first guide that I don't have many problems with as it actually
 tries to go through things step-by-step instead of making massive leaps of logic.
 The only complaint I could give is lack of a general explanation what am I looking
-at, ideally at every step. Still, a massive improvement over, uh, literally eveything.
-Especially IBM.
+at, ideally at every step. Still, a massive improvement over, uh, literally everything.
+Especially IBM. Like, is there some sort of admin mafia, who, if you make a good guide,
+roll up to your front porch at night and dump some dead hard drives on your lawn?
 
 I perform the 'apt update' and 'app upgrade' as asked. This downloads a bunch of stuff
 which then prompts the computer for restart. Let's do that and proceed.
@@ -1141,3 +1147,107 @@ There might be additional problems down the line, but let's hope not.
 I found the IP address by calling 'ifconfig -a'. I had to install it first by calling
 'sudo apt install net-tools'. Using this exact IP also works instead of localhost.
 Hurray!
+
+This does bring up a prudent question. Can I even connect to the VM from my PC?
+Uh oh. Ping definitely doesn't work, although it might be [fixable](https://stackoverflow.com/questions/18278409/cant-ping-a-local-vm-from-the-host).
+Then again, ping might be too "outside network" specific, for all I know.
+Then there's also stuff like firewalls to consider... ugh...
+This hydra sure feels like it'll never run out of heads.
+
+### Depression
+
+I've started feeling physically sick from all the bullshit that I have to deal with here.
+And that's after having some days off recently.
+
+It seems that the default configuration for the network in VirtualBox is 'NAT'.
+Haha, so funny, it's almost "NOT", which is quite an apt comparison.
+Sure, it'll get you connected to the internet. But you can probably already do that.
+On your host machine. The connection between the VM and host is much more interesting.
+
+I've looked over a few videos and other resources. I'll link relevant ones promptly.
+The impression I get is that there's all kinds of different ways to set things up
+depending on your situation. For example, this here [video](https://www.youtube.com/watch?v=jdOHJ0NZ47M)
+uses a bridged adapter instead of NAT. This seems to make the VM a full fledged entity
+on the network, perhaps even getting its own IP address from DHCP out there, or something.
+Which is crippling enough to make the guy in the video have to use his personal router
+configuration to set a static IP address, or something. I dunno, I was feeling too sick
+to continue watching.
+
+The [#slut_network](#slut_network) video uses 'internal network', which I don't know
+what or how it does, but it magically works. Neat, right? Except it's a video on Windows
+VMs, so I've no idea how to put it to use or if it would magically work on Linux.
+At least I'll keep the IP address scheme as a memo. It's easy to remember, because it
+has 168 in it. And 168 is easy to remember because that's how many primes there are
+less than 1000. Commonly known, I know, but I thought I'd mention it anyways.
+
+[#old_but_bold](#old_but_bold) features a guide on setting up exactly what we need.
+The problem is, it's using a completely different, possibly outdated version of VirtualBox.
+None of the windows in their screenshots seem to exist anymore.
+All I learned from that is to put the non-NAT network adapter first.
+And that's not even right, as all that achieved is fuck my NAT adapter IP, causing all
+the existing config I had done to break. Thankfully, it's as easy as setting it back
+to its original place and it works again.
+
+[#wrong_linux](#wrong_linux) gives another glimpse into possible convoluted GUI options
+for VirtualBox. This one seems more up to date, as it refers me to 'Global tools'.
+No such thing I'm afraid, but 'Tools' does exist, and one of the options there is
+in fact 'Network'. Due to previously messing around, an adapter already exists,
+although I can't seem to change its name. I disable DHCP and enter the magic IP
+'192.168.1.1' as well as mask '255.255.255.0'. Don't forget to apply changes!
+
+Unfortunately the rest of the guide is for CentOS 7, which is apparently a different
+Linux version. So different, in fact, that they put their configurations in different
+places in different ways. Great. Excited to be working with you guys.
+
+So Fedora-like Linuxes use '/etc/sysconfig/network-scripts/'. What does Ubuntu use?
+Apparently it depends on who you ask. There's [this](https://ubuntuforums.org/showthread.php?t=783101)
+and [this](https://askubuntu.com/questions/320537/where-is-the-equivalent-of-etc-sysconfig-networking-devices-directory-in-ubunt)
+and also just [#the_batman](#the_batman).
+
+But wait! [#old_but_bold](#old_but_bold) part 2 seems to have some similar configuration
+in one of those places! Eh, what the hell, let's give it a shot.
+
+To start off, we must edit '/etc/network/interfaces' which notably does not exist.
+Since it doesn't exist, I can't give ownership to myself of it. Leaving me with no choice.
+I foolishly decide to try out using Vim! Kill me now. Please. Just end this misery.
+Can you guess, can you just imagine the procedure you must follow to save a file with Vim?
+Oh, it's no big deal. Just press escape, then type ':w', then Enter. Obviously.
+What else could it possibly be? That just makes sense. Everyone knows that.
+Did you know that adjoining the fifth root of unity to the field of rational numbers
+also automatically adjoins the square root of 5? Yeah, it's basically the same type of
+knowledge, I know.
+
+So anyway, I manage to save the file '/etc/network/interfaces' with random inputs in it.
+Then I change the ownership of the file so I can edit it with a sane program.
+Then I copy paste and adjust the file contents as instructed. They end up like this:
+
+     auto  enp0s8
+     iface enp0s8 inet static
+     address  192.168.1.2
+     network  192.168.1.0
+     netmask  255.255.255.0
+     gateway  192.168.1.1
+     dns-nameservers  8.8.8.8  192.168.1.1
+
+Notably, I use 'enp0s8', as 'enp0s3' is the first network adapter which I left as NAT
+for internet access. Then the IP is just the next available IP address after the one
+I entered in the VirtualBox settings. Network could anything, so I left its suffix as 0.
+Gateway and netmask are just the VirtualBox settings. Dns-nameservers is whatever the
+hell it is, but I changed the one IP address to match the gateway as in the example.
+Oh, and 8.8.8.8 is the public google DNS service. No idea why that pops up here out
+of nowhere. But it may as well stay.
+
+Surprise! 'sudo systemctl restart networking' doesn't work! Networking.service not found!
+That's great news. I'll just restart the VM and pretend I didn't see that.
+
+And if we call 'ip add' after restart... it doesn't work. Well, 'ip add' works.
+But the IP address is nowhere to be found. I'm guessing something to do with the
+networking.service not being found.
+
+And before you even ask, no, changing the owner to 'root' does nothing.
+
+Turns out the service has changed its name in newer Ubuntu versions [#because_of_course](#because_of_course).
+'systemctl list-unit-files | grep -i network' reveals that I had to use
+'sudo systemctl restart NetworkManager' after all.
+
+Of course, that does nothing. The IP address is still nowhere to be found.
