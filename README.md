@@ -38,6 +38,7 @@ Links to various resources referred to (try [web archive](https://archive.org/) 
 ##### [#slapped](https://web.mit.edu/rhel-doc/5/RHEL-5-manual/Deployment_Guide-en-US/s1-ldap-quickstart.html)
 ##### [#slapped_8](https://www.openldap.org/doc/admin26/quickstart.html)
 ##### [#not_so_apt](https://www.openldap.org/software/download/)
+##### [#dummy_slap](https://linuxhint.com/openldap-beginner-guide/)
 
 ## Setting up a liberty server that works
 
@@ -1018,6 +1019,8 @@ I can't seem to find any resources online that would help. The impression I get 
 far from being anywhere near done, we need to setup a bunch of framework shenanigans.
 It might be time to shelve Kerberos progress for now and proceed onto Active Directory/LDAP.
 
+### Enter the slap
+
 The network on my PC continues to deteriorate. Long loading times.
 Multiple DHCP problems. Just a random network death.
 But! I did get a message from my network provider that they will be doing some maintenance!
@@ -1068,3 +1071,73 @@ Wasn't that part of the appeal? I feel like my illusion has been shattered.
 
 In my stupor, I click on the first download link which is in USA, but it downloads
 very fast anyways. It's kinda small, actually.
+
+I continue following the advice from [#slapped_8](#slapped_8).
+I extract the archive, then start reviewing the text files.
+The license seems OK. But I still don't understand a lot of the things mentioned
+there. Maybe I need a quick "openLDAP for dummies" first.
+
+This search leads me to [#dummy_slap](#dummy_slap) which does contain apt commands.
+Well, why didn't you say so in the first place? Let's follow this instead.
+
+I think it's the first guide that I don't have many problems with as it actually
+tries to go through things step-by-step instead of making massive leaps of logic.
+The only complaint I could give is lack of a general explanation what am I looking
+at, ideally at every step. Still, a massive improvement over, uh, literally eveything.
+Especially IBM.
+
+I perform the 'apt update' and 'app upgrade' as asked. This downloads a bunch of stuff
+which then prompts the computer for restart. Let's do that and proceed.
+
+'sudo apt-get install slapd ldap-utils -y' runs successfully. It asks me to enter
+the password twice, and we continue to use the same password just in case.
+And no, it's not 'password'.
+
+Now 'sudo systemctl status slapd.service' on the other hand prints a bunch of gibberish.
+It also locks me from the terminal. I had to escape using the CTRL+C trick.
+In any case, it seems that this gibberish means things work.
+I test the same command by appending 'z' to the end, which prints rightfully that
+no such servicez could be found.
+
+'sudo dpkg-reconfigure slapd' part goes almost as described.
+I choose 'goodlike.eu.local' for my domain name. Yikes.
+For the organization I went with 'goodlike_incorporated'. Big yikes.
+Then all proceeded as expected, but I never got to choose a database backend.
+I would just follow the instructions anyway, so that's fine by me.
+
+'sudo slapcat' prints a lot less than expected, but I suppose that's fine too.
+Seems like just generic info about what was just configured.
+
+'sudo systemctl status slapd' does indeed report an active status.
+
+'sudo nano /etc/ldap/ldap.conf' opens what passes for a text editor in linux. Eew.
+No thanks. I'll just find the file in a directory and edit it with notepad equivalent.
+At least I can escape by using CTRL+X.
+
+Uh oh. The file refuses to be saved because I don't have permissions. Lovely.
+Don't you just love when you can't do basic things like editing text files on your computer?
+And, of course, if you use some arcane and decrepit way of editing via console
+it will definitely work. Just add sudo and it'll work. Why can't it "just work"
+normally then? Rubbish. I'm deleting this VM as soon as I am done.
+
+I change the ownership of the file and then edit it again from scratch.
+I'll not that both the default file and the example use port '666' to illustrate.
+But the instructions tells me to use port '389'. We'll stick to instructions, I guess.
+
+And finally, the last step 'ldapsearch -x'... doesn't work. Predictable.
+I tried to change back the ownership of the config file to root just in case,
+but it doesn't seem to be the problem.
+
+The problem is that the LDAP server cannot be contacted. Which, I suppose, makes sense.
+I've been entering all kinds of URLs that don't exist anywhere.
+Maybe I should try using exact IP address or localhost in config.
+
+Good news! Localhost works! So we have successfully identified the problem.
+I suppose instead of using localhost it would be prudent for me to find the IP
+address so I can connect to this thing from outside the VM. I assume that localhost
+will not, in-fact work for connecting to the VM from outside. But maybe it would.
+There might be additional problems down the line, but let's hope not.
+
+I found the IP address by calling 'ifconfig -a'. I had to install it first by calling
+'sudo apt install net-tools'. Using this exact IP also works instead of localhost.
+Hurray!
