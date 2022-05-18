@@ -46,6 +46,8 @@ Links to various resources referred to (try [web archive](https://archive.org/) 
 ##### [#because_of_course](https://superuser.com/questions/1423959/ubuntu-server-fail-to-restart-networking-service-unit-network-service-not-foun)
 ##### [#ask_the_manager](https://askubuntu.com/questions/196640/how-to-change-ip-when-etc-network-interface-file-is-missing)
 ##### [#its_servers_fault](https://serverfault.com/questions/225155/virtualbox-how-to-set-up-networking-so-both-host-and-guest-can-access-internet)
+##### [#open_your_slap](https://openliberty.io/docs/latest/reference/feature/ldapRegistry-3.0.html)
+##### [#not_getting_started](https://spring.io/guides/gs/authenticating-ldap/)
 
 ## Setting up a liberty server that works
 
@@ -1320,5 +1322,40 @@ here tells me there might be a 'krb5.conf' file out there somewhere. And it is.
 '/etc/krb5.conf' to be precise. I update the IPs to '192.168.1.2' and hope it works.
 'sudo kinit goodlike' and 'sudo klist' seem to still work, so we'll proceed.
 
-Of course, changing the '.conf' file in this project still achieves nothing.
+Of course, changing the 'goodlike.conf' file in this project still achieves nothing.
 But hey, it's progress!
+
+### Test your [slap](https://www.youtube.com/watch?v=juaunbIGCcw)
+
+During my lunch break, an e-mail arrived, oddly addressed to nobody.
+"I have detected security problems with your computer.
+Please tell me when you're at the office so I can come to your computer and fix this.
+I will only take 5 minutes." Oh yeah? You think you got me fooled?
+I see right through your indian scammer ways! Reported for phishing.
+Let the company figure that one out.
+
+So next I'm gonna try to either hook up LDAP to liberty, or at least test that it works
+somehow. All I have to go with for configuration is [#open_your_slap](#open_your_slap),
+which admittedly uses very similar XML to what I can see in working projects.
+The problem is, half of the things don't really make sense to me, which makes sense
+in of itself, since we've just setup LDAP and didn't actually learn anything about it
+or do anything with it.
+
+Like, what are baseDN & bindDN? Whose password is bound? There are different LDAP types?
+The last one seems to be just fine as 'Microsoft Active Directory'. I base this entirely
+on this [example](https://github.com/Azure-Samples/open-liberty-on-aro/blob/master/3-integration/aad-ldap/src/main/liberty/config/server.xml),
+as it's for openLDAP.
+
+There's a Spring guide on [#not_getting_started](#not_getting_started). Unfortunately
+it's a guide for situations where you already know everything about LDAP, so it's
+useless to me. Kinda hard to find an actual raw example, to be honest. Everyone kinda
+insists on hooking on their own technology for demonstration, making things even
+more cryptic than they were originally.
+
+I mean look at [this guy](https://www.youtube.com/watch?v=0FwOcZNjjQA) trying to explain
+this shit. Doesn't event take 3 minutes to devolve into some kind of weird ApacheDS
+server bullshit. I don't even think it's the guy's fault, this shit is just that
+convoluted you can't explain it otherwise. String theory was easier to understand than this.
+
+Also, as an aside, this is but one of [many](https://www.youtube.com/watch?v=QyhNaY5O468)
+attempts by the same guy to explain it. It really is that ridiculous, isn't it.
