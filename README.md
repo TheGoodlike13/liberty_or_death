@@ -44,6 +44,7 @@ Links to various resources referred to (try [web archive](https://archive.org/) 
 ##### [#wrong_linux](https://marcus.4christies.com/2019/01/how-to-create-a-virtualbox-vm-with-a-static-ip-and-internet-access/)
 ##### [#the_batman](http://manpages.ubuntu.com/manpages/jammy/en/man5/interfaces.5.html)
 ##### [#because_of_course](https://superuser.com/questions/1423959/ubuntu-server-fail-to-restart-networking-service-unit-network-service-not-foun)
+##### [#ask_the_manager](https://askubuntu.com/questions/196640/how-to-change-ip-when-etc-network-interface-file-is-missing)
 
 ## Setting up a liberty server that works
 
@@ -1251,3 +1252,31 @@ Turns out the service has changed its name in newer Ubuntu versions [#because_of
 'sudo systemctl restart NetworkManager' after all.
 
 Of course, that does nothing. The IP address is still nowhere to be found.
+
+The next day I am greeted with a question. Is my network home or public?
+That's the usual windows crap. It is quite a random timing.
+Could this be a portent of something else? Who knows.
+
+First and foremost I try setting the 'host-only' connection as the first one
+and 'NAT' as the second one. It doesn't work - same as before.
+
+My biggest suspicion about the whole process so far has been
+the lack of existence of the 'interfaces' file to begin with.
+[Something](https://askubuntu.com/questions/1276847/looking-for-etc-network-interfaces-is-missing)
+has changed when Ubuntu updated to version 20 or something.
+And no, moving the file to 'netplan' directory doesn't work.
+
+The answer seems to be [#ask_the_manager](#ask_the_manager). By running the command
+'nm-connection-editor' we get a 'Network connections' window with both connections.
+
+They are numbered according to the VirtualBox settings, so I edit the appropriate
+one's settings. In the settings there is a 'IPv4 Settings', which allows me to choose
+'Manual' method for IP address. Then I add the IP settings that I had previously
+configured in the 'interfaces' file here. Notably, I didn't have to add network mask.
+
+After I save the settings, the network automatically 'connects', whatever that means.
+You can see it in the top right network icon, actually.
+I close the settings windows and now 'ip add' correctly prints the IP address.
+
+However, if I ping from the host machine, it's still unreachable. Same the other way around.
+I guess firewall is next?
