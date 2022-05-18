@@ -45,6 +45,7 @@ Links to various resources referred to (try [web archive](https://archive.org/) 
 ##### [#the_batman](http://manpages.ubuntu.com/manpages/jammy/en/man5/interfaces.5.html)
 ##### [#because_of_course](https://superuser.com/questions/1423959/ubuntu-server-fail-to-restart-networking-service-unit-network-service-not-foun)
 ##### [#ask_the_manager](https://askubuntu.com/questions/196640/how-to-change-ip-when-etc-network-interface-file-is-missing)
+##### [#its_servers_fault](https://serverfault.com/questions/225155/virtualbox-how-to-set-up-networking-so-both-host-and-guest-can-access-internet)
 
 ## Setting up a liberty server that works
 
@@ -1280,3 +1281,44 @@ I close the settings windows and now 'ip add' correctly prints the IP address.
 
 However, if I ping from the host machine, it's still unreachable. Same the other way around.
 I guess firewall is next?
+
+### [Fire](https://www.youtube.com/watch?v=r32LcBqiv7I) in the hole
+
+It asked me about my network being public or private again! Jesus! Get a clue!
+
+[#its_servers_fault](#its_servers_fault) gives some insight on how to setup the firewall.
+The issue is that it thinks only VM to host connections would have the firewall problem
+in the first place. But I obviously have issues with it both ways.
+
+Well, I setup the exception exactly as explained, putting in the IP addresses that I used
+instead of the example ones. It doesn't achieve anything.
+
+I decide to investigate 'ipconfig /all' to see if everything is OK on this side, and it
+sure seems so. Except that my DHCP lease had been acquired mere 20 mins ago and is to
+expire in 10. This might explain the random questions about the network type.
+Clearly DHCP was not co-operating as usual, so I perform my usual 'reset' procedure:
+
+    netsh winsock reset catalog
+    netsh int ipv4 reset reset.log
+    ipconfig /flushdns
+
+I restart the computer and check ipconfig again... to see it has gone completely mad.
+VirtualBox confirms this. The IP mask changed to 255.255.0.0 and the IP address is
+completely random. Yet it is statically set in VirtualBox. WTF? DHCP still disabled btw.
+I guess I'll reset it to original values and run the VM again.
+
+OK... so... it works now. Pings go both ways. No idea which part, if any, of this actually
+fixed this LOL.
+
+With that in mind we have our new 'IP' address, so we better update Kerberos and LDAP
+to actually use it.
+
+Changing '/etc/ldap/ldap.conf' is easy enough. Finding where the place where Kerberos
+put my 'localhost' inputs is a bit harder. I think it would probably work anyways, but
+using localhost just doesn't sit right with me. Anyway, this [page](https://social.technet.microsoft.com/Forums/ie/en-US/26823611-786b-4ec8-bdaf-1f565dd7d68a/how-do-i-change-the-realm-name-used-during-kerberos-authentication?forum=winserver8gen)
+here tells me there might be a 'krb5.conf' file out there somewhere. And it is.
+'/etc/krb5.conf' to be precise. I update the IPs to '192.168.1.2' and hope it works.
+'sudo kinit goodlike' and 'sudo klist' seem to still work, so we'll proceed.
+
+Of course, changing the '.conf' file in this project still achieves nothing.
+But hey, it's progress!
