@@ -48,6 +48,8 @@ Links to various resources referred to (try [web archive](https://archive.org/) 
 ##### [#its_servers_fault](https://serverfault.com/questions/225155/virtualbox-how-to-set-up-networking-so-both-host-and-guest-can-access-internet)
 ##### [#open_your_slap](https://openliberty.io/docs/latest/reference/feature/ldapRegistry-3.0.html)
 ##### [#not_getting_started](https://spring.io/guides/gs/authenticating-ldap/)
+##### [#slap_intro](https://www.openldap.org/doc/admin26/intro.html)
+##### [#slap_account](https://www.thegeekstuff.com/2015/02/openldap-add-users-groups/)
 
 ## Setting up a liberty server that works
 
@@ -1359,3 +1361,51 @@ convoluted you can't explain it otherwise. String theory was easier to understan
 
 Also, as an aside, this is but one of [many](https://www.youtube.com/watch?v=QyhNaY5O468)
 attempts by the same guy to explain it. It really is that ridiculous, isn't it.
+
+Let's start off by creating "an account" in LDAP, whatever that means.
+[#slap_account](#slap_account) seems like a guide, but immediately it asks me to create
+gibberish-ridden files. If I create an account, but have no idea if I did it properly,
+that's useless. I'll have to use [#slap_intro](#slap_intro) to try to decode what in the
+fuck is going on here.
+
+Now, let's set aside 'LDIF', as I cannot see any mention of it in the intro.
+I can however decode this: 'dn: uid=adam,ou=users,dc=tgs,dc=com'
+Supposedly that's what passes for a username in LDAP system. Gloriously fucked.
+Well, this 'adam' is kind of the real username, and the rest of the values
+are something like an inverted directory? Soooo '/com/tgs/users/adam' is a good approximation.
+Of course, they're using something more like a "readable" URL format, so maybe
+'adam.users.tgs.com' is closer to what they were going for. But nobody (sane) would
+create APIs like that either. 'tgs.com/users/adam' is the sane(r) version of such an idea.
+
+Give the examples that [#slap_intro](#slap_intro) provides, I think it's safe to assume
+that the 'dc=', 'ou=' and 'uid=' are just made up. Well, they *do* stand for something
+specific, but I have to assume they are just 'conventions' decided by some grand long
+forgotten architect of this system.
+
+On the other hand, looking at the [RFC](https://www.rfc-editor.org/rfc/rfc4514.txt),
+it says these are X.500 attribute types. That still doesn't necessarily mean that they
+aren't "made up", just that perhaps they were "made up" at the X.500 level.
+
+For reference, when I say "made up", I mean that I could replace references to them
+in all configurations and everything would continue working. I would consider this to be
+**CRITICAL INFORMATION** that **SHOULD BE INCLUDED UP FRONT AND CENTER** but alas,
+unless I'm willing to dig through cryptic RFC bullshit, I won't know. And at this
+point the only interaction I want to have with RFC is through my shotgun, which I
+do not yet have. It's a blocker, so no can do. Let's wait for the next release.
+
+So how in the bloody hell should I know how to adapt this username idiom to my LDAP
+case? Looking back, we already have a user 'dc=goodlike,dc=eu,dc=local', so perhaps
+we can prefix some random bullshit and it would work. Let's go with this:
+'uid=eve,ou=users,dc=goodlike,dc=eu,dc=local'
+
+Next we have a list of 'objectClass'. According to the [#slap_intro](#slap_intro),
+it defines what attributes are required for the entry. So basically it's like a JAVA
+interface. Nice. This gives a little more insight on what exactly we're doing here.
+
+It seems like LDAP is just a weird and convoluted database along the lines of [elasticsearch](https://www.elastic.co/).
+I use this as an example because I have (some minor) experience with it.
+All that is associated with the 'username' is a map of keys & values, which can be
+explicitly defined by this 'objectClass', of which there can be multiple.
+The obvious followup question is, what the hell does this have to do with authentication???
+Usually data (such as pairs or keys & values) is something you authenticate *for*, not *with*.
+Either some shit is seriously fucked, or we're off to one of the greatest tangents YET.
