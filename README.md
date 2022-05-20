@@ -50,6 +50,7 @@ Links to various resources referred to (try [web archive](https://archive.org/) 
 ##### [#not_getting_started](https://spring.io/guides/gs/authenticating-ldap/)
 ##### [#slap_intro](https://www.openldap.org/doc/admin26/intro.html)
 ##### [#slap_account](https://www.thegeekstuff.com/2015/02/openldap-add-users-groups/)
+##### [#table_of_death](https://docs.oracle.com/cd/E21043_01/oid.1111/e10035/schema_objclass.htm)
 
 ## Setting up a liberty server that works
 
@@ -1409,3 +1410,33 @@ explicitly defined by this 'objectClass', of which there can be multiple.
 The obvious followup question is, what the hell does this have to do with authentication???
 Usually data (such as pairs or keys & values) is something you authenticate *for*, not *with*.
 Either some shit is seriously fucked, or we're off to one of the greatest tangents YET.
+
+Behold, the [#table_of_death](#table_of_death). It lists a bunch of these classes,
+naturally, all defined in some RFC or another. In any case, we can try and glimpse
+into what the suggested object classes do.
+
+'top' seems to be something like a JAVA equivalent of Object. The "top" class.
+I know it's not in the table, but you can find it hidden at the bottom of the page itself.
+Now, the page we're referencing **is** using Oracle specific bullshit, but I think
+at least to some degree they have to be adhering to the things defined in RFCs, so
+maybe we can glean some kind of minor understanding.
+
+For example, because these classes are defined as part of Oracle Identity Management system,
+the "top" class seems to have a lot to do with passwords'n'shit. So irrespective of whether
+this is Oracle using the concept of these classes to satisfy their insanity, at least we can
+say with certainty that it is possible to define a set of keys for objects such as those in
+LDAP that could be used to store information in some way related to authentication such that
+it can then be used as part of some identity management system. I would be much happier
+knowing, for example, that this **is** the intended purpose and doing anything else with
+this system is purely dumb, unsupported and liable to get you slapped across the face by
+any and all senior administrators in 500 yard radius. I would be even more happier if some
+sorry person would, you know, write that shit down in a bloody guide about LDAP for
+beginners. So either it is NOT the case, and this LDAP thing **CAN** and **HAS BEEN** used
+in whatever way whoever decided at whatever juncture, or everyone just sucks at
+explaining shit properly. You know what's the worst? Given the state of various "documentation"
+I've read over my relatively short carrier, it's a bloody coin-flip on which it is.
+
+It's like the Schrodinger's cat. Every single thing I read about this stuff only continues
+to propagate the bloody wave function instead of collapsing it, making it ever more increasingly
+confusing as to what the actual state of the thing I'm trying to understand actually is.
+At some point the cat will have hypothetical babies and I still won't know if it died or not.
