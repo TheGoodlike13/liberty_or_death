@@ -1448,7 +1448,7 @@ I mean, sure, there's 'uid' which OBVIOUSLY is supposed to refer to the user id.
 But the RFC clearly says 'userid'. So, on one hand you could say that the name of the
 attribute is probably "made up" by everyone who ends up using it. On the other hand,
 if that's the case, then how on earth would you ensure the attribute exists if you want
-to follow the RFC requirements? Does each LDAP implementation provide their own attirbute
+to follow the RFC requirements? Does each LDAP implementation provide their own attribute
 names for compliance with RFC? Do they just not comply with RFC? Does some future RFC
 I don't know of expand the definition and this is just an outdated version? Is RFC even
 important??? The ~~dream~~ world is collapsing. Great.
