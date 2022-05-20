@@ -51,6 +51,7 @@ Links to various resources referred to (try [web archive](https://archive.org/) 
 ##### [#slap_intro](https://www.openldap.org/doc/admin26/intro.html)
 ##### [#slap_account](https://www.thegeekstuff.com/2015/02/openldap-add-users-groups/)
 ##### [#table_of_death](https://docs.oracle.com/cd/E21043_01/oid.1111/e10035/schema_objclass.htm)
+##### [#reading_a_book_he_says](https://stackoverflow.com/questions/15573108/ldap-bind-invalid-credentials-49)
 
 ## Setting up a liberty server that works
 
@@ -1495,3 +1496,53 @@ you ask? It's become my standard go-to nickname when 'goodlike' is taken. Yes, i
 It is at this point that I reveal that I am, in fact, an esteemed video game developer
 whose game even has been played on youtube once! Amazing. If my game needed LDAP, I'd
 have just ended myself then and there.
+
+So let's see, we should be able to fill the file this far:
+
+    dn: uid=mumkashi,ou=users,dc=goodlike,dc=eu,dc=local
+    objectClass: top
+    objectClass: account
+    objectClass: posixAccount
+    objectClass: shadowAccount
+    cn: mumkashi
+    uid: mumkashi
+    uidNumber: ???
+    gidNumber: ???
+    homeDirectory: /home/mumkashi
+
+The rest of the attributes seem to be optional according to RFC, so we'll go with that.
+The issue is that we need two random numbers to fill. I wonder what they're supposed to be.
+
+'uidNumber' is "An integer uniquely identifying a user in an administrative domain".
+'gidNumber' is "An integer uniquely identifying a group in an administrative domain".
+
+Cool, so I guess I can just enter whatever number I want? How about 13? and 37? Let's go
+with those. Respectively.
+
+So now that I have 'mumkashi.lfid' file, I should add it to LDAP somehow. But we have
+a problem immediately. The suggested command is weird:
+'ldapadd -x -W -D "cn=ramesh,dc=tgs,dc=com" -f adam.ldif'
+
+Let's ignore the fact it also starts with '#' which I assume means I need sudo.
+Let's also ignore the single char options, I'm sure they're not important.
+Replacing 'adam' with 'mumkashi' is easy enough.
+But who the fuck is ramesh?????
+
+'cn' can be seen in [#slap_intro](#slap_intro) using an entirely different structure.
+Where the hell did it suddenly pop in from? Can I just ignore it? I'm gonna ignore it.
+
+So I enter 'sudo ldapadd -x -W -D "dc=goodlike,dc=eu,dc=local" -f mumkashi.ldif'
+and it asks me for LDAP password. No idea which password is that supposed to be, but
+luckily I used the same password FOR EVERYTHING just in case this would happen, so
+we should be fine. Except we're not fine because it gives an error.
+'ldap_bind: Invalid credentials (49)'. OK then.
+
+Bruh, the first google search is [#reading_a_book_he_says](#reading_a_book_he_says).
+Do we really need a book for this? Jesus Christ... Nothing in the response makes much sense
+to me, but I tried out the "debug" command! It did print a lot more gibberish this time.
+I could even see that it connected to LDAP server, AND sent the password in plaintext!
+Hurray! Still doesn't work.
+
+Look, irrespective of this being the right thing to do or not, or even relevant or not,
+I still want to at least be able to do it, such that I could at least attempt to verify
+the relevancy of it all. And, as it stands, I can't, because it doesn't fucking work :D
