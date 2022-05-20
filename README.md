@@ -1475,3 +1475,23 @@ so blurry to me, I may as well be watching Japanese porn. And I'm a practitioner
 anyways, so "the way to use something" to me is the same as "something" anyways.
 So I guess I'll continue calling LDAP something it probably isn't when I mean AD.
 If I even understand anything at all, LOL.
+
+Looking back to [#slap_account](#slap_account), even they use "LDAP directory".
+So I'm totally not alone on this. Hurray! What's 'shadowAccount' btw? Uh... no idea.
+It looks like an account... with 'shadow' prefix to everything. Given how 'posixAccount'
+seems like a "real" thing, not "made up", I guess this is also a thing? Whatever.
+
+My point is, what the hell are we doing here? How on earth am I supposed to set this up?
+So I need to have an account on the linux VM? And then use the information from there?
+Or am I supposed to use the LDAP system as my account management system, and then set this up?
+Which comes first? Chicken? Egg? Ham? Cranberry juice? Fuck it. I'll just use my existing
+account and see what happens. What's the worst that could happen, amirite?
+
+We need to adjust our previous approach and change the username to
+'uid=mumkashi,ou=users,dc=goodlike,dc=eu,dc=local'.
+
+What the hell is a [mumkashi](https://www.youtube.com/playlist?list=PLh0Ul3zO7LAhPnJh-SF59Le5Ui1NDEXU1),
+you ask? It's become my standard go-to nickname when 'goodlike' is taken. Yes, indeed.
+It is at this point that I reveal that I am, in fact, an esteemed video game developer
+whose game even has been played on youtube once! Amazing. If my game needed LDAP, I'd
+have just ended myself then and there.
