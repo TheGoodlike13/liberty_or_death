@@ -1452,3 +1452,26 @@ to follow the RFC requirements? Does each LDAP implementation provide their own 
 names for compliance with RFC? Do they just not comply with RFC? Does some future RFC
 I don't know of expand the definition and this is just an outdated version? Is RFC even
 important??? The ~~dream~~ world is collapsing. Great.
+
+Let's investigate the next one, 'posixAccount'. This leads us to a different RFC that is
+somehow also rebelling against itself in [this example](https://datatracker.ietf.org/doc/html/rfc2307#appendix-A).
+Clearly the example shows "uid" instead of "userid", so I guess we can just trash the
+previous RFC because it was drunk.
+
+Actually it seems that "uid" is pulled in as required by 'posixAccount' itself.
+So technically it could be entirely unrelated to "userid". Because of course.
+
+One thing that seems prudent to note is the requirement for a 'home directory'.
+This seems to be equivalent to the "user home folder" in the OS. Makes me wonder,
+if I had installed "Active Directory" when I installed Ubuntu, would that have created
+this "database" somewhere with an entry which would have my username and this property
+which would be set to my home directory which would then be used by OS somehow.
+Since I'm not at all familiar with the internals of any OS, this isn't so much helpful
+as stalling for time daydreaming so the day ends sooner, but still nice to think about.
+
+It does seem like I have to make a revision on LDAP being a database, as this whole
+Active Directory thing seems like the actual database. The line between the two is
+so blurry to me, I may as well be watching Japanese porn. And I'm a practitioner of OOP
+anyways, so "the way to use something" to me is the same as "something" anyways.
+So I guess I'll continue calling LDAP something it probably isn't when I mean AD.
+If I even understand anything at all, LOL.
