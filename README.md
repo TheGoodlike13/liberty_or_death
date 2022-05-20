@@ -1431,8 +1431,8 @@ knowing, for example, that this **is** the intended purpose and doing anything e
 this system is purely dumb, unsupported and liable to get you slapped across the face by
 any and all senior administrators in 500 yard radius. I would be even more happier if some
 sorry person would, you know, write that shit down in a bloody guide about LDAP for
-beginners. So either it is NOT the case, and this LDAP thing **CAN** and **HAS BEEN** used
-in whatever way whoever decided at whatever juncture, or everyone just sucks at
+beginners. So either it is **NOT** the case, and this LDAP thing **CAN** and **HAS BEEN**
+used in whatever way whoever decided at whatever juncture, or everyone just sucks at
 explaining shit properly. You know what's the worst? Given the state of various "documentation"
 I've read over my relatively short carrier, it's a bloody coin-flip on which it is.
 
@@ -1440,3 +1440,15 @@ It's like the Schrodinger's cat. Every single thing I read about this stuff only
 to propagate the bloody wave function instead of collapsing it, making it ever more increasingly
 confusing as to what the actual state of the thing I'm trying to understand actually is.
 At some point the cat will have hypothetical babies and I still won't know if it died or not.
+
+The next object class is 'account'. Sounds reasonable enough, what it do? According to [RFC](https://datatracker.ietf.org/doc/html/rfc1274#section-8.3.3),
+it seems to basically add a user id and some metadata. But we have a problem here.
+You see, there is no 'userid' key in the [#slap_account](#slap_account) example.
+I mean, sure, there's 'uid' which OBVIOUSLY is supposed to refer to the user id.
+But the RFC clearly says 'userid'. So, on one hand you could say that the name of the
+attribute is probably "made up" by everyone who ends up using it. On the other hand,
+if that's the case, then how on earth would you ensure the attribute exists if you want
+to follow the RFC requirements? Does each LDAP implementation provide their own attirbute
+names for compliance with RFC? Do they just not comply with RFC? Does some future RFC
+I don't know of expand the definition and this is just an outdated version? Is RFC even
+important??? The ~~dream~~ world is collapsing. Great.
