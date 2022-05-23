@@ -52,6 +52,8 @@ Links to various resources referred to (try [web archive](https://archive.org/) 
 ##### [#slap_account](https://www.thegeekstuff.com/2015/02/openldap-add-users-groups/)
 ##### [#table_of_death](https://docs.oracle.com/cd/E21043_01/oid.1111/e10035/schema_objclass.htm)
 ##### [#reading_a_book_he_says](https://stackoverflow.com/questions/15573108/ldap-bind-invalid-credentials-49)
+##### [#aneurysm_overload](https://stackoverflow.com/questions/15768473/ldap-bind-invalid-credentials-49-again)
+##### [#i_found_ramesh_guys](https://www.thegeekstuff.com/2015/01/openldap-linux/)
 
 ## Setting up a liberty server that works
 
@@ -1524,7 +1526,7 @@ a problem immediately. The suggested command is weird:
 'ldapadd -x -W -D "cn=ramesh,dc=tgs,dc=com" -f adam.ldif'
 
 Let's ignore the fact it also starts with '#' which I assume means I need sudo.
-Let's also ignore the single char options, I'm sure they're not important.
+Let's also ignore the single char options, I'm sure they're important.
 Replacing 'adam' with 'mumkashi' is easy enough.
 But who the fuck is ramesh?????
 
@@ -1546,3 +1548,42 @@ Hurray! Still doesn't work.
 Look, irrespective of this being the right thing to do or not, or even relevant or not,
 I still want to at least be able to do it, such that I could at least attempt to verify
 the relevancy of it all. And, as it stands, I can't, because it doesn't fucking work :D
+
+New week, new [#aneurysm_overload](#aneurysm_overload). The last answer in particular
+just is *beyond* horrifying. "It may be the configured password, but not the loaded one!"
+That is not a sentence that should exist in this universe as a result of any system.
+
+In any case, I notice a trend of having some file being configured. 'slapd.conf' call it.
+I don't recall adding anything specifically like that to any configuration, but honestly
+at this point my memory might just be failing me to protect my mind from the horrors
+I had to experience. Either way, if we configure this file with "credentials" like
+the "username" we use in our ldapadd query, things might start working. Might.
+
+Looking through the comments in the [#slap_account](#slap_account) page, it seems that
+this guide is part 2 of another guide. I start looking for it by entering 'LDAP' into
+the search bar. This produces a few pages with incomprehensible gibberish, and one page
+with gibberish that looks familiar! That's right, [#i_found_ramesh_guys](#i_found_ramesh_guys)!
+It seems that there is a link to this article in [#slap_account](#slap_account) too,
+but it's misleadingly titled "install LDAP", when clearly you're going to both install
+AND configure it in this article. Well, at least we found it, eventually.
+
+So, since we've already installed LDAP, we can skip to the configuration!
+Except we can't. Because it doesn't work.
+
+We're supposed to edit file '/etc/openldap/slapd.d/cn=config/olcDatabase={2}bdb.ldif',
+but no such file exists. To be precise, '/etc/openldap/' directory doesn't exist.
+Which, I suppose, implies the installation is not complete, at least not as far as
+this guide is considered.
+
+The installation command 'sudo yum install -y openldap openldap-clients openldap-servers'
+doesn't work either. Command 'yum' not found. But not so fast!
+By sheer coincidence during the last few days I stumbled upon [this video](https://odysee.com/@SomeOrdinaryGamers:a/please-stop-using-windows...:f)
+which gives a bit of an explanation. As we've seen before, there are different
+distributions (a weird word for 'types' or 'kinds') of linux. But it wasn't enough
+for them to make the linuxes different, they also made the installation programs
+different. Gotta style on those other tribes somehow, you know.
+
+In other words, as long as I replace 'yum' with the equivalent of whatever the hell
+installs things into Ubuntu, I should be fine. And we've had some things installed
+using apt, so surely that should work. Except it doesn't, because it can't find any
+of the packages. Great.
