@@ -55,6 +55,25 @@ Links to various resources referred to (try [web archive](https://archive.org/) 
 ##### [#aneurysm_overload](https://stackoverflow.com/questions/15768473/ldap-bind-invalid-credentials-49-again)
 ##### [#i_found_ramesh_guys](https://www.thegeekstuff.com/2015/01/openldap-linux/)
 
+## Contents
+
+### [Setting up a liberty server that works](#setting-up-a-liberty-server-that-works)
+#### [Dear diary,](#dear-diary)
+##### [Liberty in summary](#liberty-in-summary)
+### [The journey to hell](#the-journey-to-authentication-hell)
+#### [If it ain't broke, then how do you know you can fix it?](#if-it-aint-broke-then-how-do-you-know-you-can-fix-it)
+#### [Virtual Machine Arc](#virtual-machine-arc)
+##### [VM in summary](#vm-in-summary)
+#### [Ubuntu Online](#ubuntu-online)
+#### [Side story to share](#side-story-to-share)
+##### [Shared folder in summary](#shared-folder-in-summary)
+##### [HDD addendum](#hdd-addendum)
+#### [Rising of the Gibberish README](#rising-of-the-gibberish-readme)
+#### [Enter the slap](#enter-the-slap)
+#### [Depression](#depression)
+#### [Fire in the hole](#fire-in-the-hole)
+#### [Test your slap](#test-your-slap)
+
 ## Setting up a liberty server that works
 
 ### Dear diary,
