@@ -59,7 +59,7 @@ Links to various resources referred to (try [web archive](https://archive.org/) 
 
 ### [1. Setting up a liberty server that works](#setting-up-a-liberty-server-that-works)
 #### [1.1. Dear diary,](#dear-diary)
-##### [1.2. Liberty in summary](#liberty-in-summary)
+##### [1.1.1. Liberty in summary](#liberty-in-summary)
 ### [2. The journey to hell](#the-journey-to-authentication-hell)
 #### [2.1. If it ain't broke, then how do you know you can fix it?](#if-it-aint-broke-then-how-do-you-know-you-can-fix-it)
 #### [2.2. Virtual Machine Arc](#virtual-machine-arc)
