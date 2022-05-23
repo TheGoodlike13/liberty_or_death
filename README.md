@@ -1083,7 +1083,7 @@ Fuck it! We will trust this random person on the internet and put AD aside.
 Let's focus on setting up LDAP. Whatever that looks like.
 
 According to [#slapped](#slapped) I need to start off by installing OpenLDAP.
-That's the key to LDAP in linux. They even provides links for more details
+That's the key to LDAP in linux. They even provide links for more details
 if things go south. Let's get started!
 
 I just gotta do that 'sudo apt install openldap' and... it doesn't work.
@@ -1121,7 +1121,7 @@ at, ideally at every step. Still, a massive improvement over, uh, literally ever
 Especially IBM. Like, is there some sort of admin mafia, who, if you make a good guide,
 roll up to your front porch at night and dump some dead hard drives on your lawn?
 
-I perform the 'apt update' and 'app upgrade' as asked. This downloads a bunch of stuff
+I perform the 'apt update' and 'apt upgrade' as asked. This downloads a bunch of stuff
 which then prompts the computer for restart. Let's do that and proceed.
 
 'sudo apt-get install slapd ldap-utils -y' runs successfully. It asks me to enter
@@ -1156,7 +1156,7 @@ it will definitely work. Just add sudo and it'll work. Why can't it "just work"
 normally then? Rubbish. I'm deleting this VM as soon as I am done.
 
 I change the ownership of the file and then edit it again from scratch.
-I'll not that both the default file and the example use port '666' to illustrate.
+I'll note that both the default file and the example use port '666' to illustrate.
 But the instructions tells me to use port '389'. We'll stick to instructions, I guess.
 
 And finally, the last step 'ldapsearch -x'... doesn't work. Predictable.
@@ -1569,10 +1569,10 @@ I still want to at least be able to do it, such that I could at least attempt to
 the relevancy of it all. And, as it stands, I can't, because it doesn't fucking work :D
 
 New week, new [#aneurysm_overload](#aneurysm_overload). The last answer in particular
-just is *beyond* horrifying. "It may be the configured password, but not the loaded one!"
+is just *beyond* horrifying. "It may be the configured password, but not the loaded one!"
 That is not a sentence that should exist in this universe as a result of any system.
 
-In any case, I notice a trend of having some file being configured. 'slapd.conf' call it.
+In any case, I notice a trend of having some file being configured. 'slapd.conf' they call it.
 I don't recall adding anything specifically like that to any configuration, but honestly
 at this point my memory might just be failing me to protect my mind from the horrors
 I had to experience. Either way, if we configure this file with "credentials" like
@@ -1606,3 +1606,13 @@ In other words, as long as I replace 'yum' with the equivalent of whatever the h
 installs things into Ubuntu, I should be fine. And we've had some things installed
 using apt, so surely that should work. Except it doesn't, because it can't find any
 of the packages. Great.
+
+We've actually run into this exact issue before, so I consult the archives (by the
+archives I mean this README). Yes, right, [#dummy_slap](#dummy_slap) told me to install
+using 'apt-get'... but it used completely different package names ('slapd' for example).
+Using the ones from the 'yum' command just doesn't work. They just don't exist. They're
+gone. They're not present. Their presence cannot be detected. Looking for them is a waste
+of time. The configuration of particles in this universe fails to include the pattern
+which would allow them to exist.
+
+
