@@ -55,6 +55,9 @@ Links to various resources referred to (try [web archive](https://archive.org/) 
 ##### [#aneurysm_overload](https://stackoverflow.com/questions/15768473/ldap-bind-invalid-credentials-49-again)
 ##### [#i_found_ramesh_guys](https://www.thegeekstuff.com/2015/01/openldap-linux/)
 ##### [#a_real_man](https://manpages.ubuntu.com/manpages/xenial/man5/slapd-config.5.html)
+##### [#god_bodg_it](https://serverfault.com/questions/945790/olcrootpw-can-only-be-set-when-rootdn-is-under-suffix)
+##### [#german_science](https://www.linuxforen.de/forums/showthread.php?215314-LDAP-Server-will-nicht-starten)
+##### [#another_victim](https://stackoverflow.com/questions/30741095/openldap-error-entry-1-has-no-dn-slaptest-wont-work)
 
 ## Contents
 
@@ -74,6 +77,7 @@ Links to various resources referred to (try [web archive](https://archive.org/) 
 #### [2.7. Depression](#depression)
 #### [2.8. Fire in the hole](#fire-in-the-hole)
 #### [2.9. Test your slap](#test-your-slap)
+#### [2.10. The Fiddler is born](#the-fiddler-is-born)
 
 ## Setting up a liberty server that works
 
@@ -1686,3 +1690,69 @@ Riddle me this, Batman.
 THEN WHAT THE HELL AM I SUPPOSED TO FUCKING DO????? Who made this garbage ass system?
 Why doesn't it come pre-configured with some basic bullshit you could change later?
 What is wrong with these people???
+
+### The Fiddler is born
+
+Fine. It's time to get my hands dirty. If we can't use 'ldapmodify', but we still have to
+modify the 'cn=config.ldif' file, then I'll just have to reverse engineer the logic for
+the checksum calculation. We already know it's CRC32, so I just need to figure out the input.
+
+It seems that calculating the CRC32 is as simple as typing 'crc32 {filename}'.
+Well, let's give that a shot on our config file. Predictably the value does not match
+the one in the file. But what if we remove those lines temporarily? Bingo.
+
+I re-add the line I had previously deleted and run CRC32, then re-add the documentation lines
+at the top with the new CRC value. Running 'sudo slaptest -u' now no longer produces
+the checksum error. Hurray! Now let's hope 'ldapmodify' doesn't have any hidden side-effects
+that are not at all covered by this CRC32 magic trick.
+
+That's 1 out of 3 errors taken care of! NEXT!
+
+"<olcRootPW> can only be set when rootdn is under suffix". It would help if you could tell us,
+you know, what do you think these 'rootdn' and 'suffix' values are, because the ones I entered
+into the file seem just fine. Then again, I made that file myself, so it's entirely possible
+the system hasn't even looked there. Google it is!
+
+[#god_bodg_it](#god_bodg_it) seems to have exactly the same issue. The answer, unfortunately,
+is entirely useless because we go back to the Fiddler's riddle (that's the thing from previous
+chapter). It does seem that editing this 'cn=config.ldif' file using the advice from the guide
+is perilous to the extreme. Which is confusing, because the comment section seems to think it
+helped them. I mean, they could all be bots, but cmon.
+
+Anyway, what if we take the lines from 'database{2}bdb.ldif', which didn't exist anyway,
+and put them into 'cn=config.ldif', but also adjust them to have the prefix 'cn=config'?
+That's just insane enough to work.
+
+HAHAHAHAHAHAHAHAHAHAHAHAHAHA! No seriously. The Fiddler's riddle no.2:
+'suffix <cn=config> not allowed in frontend database'!
+
+1. I want to add an admin account to 'cn=config.ldif'.
+2. If I use a suffix that is not 'cn=config', it's a bad suffix.
+3. If I use a suffix that is 'cn=config', it's a bad suffix.
+
+Well, this one is less cryptic. Maybe if I make the suffix longer, it would work.
+Or maybe it just doesn't like the 'olcSuffix' property. Let's try these.
+
+Well, no. Both of those turn out to be false. Other suffixes, like 'cn=deeper,cn=config'
+give the same error. Removing the 'olcSuffix' goes back to the original error. The Fiddler wins.
+
+The issue seems to be EVEN DEEPER, because in my madness I tried just using original values
+from the database file. Turns out those are ALSO not allowed in frontend database!
+Well, that should help with searching for an answer, at least.
+
+I find nothing but cryptic garbage and somebody who thinks telling someone to read
+the fucking manual, when the manual is the size of a fucking book, is a serious answer.
+Seriously. I did find some [#german_science](#german_science) which doesn't help in of itself,
+but gives me the impression that the current approach can't possibly work.
+I probably would have to configure the whole system to use BDB in order for it to recognize
+the file. The file probably also needs a lot more values. Probably.
+
+So I return the file back to normal (I even kept the original CRC, hehe). Surely things
+should work? No, of course not. 'entry -1 has no dn'. What?
+
+Ah, [#another_victim](#another_victim). The answer does contain some more instructions which
+might be cool enough to follow through, so I'll give it a shot. BUT. The guy in the comments
+says they tried it. And then they got the error I get. Then the answer given is to re-install.
+Well, shit. I knew it would happen sooner or later, but it's not happening today, I'm done xD
+Let's just hope a quick re-install will be sufficient. Of course, his instructions use 'yum',
+so that's another YUMMY snack for tomorrow to figure out. Hurray!
