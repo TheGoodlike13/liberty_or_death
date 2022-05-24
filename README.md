@@ -58,6 +58,7 @@ Links to various resources referred to (try [web archive](https://archive.org/) 
 ##### [#god_bodg_it](https://serverfault.com/questions/945790/olcrootpw-can-only-be-set-when-rootdn-is-under-suffix)
 ##### [#german_science](https://www.linuxforen.de/forums/showthread.php?215314-LDAP-Server-will-nicht-starten)
 ##### [#another_victim](https://stackoverflow.com/questions/30741095/openldap-error-entry-1-has-no-dn-slaptest-wont-work)
+##### [#you_must_construct_additional_pylons](https://serverfault.com/questions/576473/ldap-add-no-such-object-32-matched-dn-dc-domain-dc-com)
 
 ## Contents
 
@@ -1756,3 +1757,50 @@ says they tried it. And then they got the error I get. Then the answer given is 
 Well, shit. I knew it would happen sooner or later, but it's not happening today, I'm done xD
 Let's just hope a quick re-install will be sufficient. Of course, his instructions use 'yum',
 so that's another YUMMY snack for tomorrow to figure out. Hurray!
+
+Reinstall went quite smoothly, all things considered. [This page](https://www.cyberciti.biz/faq/debian-ubuntu-linux-reinstall-a-package-using-apt-get-command/)
+is what I end up using to craft the command 'sudo aptitude reinstall slapd ldap-utils'.
+I had to install aptitude with 'sudo apt install aptitude' first, but that's a given.
+I did delete the config folder '/etc/ldap/slapd.d/' first using 'sudo rm -r {folder}'.
+It seems it has regenerated successfully. At first I thought it failed, because 'slaptest -u'
+still gave me errors, but when I did 'sudo slaptest -u', it didn't no more. How annoying.
+It's possible that there were no errors before and I just forgot 'sudo' again. Yay.
+
+So will we no longer be [#another_victim](#another_victim)? Yes, yes we will. I attempt to
+use the command 'sudo ldapsearch -Y EXTERNAL -H ldapi:/// -b "cn=config"' which supposedly
+is the thing that I complained didn't exist, which apprently exists, that is, admin access.
+Except it doesn't work, because I still get the same fucking stupid invalid credentials (49)
+error.
+
+My last ditch attempt at fixing this was the other files that did exist, namely
+'olcDatabase={1}mdb.ldif'. It already contained 'olcSuffix' and similar values,
+so I thought if I could just change the password, it would work. Unfortunately,
+even if I manually edit the password using the Fiddler way, the 'ldapadd' command still
+fails with bad credentials error.
+
+I restart the computer to see if something changes, and yes, things are even more broken!
+Now the LDAP server cannot even be reached at all. It might be related to [permissions](https://www.linuxquestions.org/questions/linux-networking-3/ldap_bind-can%27t-contact-ldap-server-383602/).
+Easy enough, just change back ownership... uh... to what again? Well, I use the command
+from the page 'ls -la /etc/ldap/slapd.d/cn=config/' to find out the user is 'openldap'.
+So the command should be 'sudo chown openldap /etc/ldap/slapd.d/cn=config/olcDatabase{1}.ldif'.
+Except that doesn't work because the file doesn't exist. Except it was just clearly listed
+and I can go to the folder and see it is there.
+
+I right click on the file, go to properties, then permissions tab, there I can change
+the settings for the group 'openldap' to 'read & write', then restart again. Server works again!
+
+OH. MY. GOD. It worked! We hacked our way into a system! The command
+'sudo ldapadd -x -W -D cn=admin,dc=goodlike,dc=eu,dc=local -f mumkashi.ldif' no longer
+gives me the middle finger! It even says 'adding new entry'!
+
+Unfortunately, it also says 'ldap_add: No such object (32)', but at least the error now
+is different and we can try to move on :D
+
+Predictably, the issue was that the new "user" had an organizational unit component "ou=users"
+which didn't exist. [#you_must_construct_additional_pylons](##you_must_construct_additional_pylons)
+for that to work. Or just delete the "ou=users" part. I don't think I have to tell you which
+one I picked :)
+
+So after this long journey we successfully added something to LDAP. Still no idea why, or what
+does this do, but at least, in theory, if we understood what we were doing, we could do it.
+Because we have.
