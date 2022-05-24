@@ -1797,7 +1797,7 @@ Unfortunately, it also says 'ldap_add: No such object (32)', but at least the er
 is different and we can try to move on :D
 
 Predictably, the issue was that the new "user" had an organizational unit component "ou=users"
-which didn't exist. [#you_must_construct_additional_pylons](##you_must_construct_additional_pylons)
+which didn't exist. [#you_must_construct_additional_pylons](#you_must_construct_additional_pylons)
 for that to work. Or just delete the "ou=users" part. I don't think I have to tell you which
 one I picked :)
 
