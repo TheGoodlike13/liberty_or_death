@@ -100,7 +100,7 @@ Now I had a project that wasn't exploding. I start following [#how_to_deploy](#h
 Immediately none of the classes they use in their example are present.
 Thankfully, [#mr_baeldung](#mr_baeldung) comes to the rescue!
 After adding the 'javax.servlet-api' dependency, it compiles.
-For the record, I coped the maven XML into the gradle file, and it was automatically formatted!
+For the record, I copied the maven XML into the gradle file, and it was automatically formatted!
 I did have to set 'implementation' instead of 'compile' myself, but still, that's pretty neat.
  
 However, the follow-up step asks me to package things into a 'war'.
@@ -370,7 +370,7 @@ It seems that the optical drive was already created by default. Huh.
 I can't seem to find a way to select the Ubuntu ISO, so I just start the machine.
 
 Immediately it tells me to select the thing to put into a drive. Good boy!
-Now that's more like it! I keep clicking add buttons until I can select it in files.
+Now that's more like it! I keep clicking 'add' buttons until I can select it in files.
 
 Aaaand it crashes. Immediately. VT-x is disabled in the BIOS for all CPU modes.
 Sounds pretty familiar, probably the thing that prevented me from doing the VM
@@ -566,7 +566,7 @@ but somehow I didn't make that connection logically as I was just browsing rando
 Anyhow, we've got ourselves a lock-less screen! Success!
 
 Unsurprisingly, our alien command doesn't work. Because alien was not installed either.
-More 'sudo apt'! But, of course, it still doesn't work.
+More 'sudo apt'! But, of course, even after installation, 'alien' still doesn't work.
 
 It complains about not running as 'root' and that the ownership of files might be wrong?
 I guess that's just because I didn't prefix it with sudo. You know what, I'll just
@@ -984,7 +984,7 @@ is 'aes128'. They seem to relate to the keys printed by 'getprinc goodlike' earl
 of encrypted shenanigans.
 
 I think it's safe to say that 'ktutil' is a builder. We called #addEntry twice and now we need
-to call #build. Like this: 'wkt goodlike.keytab'. This build the file in working directory,
+to call #build. Like this: 'wkt goodlike.keytab'. This builds the file in working directory,
 I guess. Then we enter 'q' to escape ktutil's grasp.
 
 Hey guess what! I forgot 'sudo' on the next command again! 'sudo klist -kte goodlike.keytab' prints
@@ -1265,7 +1265,7 @@ Then I copy paste and adjust the file contents as instructed. They end up like t
 
 Notably, I use 'enp0s8', as 'enp0s3' is the first network adapter which I left as NAT
 for internet access. Then the IP is just the next available IP address after the one
-I entered in the VirtualBox settings. Network could anything, so I left its suffix as 0.
+I entered in the VirtualBox settings. Network could be anything, so I left its suffix as 0.
 Gateway and netmask are just the VirtualBox settings. Dns-nameservers is whatever the
 hell it is, but I changed the one IP address to match the gateway as in the example.
 Oh, and 8.8.8.8 is the public google DNS service. No idea why that pops up here out
@@ -1405,7 +1405,7 @@ Of course, they're using something more like a "readable" URL format, so maybe
 'adam.users.tgs.com' is closer to what they were going for. But nobody (sane) would
 create APIs like that either. 'tgs.com/users/adam' is the sane(r) version of such an idea.
 
-Give the examples that [#slap_intro](#slap_intro) provides, I think it's safe to assume
+Given the examples that [#slap_intro](#slap_intro) provides, I think it's safe to assume
 that the 'dc=', 'ou=' and 'uid=' are just made up. Well, they *do* stand for something
 specific, but I have to assume they are just 'conventions' decided by some grand long
 forgotten architect of this system.
