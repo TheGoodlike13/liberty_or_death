@@ -59,6 +59,8 @@ Links to various resources referred to (try [web archive](https://archive.org/) 
 ##### [#german_science](https://www.linuxforen.de/forums/showthread.php?215314-LDAP-Server-will-nicht-starten)
 ##### [#another_victim](https://stackoverflow.com/questions/30741095/openldap-error-entry-1-has-no-dn-slaptest-wont-work)
 ##### [#you_must_construct_additional_pylons](https://serverfault.com/questions/576473/ldap-add-no-such-object-32-matched-dn-dc-domain-dc-com)
+##### [#fusion](https://wiki.debian.org/LDAP/OpenLDAPSetup#Kerberos)
+##### [#fusion_but_old](https://wiki.debian.org/LDAP/Kerberos)
 
 ## Contents
 
@@ -79,6 +81,7 @@ Links to various resources referred to (try [web archive](https://archive.org/) 
 #### [2.8. Fire in the hole](#fire-in-the-hole)
 #### [2.9. Test your slap](#test-your-slap)
 #### [2.10. The Fiddler is born](#the-fiddler-is-born)
+#### [2.11. The Fiddler fuses](#the-fiddler-fuses)
 
 ## Setting up a liberty server that works
 
@@ -1804,3 +1807,40 @@ one I picked :)
 So after this long journey we successfully added something to LDAP. Still no idea why, or what
 does this do, but at least, in theory, if we understood what we were doing, we could do it.
 Because we have.
+
+### The Fiddler fuses
+
+The next obvious step would be to perform the [#fusion](#fusion) between LDAP and Kerberos.
+I suppose we could do a quick recap on what we know so far first, to get on the same page.
+So LDAP is a protocol used to access a "directory", a fancy name for a database of key-value
+mappings. Kerberos is a protocol that facilitates "logging in", whatever that might mean
+for any system. I suppose that since LDAP is basically a database, you could make Kerberos
+use it somehow to store something in some way. Why would you want to do that? Who knows.
+Maybe you just don't wanna write shit and want to integrate everything magically. That's
+probably it. In other words, bad idea.
+
+But bad ideas are all we've got, so let's get on with this [#fusion](#fusion) stuff.
+[#fusion_but_old](#fusion_but_old) is the actual website I found, but it links to the new one.
+Nonetheless, it at least attempts to give some insight to the motivation: apparently if you
+JUST used LDAP, you'd need to do something crazy, like, store a password in the database.
+I know, who would do such a thing? So instead we'll not store it, and make it magically
+disappear into the stomach of a three headed mythical monster. That's definitely better.
+
+OK, OK, enough foreplay. What's the first thing? Install LDAP enabled Kerberos servers? Uh oh.
+I just have normal Kerberos servers. Are you telling me this is so complicated that the devs
+decided to give up on even attempting configuring such things, and just created a whole separate
+installation package for this case? That's crazy.
+
+You know, at some point you'd think they'd realize: we've gone too far. This is too much.
+This is not a reasonable approach. It's not gonna work.
+
+But no. These madmen keep going forward, probably while listening to [this](https://www.youtube.com/watch?v=2S4qGKmzBJE).
+So what are our options here? Uninstall Kerberos and install this new one? I haven't had much
+luck uninstalling things, as random settings remain unchanged for no reason. And because these
+people thought it's a good idea to drop settings in some random esoteric directory somewhere
+in the OS, it's not like I can just go and delete it manually, at least not easily. A reinstall
+of the OS itself would be faster and simpler. Honestly, the more I write about these programs,
+the more they sound like a virus! :D
+
+Alright, how about this. Let's just try *installing this on top of the existing installation*.
+If that fails miserably, it will be a good enough excuse to start over with the OS. Let's go!
