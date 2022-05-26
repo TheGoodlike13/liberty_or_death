@@ -61,6 +61,8 @@ Links to various resources referred to (try [web archive](https://archive.org/) 
 ##### [#you_must_construct_additional_pylons](https://serverfault.com/questions/576473/ldap-add-no-such-object-32-matched-dn-dc-domain-dc-com)
 ##### [#fusion](https://wiki.debian.org/LDAP/OpenLDAPSetup#Kerberos)
 ##### [#fusion_but_old](https://wiki.debian.org/LDAP/Kerberos)
+##### [#sudo_the_world](https://serverfault.com/questions/451869/ldap-modify-insufficient-access-50)
+##### [#what_the_fuck_did_i_just_read](https://serverfault.com/questions/578710/wrong-attributetype-when-using-ldapadd)
 
 ## Contents
 
@@ -1844,3 +1846,150 @@ the more they sound like a virus! :D
 
 Alright, how about this. Let's just try *installing this on top of the existing installation*.
 If that fails miserably, it will be a good enough excuse to start over with the OS. Let's go!
+
+Unfortunately, it seems I've made a horrible mistake. I got a pop-up to install "updates" for
+the VM OS. 10MB it says. How long could it possibly take, I think? Well, it's taking forever.
+Great. At least it finishes eventually.
+
+Surprisingly, the installation goes through successfully.
+'sudo apt install krb5-kdc-ldap krb5-admin-server schema2ldif' only says that the admin server
+is already installed, and the latest version, which makes sense since we did install some Kerberos
+stuff and we just updated everything.
+
+Things stop going well with step 2.
+'sudo zcat /usr/share/doc/krb5-kdc-ldap/kerberos.openldap.ldif.gz | ldapadd -Q -Y EXTERNAL -H ldapi:///'
+We're loading a schema, which I wonder what it does. Normally, schema refers to something like,
+dunno, table column definitions. So perhaps this contains proprietary objectClass definitions?
+Doesn't matter much because we get "Insufficient access (50)" error. Given that we're trying to
+use the same broken mechanism some other comment suggested before, this is hardly surprising.
+I'm just gonna peek into this .gz file quickly, and then let the fiddling begin!
+
+Well, a quick glance does reveal it to be some bizarre .ldif file with a lot of definitions.
+A lot of them say 'SUP', and I can just say 'nothin' back.
+
+It turns out all we had to do is [#sudo_the_world](#sudo_the_world). Apparently if you use a pipe,
+that does not, in fact, keep sudo going. So the command that works is this:
+'sudo zcat /usr/share/doc/krb5-kdc-ldap/kerberos.openldap.ldif.gz | sudo ldapadd -Q -Y EXTERNAL -H ldapi:///'
+It both makes sense, and makes me wonder how come all linux developers have not been simultaneously
+assassinated yet.
+
+Next we're gonna add an index to something. See? It is a database. Except if I gave this task
+to guys that work with DB in my team, they would die from consecutive aneurysms. Instantly.
+'sudo ldapmodify -Q -Y EXTERNAL -H ldapi:/// <<EOF' seems to work. I keep entering more things
+as explained by the guide:
+
+    dn: olcDatabase={1}mdb,cn=config
+    add: olcDbIndex
+    olcDbIndex: krbPrincipalName eq,pres,sub
+    EOF
+
+Seems promising, because we're using something that actually should exist, namely, olcDatabase{1}mdb.
+But it doesn't work. We get an error 'wrong attributeType at line 3, entry "olcDatabase={1}mdb,cn=config"'.
+I find this kind of odd, because 'olcDatabase={1}mdb,cn=config' is in line 1. And I'm not sure what
+part is wrong in line 3 then. olcDbIndex? krbPrincipalName? eq,pres,sub?
+
+My best guess is 'olcDatabase={1}mdb,cn=config' doesn't understand what krbPrincipalName is,
+since it seems very Kerberos-specific? Wasn't the schema imported to avoid such things, though?
+
+I have but a simple thought coming from reading the first google search answer.
+[#what_the_fuck_did_i_just_read](#what_the_fuck_did_i_just_read)? Seriously?
+That's the level of bullshit we're dealing with here? A MERE SPACE COULD BREAK THINGS???
+
+I have to admit, that for the most part, I felt I have been somewhat exaggerated in terms of my,
+uh, criticisms regarding these systems, because I'm new and angry. It's only natural.
+But after reading that, I'm doubling down, motherfuckers. Whoever made this must be destroyed.
+They are actively making the world of software engineering worse and making our name slanderous.
+I will not stand for this. You should not stand for this. Down with the systems!
+
+Meanwhile, google has a bit of a stroke. I search for "olcDatabase={1}mdb,cn=config".
+It says, "no results". Then it prints the results for the search query *without the quotes*.
+The first page literally has "olcDatabase={1}mdb,cn=config" as its title, meaning, by definition,
+it should've been picked up with the quotes search. Not that it helps, as they have a different
+kind of error.
+
+You know what, fuck it. This step is optional anyways. No better solution than not doing it.
+And while it's true that we're just running away from the problem, perhaps follow-up steps
+will give more insight into what's wrong. It's worked so far!
+
+Next is another optional step, but it's so big and weird I find it hard to believe its optional.
+Let's try it anyway. Plus, it says something about organizational units, maybe we'll learn
+how to add those.
+
+Holy shit! I actually managed to enter everything correctly first time and it worked. Like this:
+    
+    sudo ldapadd -x -D cn=admin,dc=goodlike,dc=eu,dc=local -W <<EOF
+    dn: ou=Services,dc=goodlike,dc=eu,dc=local
+    objectClass: organizationalUnit
+    objectClass: top
+    ou: Services
+    
+    dn: ou=kerberos,ou=Services,dc=goodlike,dc=eu,dc=local
+    objectClass: organizationalUnit
+    objectClass: top
+    ou: kerberos
+    
+    dn: uid=kdc,ou=kerberos,ou=Services,dc=goodlike,dc=eu,dc=local
+    uid: kdc
+    objectClass: account
+    objectClass: simpleSecurityObject
+    userPassword: {CRYPT}x
+    description: Kerberos KDC Account
+    
+    dn: uid=kadmin,ou=kerberos,ou=Services,dc=goodlike,dc=eu,dc=local
+    uid: kadmin
+    objectClass: account
+    objectClass: simpleSecurityObject
+    userPassword: {CRYPT}x
+    description: Kerberos Admin Server Account
+    EOF
+
+Then I entered the password twice (once for sudo and once for ldapadd) and it's all added.
+So far this is within my expectations. These accounts, because they're not "user" accounts
+like 'posixAccount', are much simpler.
+
+I continue to pop off by entering these without errors:
+
+    sudo ldappasswd -x -D cn=admin,dc=goodlike,dc=eu,dc=local -W -S uid=kdc,ou=kerberos,ou=Services,dc=goodlike,dc=eu,dc=local
+    sudo ldappasswd -x -D cn=admin,dc=goodlike,dc=eu,dc=local -W -S uid=kadmin,ou=kerberos,ou=Services,dc=goodlike,dc=eu,dc=local
+
+Admittedly, the second one was easy, as I just had to press 'up' and modify the previous command.
+But that's still going strong! And of course, every single password is still the same.
+
+Now the next part gives me pause, because it says, and I quote, "something like this:",
+which is not what I wanna see. It seems like we're doing another typical DB thing of granting
+rights. Since I'm not too sure about the rights mechanism, I'll just copy the command verbatim,
+except for the 'dn' parts, of course:
+
+    sudo ldapmodify -Q -Y EXTERNAL -H ldapi:/// <<EOF
+    dn: olcDatabase{1}mdb,cn=config
+    add: olcAccess
+    olcAccess: {0}to attrs=krbPrincipalKey
+      by anonymous auth
+      by dn.exact="uid=kdc,ou=kerberos,ou=Services,dc=goodlike,dc=eu,dc=local" read
+      by dn.exact="uid=kadmin,ou=kerberos,ou=Services,dc=goodlike,dc=eu,dc=local" write
+      by self write
+      by * none
+    -
+    add: olcAccess
+    olcAccess: {1}to dn.subtree="cn=krbContainer,ou=kerberos,ou=Services,dc=goodlike,dc=eu,dc=local"
+      by dn.exact="uid=kdc,ou=kerberos,ou=Services,dc=goodlike,dc=eu,dc=local" read
+      by dn.exact="uid=kadmin,ou=kerberos,ou=Services,dc=goodlike,dc=eu,dc=local" write
+      by * none
+    EOF
+
+Unfortunately, this is as far as our streak goes. I end up making a few typos, although it seems
+correcting them is not a big deal after all. But none of the typos were the problem.
+The problem is "Invalid DN syntax (34)". Great. I'm so glad you told me which one is the problem
+so I can fix it...
+
+Turns out I had misspelled the very first DN! Look:
+
+    dn: olcDatabase{1}mdb,cn=config    # my mistake
+    dn: olcDatabase={1}mdb,cn=config   # correct
+
+I did mess around with other DNs first, but I suppose the fact that no other typos before
+affected the error should've clued me in. But, you see, I can be forgiven, because that's
+an assumption you could make in a system designed by sane people. This is definitely not
+such a system. I guess even a broken mind is sane twice a day, as the saying goes.
+
+The other steps seem to be unnecessary, so we're gonna jump straight into Kerberos next!
