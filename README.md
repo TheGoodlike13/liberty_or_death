@@ -1883,10 +1883,10 @@ as explained by the guide:
     olcDbIndex: krbPrincipalName eq,pres,sub
     EOF
 
-Seems promising, because we're using something that actually should exist, namely, olcDatabase{1}mdb.
+Seems promising, because we're using something that actually should exist, namely, olcDatabase={1}mdb.
 But it doesn't work. We get an error 'wrong attributeType at line 3, entry "olcDatabase={1}mdb,cn=config"'.
 I find this kind of odd, because 'olcDatabase={1}mdb,cn=config' is in line 1. And I'm not sure what
-part is wrong in line 3 then. olcDbIndex? krbPrincipalName? eq,pres,sub?
+part is wrong in line 3 then. olcDbIndex? krbPrincipalName? eq,pres,sub? et tu, Kerberos?
 
 My best guess is 'olcDatabase={1}mdb,cn=config' doesn't understand what krbPrincipalName is,
 since it seems very Kerberos-specific? Wasn't the schema imported to avoid such things, though?
