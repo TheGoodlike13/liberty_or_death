@@ -1993,3 +1993,81 @@ an assumption you could make in a system designed by sane people. This is defini
 such a system. I guess even a broken mind is sane twice a day, as the saying goes.
 
 The other steps seem to be unnecessary, so we're gonna jump straight into Kerberos next!
+
+I modify '/etc/krb5.conf' and '/etc/krb5kdc/kdc.conf' as suggested. A few of the values
+were already there. Notably in 'kdc.conf' we're replacing the entire realm configuration.
+I assume previous config was the stuff we setup for Kerberos long time ago.
+The new configuration will make Kerberos use LDAP as a database, for what it's worth.
+In all cases I use 'GOODLIKE.EU.LOCAL' as the realm, which replaces the original 'GOODLIKE.EU'.
+
+I skip editing '/etc/krb5kdc/kadm5.acl' as it already has been edited for admins long time ago.
+
+The next command actually has 'sudo' in it randomly. You're telling me the others would work
+without sudo? I don't believe you :D Anyway, here it is:
+
+    sudo kdb5_ldap_util -D cn=admin,dc=goodlike,dc=eu,dc=local create -subtrees dc=goodlike,dc=eu,dc=local -r GOODLIKE.EU.LOCAL -s -H ldapi:///
+    
+I believe this creates a bunch of stuff you could see under 'sudo ldapsearch -x'.
+As always, same password.
+
+Speaking of same password, we set some more:
+
+    sudo kdb5_ldap_util -D cn=admin,dc=goodlike,dc=eu,dc=local stashsrvpw -f /etc/krb5kdc/service.keyfile uid=kdc,ou=kerberos,ou=Services,dc=goodlike,dc=eu,dc=local
+    sudo kdb5_ldap_util -D cn=admin,dc=goodlike,dc=eu,dc=local stashsrvpw -f /etc/krb5kdc/service.keyfile uid=kdc,ou=kerberos,ou=Services,dc=goodlike,dc=eu,dc=local
+
+You can actually find them in (sort of) plaintext in '/etc/krb5kdc/service.keyfile'.
+
+Next we need to start Kerberos... but it's probably already running, so I try to stop it
+while at it:
+
+    systemctl stop krb5-kdc krb5-admin-server
+    systemctl start krb5-kdc krb5-admin-server
+
+I encounter some issues, but its mostly typos in config files which I promptly fix.
+We're on a roll today! But, alas, all good things must come to an end.
+Next up we try to add Bob as a user:
+
+    sudo kadmin.local
+    > addprinc bob
+    > q
+
+But this fails. Apparently the rights that were given are simply insufficient.
+As always, there is just not enough information on what on earth is wrong.
+Normally, this wouldn't be an issue, as you could just, you know, look at things,
+see a discrepancy and fix it. But I can't tell what is and isn't a discrepancy because
+at no point or step was anything explained to such a degree.
+
+For example, in the statement where we granted rights, we did so to
+ 
+    dn.subtree="cn=krbContainer,ou=kerberos,ou=Services,dc=goodlike,dc=eu,dc=local"
+
+But the DN suffix we configured in Kerberos was this:
+
+    ldap_kerberos_container_dn = cn=kerberos,ou=Services,dc=goodlike,dc=eu,dc=local
+    
+I mean, it doesn't take a genius to tell these are different. Yet the guide clearly
+provided both, and everything else so far seems to be working.
+I can't just edit 'ldap_kerberos_container_dn' either, because as far as I am concerned,
+that could break some other assumption of this proprietary setup elsewhere.
+
+What if I give it more rights then? Like this?
+ 
+    dn.subtree="dc=goodlike,dc=eu,dc=local"
+
+That's about as many rights as you could possibly need, right? WRONG! Doesn't work!
+Breaks both LDAP and Kerberos.
+
+Admittedly, this might just be an issue with me editing the olcDatabase file.
+If I try to use 'ldapmodify' to change 'olcAccess', it deletes it completely first.
+As I didn't copy all pre-existing things, this may have broken something.
+
+So I delete 'slapd.d' folder again, re-install using 'aptitude' like before,
+perform the Fiddler's surprise to manually change the password for 'cn=admin'
+(a very painful process, by the way), then try to add the rights. This time I even use
+a file instead of typing it manually! Except that doesn't work. Unlike last time,
+it rejects my addition by saying olcAccess{0} and olcAccess{1} are already taken.
+And true, they are taken. They were also taken the last time, and the program managed
+to insert them into 0 & 1 respectively without issue. But now that I'm using a file,
+which is 100% more logical, it doesn't work no more. So I have to manually change
+the numbers to {3} and {4}. But after all of this, things still don't work, and I have
+no idea if its because of 3 & 4 or some other reason >.<
