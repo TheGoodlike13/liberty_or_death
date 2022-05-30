@@ -63,6 +63,7 @@ Links to various resources referred to (try [web archive](https://archive.org/) 
 ##### [#fusion_but_old](https://wiki.debian.org/LDAP/Kerberos)
 ##### [#sudo_the_world](https://serverfault.com/questions/451869/ldap-modify-insufficient-access-50)
 ##### [#what_the_fuck_did_i_just_read](https://serverfault.com/questions/578710/wrong-attributetype-when-using-ldapadd)
+##### [#burn_in_hell](https://askubuntu.com/questions/147277/sudo-apt-get-remove-does-not-remove-config-files)
 
 ## Contents
 
@@ -84,6 +85,7 @@ Links to various resources referred to (try [web archive](https://archive.org/) 
 #### [2.9. Test your slap](#test-your-slap)
 #### [2.10. The Fiddler is born](#the-fiddler-is-born)
 #### [2.11. The Fiddler fuses](#the-fiddler-fuses)
+#### [2.12. The Fiddler purges](#the-fiddler-purges)
 
 ## Setting up a liberty server that works
 
@@ -2071,3 +2073,59 @@ to insert them into 0 & 1 respectively without issue. But now that I'm using a f
 which is 100% more logical, it doesn't work no more. So I have to manually change
 the numbers to {3} and {4}. But after all of this, things still don't work, and I have
 no idea if its because of 3 & 4 or some other reason >.<
+
+### The Fiddler purges
+
+I'm still somewhat daunted by the prospect of redo-ing the whole VM installation.
+It's not that I'm lazy or anything. I just like to do things when I understand precisely
+what it is that I am doing. When something is nebulous or unclear, I lose motivation,
+because I don't even know what I will achieve in the process.
+
+So I say, let's make those modules I installed [#burn_in_hell](#burn_in_hell).
+I'll remove them all, then do a "fresh" installation. Take that!
+
+    sudo apt purge krb5-kdc krb5-admin-server krb5-config krb5-kdc-ldap schema2ldif slapd ldap-utils
+    sudo apt install krb5-kdc-ldap krb5-admin-server schema2ldif
+    sudo apt install slapd ldap-utils
+    sudo dpkg-reconfigure slapd
+
+I enter the same things as before, except simplify my domain to 'goodlike.eu'.
+Then I proceed to use the [#fusion](#fusion) page again, in order.
+Surprisingly, this time the password for the admin that I enter when setting up LDAP works!
+And I even managed to add the index that previously refused to be added!
+Is this finally the break we've been waiting for? No. Something else doesn't work.
+
+The command to modify rights now complains with an entirely different error:
+
+    ldap_modify: Other (e.g. implementation specific) error (80)
+            additional info: <olcAccess> handler exited with 1
+
+There seems to be some evidence that this is just a [syntax error](https://serverfault.com/questions/1004980/how-to-wrap-long-lines-for-olcaccess),
+but no messing around with the command works. What about putting it into an .ldif file?
+Same error. This time even changing things to {3} and {4} doesn't help, it's just completely
+bricked.
+
+Something to consider: I kept the file I had previously used to attempt to give rights,
+and it also gives the same error. This at least rules out input problems, as it didn't give
+this kind of error before.
+
+I attempt to use the Fiddler's surprise to enter these values of olcAccess manually,
+but it doesn't work. LDAP just thinks there's an error with the resulting config file.
+It's not that surprising. The values we want to add a very long, and they were carefully
+cut back when this file worked. I have no idea how, though, as I didn't keep those around.
+I thought, foolishly, well, it worked, it couldn't possibly break like this. Ha. HA!
+HAHAHAHAHAHHAHAHAHAHHAHAHHAHAHAHHAAHAHAHAH!
+
+Anyway, I give up and install a whole new VM instance, download updates for it,
+the repeat the steps (except the index one) from this chapter and it now works.
+Because of course. Must've been the wind that broke it.
+
+I re-configure the network which once again using 'nm-connection-editor', then
+re-configure the network on VirtualBox side as it has gone mad again, restart,
+network works. Hurray. I'm getting good at this. I wish I didn't have to.
+
+I continue following [#fusion](#fusion) instructions all the way up to adding 'bob',
+where we had to stop due to insufficient privileges. And what do you know? It doesn't work.
+Same exact error of insufficient privileges. Because of course.
+At least we know now that originally we had not broken anything with our installation-on-top.
+Until we started fiddling, at least.
