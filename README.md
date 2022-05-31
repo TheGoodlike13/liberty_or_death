@@ -2424,3 +2424,46 @@ I'm going to try to add the password to 'uid=kadmin' again, I guess? If this fai
 I guess I'm gonna re-install another VM instance and just add rights to "dc=goodlike,dc=eu"
 subtree from the beginning. This will put a nail in the coffin of whether that's the issue
 or not.
+
+I re-installed the VM and tried various configurations with varying degree of failure.
+It never works. I'm giving up on this. By this, however, I mean the 'kdc' and 'kadmin'
+optional setup. We're gonna go straight to root.
+
+Oh my fucking God. How on earth does anyone still continue to use this dilapidated garbage?
+There aren't enough magnum bullets in the world to shoot the next person who suggests using
+this absolutely trash tier nonsensical fucked-in-the-ass system with.
+
+So, I try, I really do, and I put in the thing, with the root permissions, into the command:
+
+    sudo ldapmodify -Q -Y EXTERNAL -H ldapi:/// <<EOF
+    dn: olcDatabase={1}mdb,cn=config
+    add: olcAccess
+    olcAccess: {0}to attrs=krbPrincipalKey
+      by anonymous auth
+      by dn.exact="dn:gidNumber=0+uidNumber=0,cn=peercred,cn=external,cn=auth" write
+      by self write
+      by * none
+    -
+    add: olcAccess
+    olcAccess: {1}to dn.subtree="cn=krbContainer,ou=kerberos,ou=Services,dc=goodlike,dc=eu"
+      by dn.exact="dn:gidNumber=0+uidNumber=0,cn=peercred,cn=external,cn=auth" write
+      by * none
+    EOF
+
+And don't you worry, sonny, I did create the 'ou=kerberos' and 'ou=Services' beforehand,
+so that can't be it.
+
+It doesn't work if I split the commands, it doesn't work if I type them manually or copy,
+other commands which modify olcAccess, like the old ones with 'kdc' and 'kadmin' do work,
+which means I've fucked the configuration for the bazillionth time and will need a full
+re-install of the VM AGAIN just to be sure that whatever breaks in the future is not induced
+by this abject failure, it doesn't work if I google it because the stupid fucking error
+that I get is "oh, I don't know, I'm retarded (80)" and the error is some sort of weird
+catch-all bullshit that is usually associated with putting in one space instead of two spaces
+(that's a treat!) but even despite that being absolutely insane, that's not even the issue!
+No amount of fucking spaces work!
+
+Fuck it! I didn't actually try deleting the spaces to make less! Why not?
+Of course it doesn't work. Why would it work? Nothing works. It's just bricked and broken
+and shit and garbage and every other possible mean word in existence that ever has, is
+or will be uttered simultaneously.
