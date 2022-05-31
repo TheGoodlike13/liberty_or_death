@@ -19,6 +19,7 @@
 #### [2.10. The Fiddler is born](#the-fiddler-is-born)
 #### [2.11. The Fiddler fuses](#the-fiddler-fuses)
 #### [2.12. The Fiddler purges](#the-fiddler-purges)
+#### [2.13. It's time to back up a little](#its-time-to-back-up-a-little)
 
 Links to various resources referred to (try [web archive](https://archive.org/) if down, should work for most):
 
@@ -2467,3 +2468,5 @@ Fuck it! I didn't actually try deleting the spaces to make less! Why not?
 Of course it doesn't work. Why would it work? Nothing works. It's just bricked and broken
 and shit and garbage and every other possible mean word in existence that ever has, is
 or will be uttered simultaneously.
+
+### It's time to back up a little
