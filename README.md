@@ -1,5 +1,25 @@
 # Trying to setup SSO for a liberty application (from zero)
 
+### [1. Setting up a liberty server that works](#setting-up-a-liberty-server-that-works)
+#### [1.1. Dear diary,](#dear-diary)
+##### [1.1.1. Liberty in summary](#liberty-in-summary)
+### [2. The journey to hell](#the-journey-to-authentication-hell)
+#### [2.1. If it ain't broke, then how do you know you can fix it?](#if-it-aint-broke-then-how-do-you-know-you-can-fix-it)
+#### [2.2. Virtual Machine Arc](#virtual-machine-arc)
+##### [2.2.1. VM in summary](#vm-in-summary)
+#### [2.3. Ubuntu Online](#ubuntu-online)
+#### [2.4. Side story to share](#side-story-to-share)
+##### [2.4.1. Shared folder in summary](#shared-folder-in-summary)
+##### [2.4.2. HDD addendum](#hdd-addendum)
+#### [2.5. Rising of the Gibberish README](#rising-of-the-gibberish-readme)
+#### [2.6. Enter the slap](#enter-the-slap)
+#### [2.7. Depression](#depression)
+#### [2.8. Fire in the hole](#fire-in-the-hole)
+#### [2.9. Test your slap](#test-your-slap)
+#### [2.10. The Fiddler is born](#the-fiddler-is-born)
+#### [2.11. The Fiddler fuses](#the-fiddler-fuses)
+#### [2.12. The Fiddler purges](#the-fiddler-purges)
+
 Links to various resources referred to (try [web archive](https://archive.org/) if down, should work for most):
 
 ##### [#ibm_basic](https://www.ibm.com/support/pages/websphere-liberty-developers)
@@ -64,28 +84,6 @@ Links to various resources referred to (try [web archive](https://archive.org/) 
 ##### [#sudo_the_world](https://serverfault.com/questions/451869/ldap-modify-insufficient-access-50)
 ##### [#what_the_fuck_did_i_just_read](https://serverfault.com/questions/578710/wrong-attributetype-when-using-ldapadd)
 ##### [#burn_in_hell](https://askubuntu.com/questions/147277/sudo-apt-get-remove-does-not-remove-config-files)
-
-## Contents
-
-### [1. Setting up a liberty server that works](#setting-up-a-liberty-server-that-works)
-#### [1.1. Dear diary,](#dear-diary)
-##### [1.1.1. Liberty in summary](#liberty-in-summary)
-### [2. The journey to hell](#the-journey-to-authentication-hell)
-#### [2.1. If it ain't broke, then how do you know you can fix it?](#if-it-aint-broke-then-how-do-you-know-you-can-fix-it)
-#### [2.2. Virtual Machine Arc](#virtual-machine-arc)
-##### [2.2.1. VM in summary](#vm-in-summary)
-#### [2.3. Ubuntu Online](#ubuntu-online)
-#### [2.4. Side story to share](#side-story-to-share)
-##### [2.4.1. Shared folder in summary](#shared-folder-in-summary)
-##### [2.4.2. HDD addendum](#hdd-addendum)
-#### [2.5. Rising of the Gibberish README](#rising-of-the-gibberish-readme)
-#### [2.6. Enter the slap](#enter-the-slap)
-#### [2.7. Depression](#depression)
-#### [2.8. Fire in the hole](#fire-in-the-hole)
-#### [2.9. Test your slap](#test-your-slap)
-#### [2.10. The Fiddler is born](#the-fiddler-is-born)
-#### [2.11. The Fiddler fuses](#the-fiddler-fuses)
-#### [2.12. The Fiddler purges](#the-fiddler-purges)
 
 ## Setting up a liberty server that works
 
