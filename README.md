@@ -128,12 +128,19 @@ At least that makes sense, because I never did any war to begin with.
 is not needed when using 'war' plugin.
 Turns out to be true and all is well in the project again!
 
-The next step seems to be running 'gradlew installApps'. Except that doesn't work.
-The task 'installApps' could not be found.
+The next step seems to be running
+
+    gradlew installApps
+
+Except that doesn't work. The task 'installApps' could not be found.
 Google results for 'Task "installApps" not found in root project' also could not be found.
 Also, 'installApps' could not be found anywhere in [#gradle_plugin](#gradle_plugin) project.
 Uh oh.
-Well, let's experiment. How about 'gradlew install'?
+
+Well, let's experiment. How about
+
+    gradlew install
+    
 Ambiguous. Candidates are: 'installFeature', 'installLiberty'.
 Wait a minute, one of those is awfully familiar... let's try that.
 Well, it runs. Does it do the thing? Nobody knows.
@@ -146,7 +153,10 @@ Or the nebulous phrase 'manually create a runtime and server'. OK then.
 I'll go and do that. Somehow. Bye.
 
 Let's go back to [#how_to_deploy](#how_to_deploy).
-Since we're using 'war' plugin, we can run 'gradlew war'
+Since we're using 'war' plugin, we can run
+
+    gradlew war
+
 which will produce a '.war' file in the build directory.
 I'd say that qualifies for step 2.
 
@@ -163,7 +173,11 @@ So I decided to save them to the [web archive](https://archive.org/). Take that!
 
 As I was doing this, I scrolled past some of the documentation in [#gradle_plugin](#gradle_plugin).
 I noticed there should be a task called 'libertyCreate' which supposedly creates
-a server. It also ran and did something. Could this be the thing I needed? My god...
+a server:
+
+    gradlew libertyCreate
+
+It also ran and did something. Could this be the thing I needed? My god...
 What can I say. Software engineering works in mysterious ways.
 
 Time to proceed onwards with step 4. We're on [#how_to_deploy](#how_to_deploy) if you're lost.
@@ -172,7 +186,10 @@ I add the servlet feature to the server.xml file.
 Step 5. Start the server. I don't trust this page anymore, so I'll refer to
 [#gradle_plugin](#gradle_plugin) instead. That's where all the cool kids look for documentation.
 I'm a bit perplexed, as there seems to be a difference between 'running' and 'starting'.
-Let's try to use the specific wording from the guide and run 'gradlew libertyStart'.
+Let's try to use the specific wording from the guide and run
+
+    gradlew libertyStart
+    
 Looks like it succeeded. But I'm not sure at what.
 
 There's some weirdly formatted text, a message you would typically expect someone to put there,
@@ -182,7 +199,10 @@ Maybe I shouldn't have messed with those files :(
 
 I restore the original httpEndpoint configuration, but that seems to have no effect.
 I stop with 'gradlew libertyStop' and start again to no avail.
-Looks like its time to run away! Yes, that's right! 'gradlew libertyRun' works!
+Looks like its time to run away! Yes, that's right!
+
+    gradlew libertyRun
+    
 I think both of the options work, but 'start' just launches it in the background,
 whereas 'run' hooks right onto it. It only prints the info into the console if it's hooked.
 But that's just a guess. Don't take my word for it.
@@ -528,12 +548,20 @@ out of the box. Looks like some [plugin](https://superuser.com/questions/42134/h
 might be required. What if I just open the page in a browser inside a VM though?
 
 Success! It took a little effort to find the page, as they also have their product
-specific pages online, but I can copy the command now! Hurray! Except it doesn't work.
+specific pages online, but I can copy the command now! Hurray!
+
+    rpm -ivh krb5-server-1.10.3-10.el6_4.6.x86_64.rpm
+
+Except it doesn't work.
 
 The command uses rpm, which I assume is a client for some place that you can download from.
 Well, this fresh Ubuntu ain't got that. But at least it tells me this! And even tells me
-how to install it! 'sudo apt install rpm'. It installs without a hitch.
-So how about running the command now? It doesn't work.
+how to install it!
+
+    sudo apt install rpm
+    
+It installs without a hitch.
+So how about running the command now? It still doesn't work.
 
 First thing that rpm does is immediately reprimand me for doing something I don't know what it is.
 'You should use Alien instead!' Oh yeah, I'll just take it up with the guys who wrote
@@ -552,7 +580,10 @@ The first page I find on [#it_was_aliens](#it_was_aliens) seems to imply its som
 converter between types of packages, which I assume refers to the format in which
 applications are stored so they can be installed into linux, particularly via command line.
 
-Well, why don't we try running 'alien --to-rpm {that thing with the version and stuff}'.
+Well, why don't we try running
+
+    alien --to-rpm krb5-server-1.10.3-10.el6_4.6.x86_64.rpm
+    
 Well, I'd love to, but my Ubuntu has locked the screen. Now, I remember the password,
 but it would be really annoying to constantly get locked because I tab out to check
 something elsewhere. It's a VM, who cares.
@@ -574,7 +605,10 @@ but somehow I didn't make that connection logically as I was just browsing rando
 Anyhow, we've got ourselves a lock-less screen! Success!
 
 Unsurprisingly, our alien command doesn't work. Because alien was not installed either.
-More 'sudo apt'! But, of course, even after installation, 'alien' still doesn't work.
+
+    sudo apt install alien
+
+But, of course, even after installation, 'alien' still doesn't work.
 
 It complains about not running as 'root' and that the ownership of files might be wrong?
 I guess that's just because I didn't prefix it with sudo. You know what, I'll just
@@ -582,21 +616,30 @@ prefix everything with sudo from now on. I'm sure that's a good and helpful idea
 doesn't break the security model that was intended whatsoever. Well, they should've
 thought of it sooner.
 
+    sudo alien --to-rpm krb5-server-1.10.3-10.el6_4.6.x86_64.rpm
+
 But the fundamental problem is the same. There is no 'krb5-server-1.10.3-10.el6_4.6.x86_64.rpm'.
 Therefore I assume we must find a new version. Maybe if I remove the version it will
-figure it out by itself? Nope. That was admittedly probably too much to ask :D
+figure it out by itself?
+ 
+    sudo alien --to-rpm krb5-server
+ 
+Nope. That was admittedly probably too much to ask :D
 
 Looking for something like a version, I find [#ubuntu_kerberos](#ubuntu_kerberos) instead.
 This guide seems a lot more well intentioned than the previous one AND it doesn't have
 random versions in it! Let's play along for now!
 
-I'll note that they make a really poor decision when it comes to their approach.
-If the command can be run either with administrative privilege or with 'sudo',
-why not just 'sudo' prefix all commands that need the privilege anyway?
-If you don't need 'sudo', you can just copy the command *after* sudo.
-Right now, I'm copying commands after '#'. Whether it was '#' or 'sudo' would make
-no difference to me, but it would probably be much easier to explain than a random
-symbol. Just saying.
+This guide has made a very poor decision in handling commands, at least for purposes of copy-paste.
+They prefix every command with '#' when actually they mean that every command should
+be prefixed with 'sudo'. So whenever I copy the command I have to remember to manually
+type sudo, which is annoying and will continue to trip me up for some time.
+I assume that in some cases 'sudo' is not needed, but whoever would be copy-paste-ing
+the commands could just ignore the 'sudo' part. I'm sure they'd know that.
+And they could copy just the part that they want. I'm the one getting shafted here, seriously.
+Not to mention 'sudo' makes a lot more sense than '#' when explaining something...
+
+    sudo apt install krb5-kdc krb5-admin-server krb5-config
 
 Running the install command succeeds, but we're met with an installation dialogue.
 This is somewhat different than the previous guide, which explains the difference in
@@ -609,7 +652,7 @@ I'm going to try to explain every step the way I understood it (oh boy).
 This is in the interest of perspective. And maybe even learning something!
 
 To begin, I assume that at the end of this wizard we should have a working
-Kerberos server installed. It may or may not run, but it definitely can be started.
+Kerberos server installed. I hope it will also run automatically.
 
 First we are asked for the default realm. Now what exactly is a realm?
 Let us speculate based on an entirely surface understanding of the question :D
@@ -730,13 +773,18 @@ follow the instructions, I should be good to go!
 
 First, I need to install the additions. Already done that. Next step.
 
-Second, I need to run the command 'sudo adduser {username} vboxsf'.
+Second, I need to run the command
+
+    sudo adduser {username} vboxsf
+
 I run this command. It doesn't work. "The group 'vboxsf' does not exist."
 Maybe I didn't install the additions after all :(
 
 Upon further inspection, the answer contains a link to [#who_needs_gui_anyway](#who_needs_gui_anyway)
 which reveals a secret additional step of running
-'sudo apt-get install -y dkms build-essential linux-headers-generic linux-headers-$(uname -r)'
+
+    sudo apt-get install -y dkms build-essential linux-headers-generic linux-headers-$(uname -r)
+
 which supposedly will install the pre-requisites for running the actual .run file.
 Either I'm being hard trolled right now, or some dummy really fucked up by
 **not** adding that command to the run file. Or this is just stupid for some
@@ -745,8 +793,15 @@ other stupid reason.
 I run the command. It doesn't work. "Bad substitution". Fine then. I'll just
 type out the outcome of what I assume to be another command myself.
 
-Finally the command succeeds, I proceed to run the .run file. I had to run it
-with 'sudo', because it required admin privileges. Maybe that's why it failed
+    uname -r
+    > 5.15.0-33-generic
+    sudo apt-get install -y dkms build-essential linux-headers-generic linux-headers-5.15.0-33-generic
+
+Finally the command succeeds, I proceed to run the .run file.
+
+    sudo /media/{your username}/{Virtual Box CD name}/VBoxLinuxAdditions.run
+
+I had to run it with 'sudo', because it required admin privileges. Maybe that's why it failed
 to achieve anything before. I think I would've noticed that, but at this point the only
 thing preventing my rage from manifesting is the typing of the very sentence you are reading
 right now, so maybe that has something to do with it. Maybe.
@@ -765,6 +820,8 @@ Before I even get there, the file explorer shows me "sf_shared", which is my
 shared folder. But I can't access it because I don't have rights.
 Wait. I remember something like that... wasn't there 'vboxsf' group?
 Let's try that.
+
+    sudo adduser {username} vboxsf
 
 I added myself to the group! Yes! Finally! I can see the fo... it doesn't work.
 Still does not give me access. Well, shit.
@@ -835,7 +892,7 @@ Well, whatever. I enter the command and it outputs cryptic gibberish to me.
 
 "It's much more important that your password is secure than that you remember it.
 But if you forget it, you can no longer use the database or something."
-That's some hardcode mixed messaging. Thankfully, we don't actually need our password
+That's some hardcore mixed messaging. Thankfully, we don't actually need our password
 to be secure, since, you know, we're only setting up a toy here. I'll make it the same
 as the 'sudo' password for simplicity.
 
@@ -877,16 +934,17 @@ it for half a year here.
 The config itself looks normal. By that I mean I cannot see any immediate shenanigans
 that would make me cringe, and the rest of it looks like any other random config file
 for random application you don't understand. I suppose a few of these properties are
-somewhat parsable. But if I had to guess what the hell any of them do, I'd start commenting
-them out and see what breaks. And I don't even know how to check if something is broken
-yet. So I think I'll leave it alone for now.
+somewhat parsable. But if I had to figure out what the hell any of them do, I'd start
+by  commenting them out and see what breaks.
+And I don't even know how to check if something is broken yet.
+So I think I'll leave it alone for now.
 
 Notably, I can't see any 'localhost' in here. That does not bode well :D
 
 Next up, I edit the kadm5.acl file as described in [#ubuntu_kerberos](#ubuntu_kerberos).
 That's just removing one '#', so pretty easy. I guess this is the list of usernames,
 which they insist calling principals for some reason, which have admin access. Whatever
-that give them. I'll keep it in mind. Goodlike/admin sounds pretty good :D
+that gives them. I'll keep it in mind. Goodlike/admin sounds pretty good :D
 
 And of course, the next step is the setup for Kerberos client. I'm gonna go ahead and
 try to setup it on the **same** machine as the server. What could possibly go wrong? :D
@@ -903,7 +961,9 @@ Well, well, well, looks like my issue was that I was following the guide in good
 Should've gone with [#bad_faith](#bad_faith) instead. Apparently some commands have to
 be executed under 'kadmin' command. Glad I've been informed of this. By someone else!@!
 
-Ah, except the 'kadmin.local' command doesn't work. It authenticated me as my user/admin,
+    kadmin.local -q "addprinc {username}"
+
+Ah, except the 'kadmin.local' command doesn't work. It authenticated me as my {user}/admin,
 you know, the one I used as username when installing the Ubuntu itself. But then that
 user gets denied access to the DB2 database. So what is happening? Do I already have
 a {user}/admin principal? Or do I not have it, and that's why I'm denied permission?
@@ -918,14 +978,22 @@ I already got one. I just can't do anything with it. Restarting the service does
 do anything.
 
 In an act of sheer madness I prefix sudo with all the commands and we finally get somewhere.
+
+    sudo kadmin -q "list_principles"
+    sudo kadmin.local -q "list_principles"
+
 'sudo kadmin' doesn't work because it can't find root/admin (wait who the hell is root?)
 'sudo kadmin.local' just works. Because of course it does. The command I tried was
-the most inconsequential one (as far as I thought) - list_principles. But instead I'm
+the most inconsequential one (as far as I thought) - 'list_principles'. But instead I'm
 greeter with a list of 4 principals. None of which were my user or root. So how on earth
 is this working???
 
+    sudo kadmin -p kadmin/kadmin -q "list_principles"
+
 Alright, so one of the principals is 'kadmin/admin'. So I try to use 'kadmin/admin' with
 'sudo kadmin', but now it doesn't find the principal.
+
+    sudo kadmin.local -p kadmin/kadmin -q "list_principles"
 
 If I pass this into 'sudo kadmin.local' instead, and misspell it, it still works.
 I don't get it. So anything and everything works if I use .local regardless of principal.
@@ -940,6 +1008,8 @@ just allows you to do whatever you want. As long as you run it with 'sudo' and t
 Fine. Let's not get ahead of ourselves. We figured out how to make it work.
 Let's return to [#ubuntu_kerberos](#ubuntu_kerberos) and proceed onwards.
 
+    sudo kadmin.local -q "addprinc goodlike"
+
 So I use 'kadmin.local' to hack straight into the database and add the 'goodlike' principal.
 But wait. I have to set the password? What? Why would the person on the server set the
 password for the user? How does that make any sense? I mean, luckily, I'm both the server
@@ -951,19 +1021,25 @@ For the sake of security (lol) I use the same password as for everything else in
 Principal. Created! Cool, can I, uh, do anything with it? Probably nothing in 'kadmin'.
 Let's continue.
 
-'sudo kinit goodlike' almost sounds like a spell to banish the Necronomicon. I almost missed
+    sudo kinit goodlike
+
+That almost sounds like a spell to banish the Necronomicon. I almost missed
 sudo again, because, like I said, this guide was written by geniuses who think replacing
 'sudo' with '#' in their notes is a good idea. Anyway, I enter the password and nothing happens,
 which I think means something happened, and it just didn't tell me. Well, one way to find out.
 
-'sudo klist' actually lists my ticket, nice. I'll note that if you inspect the guide extremely
+    sudo klist
+
+It actually lists my ticket, nice. I'll note that if you inspect the guide extremely
 carefully, there's blocks of text that actually technically tell you how to do everything in
 detail. And by detail I mean you can't tell that's what they do at a glance, which makes them
 pretty bad. And they **still** replace 'sudo' with '#' in those. Only by collecting the
 puzzle pieces from everywhere else do I now understand that's their purpose. Still, now
 that we made it so far, surely we can blitz through the rest of it, right? Right?
 
-'sudo kadmin.local -q "getprinc goodlike"' works too. Looking good.
+    sudo kadmin.local -q "getprinc goodlike"
+    
+Works. Looking good.
 
 The next section seems to deal with keytab creation. This piques interest, as keytab seemed to be
 a key configuration in whatever the hell those other projects did to make this shit work.
@@ -980,48 +1056,67 @@ One more note that disturbs me though: changing keytab file when passwords chang
 seem very configuration-like. Oh well. Maybe if you do something you don't have to change it.
 Whatever.
 
-We're using 'sudo ktutil' which seems to rob the terminal of its control, somehow. Anyway, I almost
-forget 'sudo' *again*. Thanks guide. I enter these commands:
+    sudo ktutil
 
-'add_entry -password -p goodlike@GOODLIKE.EU -k 1 -e aes256-cts-hmac-sha1-96'
+This robs the terminal of its control, somehow.
+Anyway, I almost forget 'sudo' *again*. Thanks guide.
 
-'add_entry -password -p goodlike@GOODLIKE.EU -k 1 -e aes128-cts-hmac-sha1-96'
+    add_entry -password -p goodlike@GOODLIKE.EU -k 1 -e aes256-cts-hmac-sha1-96
+    add_entry -password -p goodlike@GOODLIKE.EU -k 1 -e aes128-cts-hmac-sha1-96
 
 They might seem like they're exactly the same, but actually one of them is 'aes256' and the other
 is 'aes128'. They seem to relate to the keys printed by 'getprinc goodlike' earlier. Some kind
 of encrypted shenanigans.
 
 I think it's safe to say that 'ktutil' is a builder. We called #addEntry twice and now we need
-to call #build. Like this: 'wkt goodlike.keytab'. This builds the file in working directory,
-I guess. Then we enter 'q' to escape ktutil's grasp.
+to call #build. Like this:
 
-Hey guess what! I forgot 'sudo' on the next command again! 'sudo klist -kte goodlike.keytab' prints
-the shizz. As expected.
+    wkt goodlike.keytab
 
-'sudo kinit -k -t goodlike.keytab goodlike' also works, although prints nothing.
-'sudo klist' shows information. What the guide people didn't expect is that I would run it *before*
+This builds the file in working directory, I guess. Then we enter
+
+    q
+
+to escape ktutil's grasp.
+
+Hey, guess what! I forgot 'sudo' on the next command again!
+
+    sudo klist -kte goodlike.keytab
+
+prints the shizz. As expected.
+
+    sudo kinit -k -t goodlike.keytab goodlike
+    
+Works, although prints nothing.
+
+    sudo klist
+    
+Shows information. What the guide people didn't expect is that I would run it *before*
 'sudo kinit' as well as *after*. Thus being able to see the difference and determining that
 calling 'sudo kinit' also refreshes the ticket. Using the keytab file instead meant I didn't
 have to use the password. Which makes perfect sense. So if somebody is calling 'sudo kinit' logic,
 but like a client, they can use the keytab file instead of a password. I wonder if we can hook
 this damn file to Liberty somehow, that'd be amazing.
 
-Things have started to calm down, so I reviewed some of the process so far. Turns out that
-I had misspelled 'kadmin/admin' as 'kadmin/kadmin' (can you blame me) when running the 'sudo kadmin'
-program too. This explains why it didn't work. It doesn't explain how it's supposed to work, because
-I tried the **ONLY** password I used in **EVERY** circumstance and it still was wrong. Fuck it.
-I'll just hack away with 'sudo kadmin.local' like a pleb. If I even need to do anything else anymore.
+Things have started to calm down, so I reviewed some of the process so far.
+Turns out that I had misspelled 'kadmin/admin' as 'kadmin/kadmin' (can you blame me)
+when running the 'sudo kadmin' program too. This explains why it didn't work.
+It doesn't explain how it's supposed to work, because I tried the **ONLY** password
+I used in **EVERY** circumstance and it still was wrong. Fuck it.
+I'll just hack away with 'sudo kadmin.local' like a pleb.
+If I even need to do anything else anymore.
 
 Now, before we return to [#spnego_sad](#spnego_sad) or any similar resource, let's try to just
 hook normal authentication through Kerberos. That seems like a logical idea.
 Particularly with our track record, if something doesn't work, I'd like to flush it out now
 rather than getting distracted for a week again.
 
-First non-IBM page I encounter is [#open_your_heart](#open_your_heart). It seems to relate specifically
-to some sort of *open* implementation of liberty. It can't be something all that different, because
-it seems to use the familiar format in configuration. That being said, there's no knowing if
-this will work or not with what I'm doing. It does give some hints, like features being able to use
-Kerberos credentials. In their example, a database connection is configured that way (I think).
+First non-IBM page I encounter is [#open_your_heart](#open_your_heart).
+It seems to relate specifically to some sort of *open* implementation of liberty.
+It can't be all that different, because it seems to use the familiar format in configuration.
+That being said, there's no knowing if this will work or not with what I'm doing.
+It does give some hints, like features being able to use Kerberos credentials.
+In their example, a database connection is configured that way (I think).
 
 That's not quite what I need, but we can try to investigate all possible features we could
 add to server.xml. Maybe one of them will be so obviously related to authentication, we will
@@ -1048,7 +1143,9 @@ But not so fast! Ubuntu is not quite ready to give up yet. The keytab file was c
 by root, so I have no rights to it, because of course. I guess I have to take ownership of it
 somehow first.
 
-Looks like [#im_the_captain_now](#im_the_captain_now). Simply 'sudo chown {user} goodlike.keytab' works.
+    sudo chown {user} goodlike.keytab
+
+Looks like [#im_the_captain_now](#im_the_captain_now).
 
 My shared folder now comes in handy. I can move the file through it. Fun fact: the link
 on explorer now just works, so I don't have to go all the way around through 'other locations'.
@@ -1059,8 +1156,8 @@ Kerberos though. And clicking the link for my application does not ask me for a 
 Well, that was a bit much to expect, I suppose.
 
 In a twist of fate, [#ibm_security](#ibm_security) actually does contain some info.
-I need to setup a user registry of some kind. I assume in my examples the LDAP takes care of that,
-and we don't have nothin' here.
+I need to setup a user registry of some kind.
+I assume in my examples the LDAP takes care of that, and we don't have nothin' here.
 
 I can't seem to find any resources online that would help. The impression I get is that
 far from being anywhere near done, we need to setup a bunch of framework shenanigans.
@@ -1069,8 +1166,8 @@ It might be time to shelve Kerberos progress for now and proceed onto Active Dir
 ### Enter the slap
 
 The network on my PC continues to deteriorate. Long loading times.
-Multiple DHCP problems. Just a random network death.
-But! I did get a message from my network provider that they will be doing some maintenance!
+Multiple DHCP problems. Just a random network death. But!
+I did get a message from my network provider that they will be doing some maintenance!
 So who knows. Maybe there's still some hope.
 Remind me to reset my hardware come tomorrow morning.
 
@@ -1134,51 +1231,81 @@ at, ideally at every step. Still, a massive improvement over, uh, literally ever
 Especially IBM. Like, is there some sort of admin mafia, who, if you make a good guide,
 roll up to your front porch at night and dump some dead hard drives on your lawn?
 
-I perform the 'apt update' and 'apt upgrade' as asked. This downloads a bunch of stuff
-which then prompts the computer for restart. Let's do that and proceed.
+    sudo apt update
+    sudo apt upgrade -y
 
-'sudo apt-get install slapd ldap-utils -y' runs successfully. It asks me to enter
-the password twice, and we continue to use the same password just in case.
+This downloads a bunch of stuff which then prompts the computer for restart.
+Let's do that and proceed.
+
+    sudo apt-get install slapd ldap-utils -y
+
+This asks me to enter the password twice, and we continue to use the same password.
 And no, it's not 'password'.
 
-Now 'sudo systemctl status slapd.service' on the other hand prints a bunch of gibberish.
-It also locks me from the terminal. I had to escape using the CTRL+C trick.
+    sudo systemctl status slapd.service
+    
+Prints a bunch of gibberish. It also locks me from the terminal.
+I had to escape using the CTRL+C trick.
 In any case, it seems that this gibberish means things work.
-I test the same command by appending 'z' to the end, which prints rightfully that
-no such servicez could be found.
+I test the same command by appending 'z' to the end
 
-'sudo dpkg-reconfigure slapd' part goes almost as described.
+    sudo systemctl status slapd.servicez
+    
+which prints rightfully that no such servicez could be found.
+
+    sudo dpkg-reconfigure slapd
+    
 I choose 'goodlike.eu.local' for my domain name. Yikes.
 For the organization I went with 'goodlike_incorporated'. Big yikes.
 Then all proceeded as expected, but I never got to choose a database backend.
 I would just follow the instructions anyway, so that's fine by me.
 
-'sudo slapcat' prints a lot less than expected, but I suppose that's fine too.
+    sudo slapcat
+    
+This prints a lot less than expected, but I suppose that's fine too.
 Seems like just generic info about what was just configured.
 
-'sudo systemctl status slapd' does indeed report an active status.
+    sudo systemctl status slapd
+    
+This does indeed report an active status.
 
-'sudo nano /etc/ldap/ldap.conf' opens what passes for a text editor in linux. Eew.
-No thanks. I'll just find the file in a directory and edit it with notepad equivalent.
+    sudo nano /etc/ldap/ldap.conf
+    
+This opens what passes for a text editor in linux. Eew. No thanks.
+I'll just find the file in a directory and edit it with notepad equivalent.
 At least I can escape by using CTRL+X.
 
 Uh oh. The file refuses to be saved because I don't have permissions. Lovely.
 Don't you just love when you can't do basic things like editing text files on your computer?
 And, of course, if you use some arcane and decrepit way of editing via console
-it will definitely work. Just add sudo and it'll work. Why can't it "just work"
+it will definitely work. Just add 'sudo' and it'll work. Why can't it "just work"
 normally then? Rubbish. I'm deleting this VM as soon as I am done.
 
+    sudo chown {user} /etc/ldap/ldap.conf
+
 I change the ownership of the file and then edit it again from scratch.
+
+    BASE    dc=goodlike,dc=eu,dc=local
+    URI     ldap://goodlike.eu.local ldap://goodlike.eu.local:389
+
 I'll note that both the default file and the example use port '666' to illustrate.
 But the instructions tells me to use port '389'. We'll stick to instructions, I guess.
 
-And finally, the last step 'ldapsearch -x'... doesn't work. Predictable.
-I tried to change back the ownership of the config file to root just in case,
-but it doesn't seem to be the problem.
+And finally, the last step
+ 
+    ldapsearch -x
+    
+... doesn't work. Predictable.
+
+    sudo chown root /etc/ldap/ldap.conf
+
+Doesn't seem like that was the problem.
 
 The problem is that the LDAP server cannot be contacted. Which, I suppose, makes sense.
 I've been entering all kinds of URLs that don't exist anywhere.
 Maybe I should try using exact IP address or localhost in config.
+
+    URI     ldap://localhost ldap://localhost:389
 
 Good news! Localhost works! So we have successfully identified the problem.
 I suppose instead of using localhost it would be prudent for me to find the IP
@@ -1186,11 +1313,17 @@ address so I can connect to this thing from outside the VM. I assume that localh
 will not, in-fact work for connecting to the VM from outside. But maybe it would.
 There might be additional problems down the line, but let's hope not.
 
-I found the IP address by calling 'ifconfig -a'. I had to install it first by calling
-'sudo apt install net-tools'. Using this exact IP also works instead of localhost.
-Hurray!
+    sudo apt install net-tools
+    ifconfig -a
+    
+    URI     ldap://10.0.2.15 ldap://10.0.2.15:389
+
+Using the IP address from 'ifconfig -a' also works! Hurray!
 
 This does bring up a prudent question. Can I even connect to the VM from my PC?
+
+    ping 10.0.2.15
+
 Uh oh. Ping definitely doesn't work, although it might be [fixable](https://stackoverflow.com/questions/18278409/cant-ping-a-local-vm-from-the-host).
 Then again, ping might be too "outside network" specific, for all I know.
 Then there's also stuff like firewalls to consider... ugh...
@@ -1251,6 +1384,9 @@ in one of those places! Eh, what the hell, let's give it a shot.
 
 To start off, we must edit '/etc/network/interfaces' which notably does not exist.
 Since it doesn't exist, I can't give ownership to myself of it. Leaving me with no choice.
+
+    sudo vi /etc/network/interfaces
+
 I foolishly decide to try out using Vim! Kill me now. Please. Just end this misery.
 Can you guess, can you just imagine the procedure you must follow to save a file with Vim?
 Oh, it's no big deal. Just press escape, then type ':w', then Enter. Obviously.
@@ -1261,6 +1397,9 @@ knowledge, I know.
 
 So anyway, I manage to save the file '/etc/network/interfaces' with random inputs in it.
 Then I change the ownership of the file so I can edit it with a sane program.
+
+    sudo chown {user} /etc/network/interfaces
+
 Then I copy paste and adjust the file contents as instructed. They end up like this:
 
      auto  enp0s8
@@ -1279,19 +1418,24 @@ hell it is, but I changed the one IP address to match the gateway as in the exam
 Oh, and 8.8.8.8 is the public google DNS service. No idea why that pops up here out
 of nowhere. But it may as well stay.
 
-Surprise! 'sudo systemctl restart networking' doesn't work! Networking.service not found!
+    sudo systemctl restart networking
+
+Surprise! It doesn't work! Networking.service not found!
 That's great news. I'll just restart the VM and pretend I didn't see that.
 
-And if we call 'ip add' after restart... it doesn't work. Well, 'ip add' works.
-But the IP address is nowhere to be found. I'm guessing something to do with the
-networking.service not being found.
+    ip add
 
-And before you even ask, no, changing the owner to 'root' does nothing.
+Doesn't work. Well, 'ip add' works. But the IP address is nowhere to be found.
+I'm guessing something to do with the networking.service not being found.
+
+And before you even ask, no, changing the owner back to 'root' does nothing.
 
 Turns out the service has changed its name in newer Ubuntu versions [#because_of_course](#because_of_course).
-'systemctl list-unit-files | grep -i network' reveals that I had to use
-'sudo systemctl restart NetworkManager' after all.
 
+    systemctl list-unit-files | grep -i network
+    sudo systemctl restart NetworkManager
+
+The first command reveals the name I had to use in the second one.
 Of course, that does nothing. The IP address is still nowhere to be found.
 
 The next day I am greeted with a question. Is my network home or public?
@@ -1308,12 +1452,18 @@ has changed when Ubuntu updated to version 20 or something.
 And no, moving the file to 'netplan' directory doesn't work.
 
 The answer seems to be [#ask_the_manager](#ask_the_manager). By running the command
-'nm-connection-editor' we get a 'Network connections' window with both connections.
+
+    nm-connection-editor
+    
+we get a 'Network connections' window with both connections.
 
 They are numbered according to the VirtualBox settings, so I edit the appropriate
 one's settings. In the settings there is a 'IPv4 Settings', which allows me to choose
 'Manual' method for IP address. Then I add the IP settings that I had previously
-configured in the 'interfaces' file here. Notably, I didn't have to add network mask.
+configured in the 'interfaces' file here. Notably, I didn't have to add a network mask.
+
+*Editor's note: I did have to add it in future attempts, so no idea why it was missing
+this time. Maybe I was just blinded by rage. Who knows?*
 
 After I save the settings, the network automatically 'connects', whatever that means.
 You can see it in the top right network icon, actually.
@@ -1333,19 +1483,27 @@ in the first place. But I obviously have issues with it both ways.
 Well, I setup the exception exactly as explained, putting in the IP addresses that I used
 instead of the example ones. It doesn't achieve anything.
 
-I decide to investigate 'ipconfig /all' to see if everything is OK on this side, and it
-sure seems so. Except that my DHCP lease had been acquired mere 20 mins ago and is to
-expire in 10. This might explain the random questions about the network type.
+    ipconfig /all
+
+I decide to investigate if everything is OK on windows side, and it sure seems so.
+Except that my DHCP lease had been acquired mere 20 mins ago and is to expire in 10.
+This might explain the random questions about the network type.
 Clearly DHCP was not co-operating as usual, so I perform my usual 'reset' procedure:
 
     netsh winsock reset catalog
     netsh int ipv4 reset reset.log
+    
+    *restart computer*
+    
     ipconfig /flushdns
 
-I restart the computer and check ipconfig again... to see it has gone completely mad.
-VirtualBox confirms this. The IP mask changed to 255.255.0.0 and the IP address is
-completely random. Yet it is statically set in VirtualBox. WTF? DHCP still disabled btw.
+I check ipconfig again... to see it has gone completely mad. VirtualBox confirms this.
+The IP mask changed to 255.255.0.0 and the IP address is completely random.
+Yet it is statically set in VirtualBox. WTF? DHCP still disabled btw.
 I guess I'll reset it to original values and run the VM again.
+
+    ping 192.168.1.1
+    ping 192.168.1.2
 
 OK... so... it works now. Pings go both ways. No idea which part, if any, of this actually
 fixed this LOL.
@@ -1353,12 +1511,26 @@ fixed this LOL.
 With that in mind we have our new 'IP' address, so we better update Kerberos and LDAP
 to actually use it.
 
+    URI     ldap://192.168.1.2 ldap://192.168.1.2:389
+
 Changing '/etc/ldap/ldap.conf' is easy enough. Finding where the place where Kerberos
 put my 'localhost' inputs is a bit harder. I think it would probably work anyways, but
 using localhost just doesn't sit right with me. Anyway, this [page](https://social.technet.microsoft.com/Forums/ie/en-US/26823611-786b-4ec8-bdaf-1f565dd7d68a/how-do-i-change-the-realm-name-used-during-kerberos-authentication?forum=winserver8gen)
 here tells me there might be a 'krb5.conf' file out there somewhere. And it is.
-'/etc/krb5.conf' to be precise. I update the IPs to '192.168.1.2' and hope it works.
-'sudo kinit goodlike' and 'sudo klist' seem to still work, so we'll proceed.
+'/etc/krb5.conf' to be precise.
+
+    [realms]
+            GOODLIKE.EU = {
+                    kdc = 192.168.1.2
+                    admin_server = 192.168.1.2
+            }
+
+Let's check if it still works.
+
+    sudo kinit goodlike
+    sudo klist
+    
+Looks like we can proceed.
 
 Of course, changing the 'goodlike.conf' file in this project still achieves nothing.
 But hey, it's progress!
@@ -1553,9 +1725,10 @@ The issue is that we need two random numbers to fill. I wonder what they're supp
 Cool, so I guess I can just enter whatever number I want? How about 13? and 37? Let's go
 with those. Respectively.
 
-So now that I have 'mumkashi.lfid' file, I should add it to LDAP somehow. But we have
+So now that I have 'mumkashi.ldif' file, I should add it to LDAP somehow. But we have
 a problem immediately. The suggested command is weird:
-'ldapadd -x -W -D "cn=ramesh,dc=tgs,dc=com" -f adam.ldif'
+
+    # ldapadd -x -W -D "cn=ramesh,dc=tgs,dc=com" -f adam.ldif
 
 Let's ignore the fact it also starts with '#' which I assume means I need sudo.
 Let's also ignore the single char options, I'm sure they're important.
@@ -1565,16 +1738,22 @@ But who the fuck is ramesh?????
 'cn' can be seen in [#slap_intro](#slap_intro) using an entirely different structure.
 Where the hell did it suddenly pop in from? Can I just ignore it? I'm gonna ignore it.
 
-So I enter 'sudo ldapadd -x -W -D "dc=goodlike,dc=eu,dc=local" -f mumkashi.ldif'
-and it asks me for LDAP password. No idea which password is that supposed to be, but
+    sudo ldapadd -x -W -D "dc=goodlike,dc=eu,dc=local" -f mumkashi.ldif
+
+This asks me for LDAP password. No idea which password is that supposed to be, but
 luckily I used the same password FOR EVERYTHING just in case this would happen, so
 we should be fine. Except we're not fine because it gives an error.
-'ldap_bind: Invalid credentials (49)'. OK then.
+
+    ldap_bind: Invalid credentials (49)
 
 Bruh, the first google search is [#reading_a_book_he_says](#reading_a_book_he_says).
 Do we really need a book for this? Jesus Christ... Nothing in the response makes much sense
-to me, but I tried out the "debug" command! It did print a lot more gibberish this time.
-I could even see that it connected to LDAP server, AND sent the password in plaintext!
+to me, but I tried out the "debug" command!
+
+    sudo ldapadd -v -d 63 -W -D "dc=goodlike,dc=eu,dc=local" -f mumkashi.ldif
+ 
+It did print a lot more gibberish this time.
+I could even see that it connected to the LDAP server, AND sent the password in plaintext!
 Hurray! Still doesn't work.
 
 Look, irrespective of this being the right thing to do or not, or even relevant or not,
@@ -1607,8 +1786,9 @@ but no such file exists. To be precise, '/etc/openldap/' directory doesn't exist
 Which, I suppose, implies the installation is not complete, at least not as far as
 this guide is considered.
 
-The installation command 'sudo yum install -y openldap openldap-clients openldap-servers'
-doesn't work either. Command 'yum' not found. But not so fast!
+    sudo yum install -y openldap openldap-clients openldap-servers
+
+Doesn't work. Command 'yum' not found. But not so fast!
 By sheer coincidence during the last few days I stumbled upon [this video](https://odysee.com/@SomeOrdinaryGamers:a/please-stop-using-windows...:f)
 which gives a bit of an explanation. As we've seen before, there are different
 distributions (a weird word for 'types' or 'kinds') of linux. But it wasn't enough
@@ -1617,8 +1797,11 @@ different. Gotta style on those other tribes somehow, you know.
 
 In other words, as long as I replace 'yum' with the equivalent of whatever the hell
 installs things into Ubuntu, I should be fine. And we've had some things installed
-using apt, so surely that should work. Except it doesn't, because it can't find any
-of the packages. Great.
+using apt, so surely that should work.
+
+    sudo apt install -y openldap openldap-clients openldap-servers
+ 
+Except it doesn't, because it can't find any of the packages. Great.
 
 We've actually run into this exact issue before, so I consult the archives (by the
 archives I mean this README). Yes, right, [#dummy_slap](#dummy_slap) told me to install
@@ -1631,11 +1814,11 @@ which would allow them to exist.
 After a short break to snack and slack, I decided to search for the file manually.
 This did not function as an activity. The 'olcDatabase' just can't be found.
 This is where [#a_real_man](#a_real_man) comes in. I couldn't install 'slapd-config'
-using 'apt-get' either, but the folder the page references exist already, so maybe
+using 'apt-get' either, but the folder the page references exists already, so maybe
 I already did it somehow. Let's hope that's the case.
 
 '/etc/ldap/slapd.d/cn=config/' actually exists too, and it even contains 'olcDatabase'
-files! Oddly enough, though, then aren't 'olcDatabase{2}' files. There's 'olcDatabase{0}',
+files! Oddly enough, though, there aren't 'olcDatabase{2}' files. There's 'olcDatabase{0}',
 'olcDatabase{1}' and even 'olcDatabase{-1}'. They all have suffixes different than
 what's expected too. So I guess I'll just have to create a new file myself.
 
@@ -1643,9 +1826,11 @@ So I create '/etc/ldap/slapd.d/cn=config/olcDatabase{2}bdb.ldif' and put this li
 
     olcRootDN: cn=ramuh,dc=goodlike,dc=eu,dc=local
 
-Ramesh just wasn't doing it for me, so we went full final fantasy instead.
+Ramesh just wasn't doing it for me, so we went full Final Fantasy instead.
 
-Next, I call 'sudo slappasswd', which unexpectedly does not open [this page](https://www.pornhub.com/video?c=4).
+    sudo slappasswd
+
+This unexpectedly does not open [this page](https://www.pornhub.com/video?c=4).
 Instead we have to enter the password twice, which then prints us the following hash:
 
     {SSHA}mcGzfWeCOIwPVFHRUvu7lQJGKPZ2mHpv
@@ -1666,8 +1851,11 @@ Anyway, I add the following line, which seems to be the last change for now:
 
     olcSuffix: dc=goodlike,dc=eu,dc=local
 
-And what's this? Next we must run 'sudo slaptest -u'! Have we finally reached the part where
-the title of the chapter makes sense? My God...
+And what's this? Next we must run
+ 
+    sudo slaptest -u
+
+Have we finally reached the part where the title of the chapter makes sense? My God...
 
 Anyway, it doesn't work. Checksum error. Then the explanation of the error has nothing to do
 with any checksum as far as I can tell. Great start.
@@ -1682,6 +1870,8 @@ Wouldn't storing the checksum inside the file... change the file? I'm not even g
 to figure this one out. Maybe they take checksum of everything AFTER these lines. Whatever.
 This definitely isn't enough to distract me from the fact I was just following a guide
 that told me to do something I shouldn't. AGAIN.
+
+    sudo ldapmodify
 
 I return the file to its original form and attempt to use the confounding 'ldapmodify'
 command. It asks me to enter the password. I enter the password. I get invalid credentials error.
@@ -1705,21 +1895,32 @@ Fine. It's time to get my hands dirty. If we can't use 'ldapmodify', but we stil
 modify the 'cn=config.ldif' file, then I'll just have to reverse engineer the logic for
 the checksum calculation. We already know it's CRC32, so I just need to figure out the input.
 
-It seems that calculating the CRC32 is as simple as typing 'crc32 {filename}'.
+It seems that calculating the CRC32 is as simple as typing
+ 
+    crc32 {filename}
+    
 Well, let's give that a shot on our config file. Predictably the value does not match
 the one in the file. But what if we remove those lines temporarily? Bingo.
 
 I re-add the line I had previously deleted and run CRC32, then re-add the documentation lines
-at the top with the new CRC value. Running 'sudo slaptest -u' now no longer produces
-the checksum error. Hurray! Now let's hope 'ldapmodify' doesn't have any hidden side-effects
+at the top with the new CRC value. 
+
+    sudo slaptest -u
+    
+now no longer produces the checksum error. Hurray!
+Now let's hope 'ldapmodify' doesn't have any hidden side-effects
 that are not at all covered by this CRC32 magic trick.
 
 That's 1 out of 3 errors taken care of! NEXT!
 
-"<olcRootPW> can only be set when rootdn is under suffix". It would help if you could tell us,
-you know, what do you think these 'rootdn' and 'suffix' values are, because the ones I entered
-into the file seem just fine. Then again, I made that file myself, so it's entirely possible
-the system hasn't even looked there. Google it is!
+    <olcRootPW> can only be set when rootdn is under suffix
+
+It would help if you could tell us, you know,
+what do you think these 'rootdn' and 'suffix' values are,
+because the ones I entered into the file seem just fine.
+Then again, I made that file myself,
+so it's entirely possible the system hasn't even looked there.
+Google it is!
 
 [#god_bodg_it](#god_bodg_it) seems to have exactly the same issue. The answer, unfortunately,
 is entirely useless because we go back to the Fiddler's riddle (that's the thing from previous
@@ -1732,7 +1933,8 @@ and put them into 'cn=config.ldif', but also adjust them to have the prefix 'cn=
 That's just insane enough to work.
 
 HAHAHAHAHAHAHAHAHAHAHAHAHAHA! No seriously. The Fiddler's riddle no.2:
-'suffix <cn=config> not allowed in frontend database'!
+
+    suffix <cn=config> not allowed in frontend database
 
 1. I want to add an admin account to 'cn=config.ldif'.
 2. If I use a suffix that is not 'cn=config', it's a bad suffix.
@@ -1755,8 +1957,12 @@ but gives me the impression that the current approach can't possibly work.
 I probably would have to configure the whole system to use BDB in order for it to recognize
 the file. The file probably also needs a lot more values. Probably.
 
-So I return the file back to normal (I even kept the original CRC, hehe). Surely things
-should work? No, of course not. 'entry -1 has no dn'. What?
+So I return the 'cn=config' file back to normal (I even kept the original CRC, hehe).
+Surely things should work? No, of course not. 
+
+    entry -1 has no dn
+
+What?
 
 Ah, [#another_victim](#another_victim). The answer does contain some more instructions which
 might be cool enough to follow through, so I'll give it a shot. BUT. The guy in the comments
@@ -1766,16 +1972,21 @@ Let's just hope a quick re-install will be sufficient. Of course, his instructio
 so that's another YUMMY snack for tomorrow to figure out. Hurray!
 
 Reinstall went quite smoothly, all things considered. [This page](https://www.cyberciti.biz/faq/debian-ubuntu-linux-reinstall-a-package-using-apt-get-command/)
-is what I end up using to craft the command 'sudo aptitude reinstall slapd ldap-utils'.
-I had to install aptitude with 'sudo apt install aptitude' first, but that's a given.
-I did delete the config folder '/etc/ldap/slapd.d/' first using 'sudo rm -r {folder}'.
+is what I end up using to craft the commands
+ 
+    sudo rm -r /etc/ldap/slapd.d/
+    sudo apt install aptitude
+    sudo aptitude reinstall slapd ldap-utils
+    
 It seems it has regenerated successfully. At first I thought it failed, because 'slaptest -u'
 still gave me errors, but when I did 'sudo slaptest -u', it didn't no more. How annoying.
 It's possible that there were no errors before and I just forgot 'sudo' again. Yay.
 
-So will we no longer be [#another_victim](#another_victim)? Yes, yes we will. I attempt to
-use the command 'sudo ldapsearch -Y EXTERNAL -H ldapi:/// -b "cn=config"' which supposedly
-is the thing that I complained didn't exist, which apprently exists, that is, admin access.
+So will we no longer be [#another_victim](#another_victim)? Yes, yes we will.
+
+    sudo ldapsearch -Y EXTERNAL -H ldapi:/// -b "cn=config"
+    
+Allegedly this is the thing I complained didn't exist, that is, admin access.
 Except it doesn't work, because I still get the same fucking stupid invalid credentials (49)
 error.
 
@@ -1787,21 +1998,30 @@ fails with bad credentials error.
 
 I restart the computer to see if something changes, and yes, things are even more broken!
 Now the LDAP server cannot even be reached at all. It might be related to [permissions](https://www.linuxquestions.org/questions/linux-networking-3/ldap_bind-can%27t-contact-ldap-server-383602/).
-Easy enough, just change back ownership... uh... to what again? Well, I use the command
-from the page 'ls -la /etc/ldap/slapd.d/cn=config/' to find out the user is 'openldap'.
-So the command should be 'sudo chown openldap /etc/ldap/slapd.d/cn=config/olcDatabase{1}.ldif'.
+Easy enough, just change back ownership... uh... to what again?
+
+    ls -la /etc/ldap/slapd.d/cn=config/
+ 
+This tells me the user is 'openldap'.
+So the command should be
+
+    sudo chown openldap /etc/ldap/slapd.d/cn=config/olcDatabase{1}.ldif
+
 Except that doesn't work because the file doesn't exist. Except it was just clearly listed
 and I can go to the folder and see it is there.
 
 I right click on the file, go to properties, then permissions tab, there I can change
 the settings for the group 'openldap' to 'read & write', then restart again. Server works again!
 
-OH. MY. GOD. It worked! We hacked our way into a system! The command
-'sudo ldapadd -x -W -D cn=admin,dc=goodlike,dc=eu,dc=local -f mumkashi.ldif' no longer
-gives me the middle finger! It even says 'adding new entry'!
+    sudo ldapadd -x -W -D cn=admin,dc=goodlike,dc=eu,dc=local -f mumkashi.ldif
 
-Unfortunately, it also says 'ldap_add: No such object (32)', but at least the error now
-is different and we can try to move on :D
+OH. MY. GOD. It worked! We hacked our way into a system! It even says 'adding new entry'!
+
+Unfortunately, it also says
+ 
+    ldap_add: No such object (32)
+    
+but at least the error now is different and we can try to move on :D
 
 Predictably, the issue was that the new "user" had an organizational unit component "ou=users"
 which didn't exist. [#you_must_construct_additional_pylons](#you_must_construct_additional_pylons)
@@ -1850,20 +2070,27 @@ Alright, how about this. Let's just try *installing this on top of the existing 
 If that fails miserably, it will be a good enough excuse to start over with the OS. Let's go!
 
 Unfortunately, it seems I've made a horrible mistake. I got a pop-up to install "updates" for
-the VM OS. 10MB it says. How long could it possibly take, I think? Well, it's taking forever.
+the VM OS. 10MB it says. How long could it possibly take, I think. Well, it's taking forever.
 Great. At least it finishes eventually.
 
+    sudo apt install krb5-kdc-ldap krb5-admin-server schema2ldif
+
 Surprisingly, the installation goes through successfully.
-'sudo apt install krb5-kdc-ldap krb5-admin-server schema2ldif' only says that the admin server
-is already installed, and the latest version, which makes sense since we did install some Kerberos
-stuff and we just updated everything.
+It only says that the admin server is already installed, and the latest version,
+which makes sense since we did install some Kerberos stuff and we had just updated everything.
 
 Things stop going well with step 2.
-'sudo zcat /usr/share/doc/krb5-kdc-ldap/kerberos.openldap.ldif.gz | ldapadd -Q -Y EXTERNAL -H ldapi:///'
+
+    sudo zcat /usr/share/doc/krb5-kdc-ldap/kerberos.openldap.ldif.gz | ldapadd -Q -Y EXTERNAL -H ldapi:///
+    
 We're loading a schema, which I wonder what it does. Normally, schema refers to something like,
 dunno, table column definitions. So perhaps this contains proprietary objectClass definitions?
-Doesn't matter much because we get "Insufficient access (50)" error. Given that we're trying to
-use the same broken mechanism some other comment suggested before, this is hardly surprising.
+Doesn't matter much because we get this error:
+
+    Insufficient access (50)
+
+Given that we're trying to use the same broken mechanism
+some other comment suggested before, this is hardly surprising.
 I'm just gonna peek into this .gz file quickly, and then let the fiddling begin!
 
 Well, a quick glance does reveal it to be some bizarre .ldif file with a lot of definitions.
@@ -1871,24 +2098,33 @@ A lot of them say 'SUP', and I can just say 'nothin' back.
 
 It turns out all we had to do is [#sudo_the_world](#sudo_the_world). Apparently if you use a pipe,
 that does not, in fact, keep sudo going. So the command that works is this:
-'sudo zcat /usr/share/doc/krb5-kdc-ldap/kerberos.openldap.ldif.gz | sudo ldapadd -Q -Y EXTERNAL -H ldapi:///'
-It both makes sense, and makes me wonder how come all linux developers have not been simultaneously
-assassinated yet.
 
-Next we're gonna add an index to something. See? It is a database. Except if I gave this task
-to guys that work with DB in my team, they would die from consecutive aneurysms. Instantly.
-'sudo ldapmodify -Q -Y EXTERNAL -H ldapi:/// <<EOF' seems to work. I keep entering more things
-as explained by the guide:
+    sudo zcat /usr/share/doc/krb5-kdc-ldap/kerberos.openldap.ldif.gz | sudo ldapadd -Q -Y EXTERNAL -H ldapi:///
+
+It both makes sense, and makes me wonder how come all linux developers
+have not been simultaneously assassinated yet.
+
+Next we're gonna add an index to something. See? It is a database.
+Except if I gave this task to guys that work with DB in my team,
+they would die from consecutive aneurysms. Instantly.
+
+    sudo ldapmodify -Q -Y EXTERNAL -H ldapi:/// <<EOF
+
+seems to work. I keep entering more things as explained by the guide:
 
     dn: olcDatabase={1}mdb,cn=config
     add: olcDbIndex
     olcDbIndex: krbPrincipalName eq,pres,sub
     EOF
 
-Seems promising, because we're using something that actually should exist, namely, olcDatabase={1}mdb.
-But it doesn't work. We get an error 'wrong attributeType at line 3, entry "olcDatabase={1}mdb,cn=config"'.
-I find this kind of odd, because 'olcDatabase={1}mdb,cn=config' is in line 1. And I'm not sure what
-part is wrong in line 3 then. olcDbIndex? krbPrincipalName? eq,pres,sub? et tu, Kerberos?
+Seems promising, because we're using something that actually should exist,
+namely, olcDatabase={1}mdb. But it doesn't work. We get an error
+ 
+    wrong attributeType at line 3, entry "olcDatabase={1}mdb,cn=config"
+
+I find this kind of odd, because 'olcDatabase={1}mdb,cn=config' is in line 1.
+And I'm not sure what part is wrong in line 3 then.
+olcDbIndex? krbPrincipalName? eq,pres,sub? et tu, Kerberos?
 
 My best guess is 'olcDatabase={1}mdb,cn=config' doesn't understand what krbPrincipalName is,
 since it seems very Kerberos-specific? Wasn't the schema imported to avoid such things, though?
@@ -1979,10 +2215,10 @@ except for the 'dn' parts, of course:
       by * none
     EOF
 
-Unfortunately, this is as far as our streak goes. I end up making a few typos, although it seems
-correcting them is not a big deal after all. But none of the typos were the problem.
-The problem is "Invalid DN syntax (34)". Great. I'm so glad you told me which one is the problem
-so I can fix it...
+Unfortunately, this is as far as our streak goes.
+I end up making a few typos, although it seems correcting them is not a big deal after all.
+But none of the typos were the problem. The problem is "Invalid DN syntax (34)".
+Great. I'm so glad you told me which one is the problem so I can fix it...
 
 Turns out I had misspelled the very first DN! Look:
 
@@ -1996,8 +2232,52 @@ such a system. I guess even a broken mind is sane twice a day, as the saying goe
 
 The other steps seem to be unnecessary, so we're gonna jump straight into Kerberos next!
 
-I modify '/etc/krb5.conf' and '/etc/krb5kdc/kdc.conf' as suggested. A few of the values
-were already there. Notably in 'kdc.conf' we're replacing the entire realm configuration.
+I modify '/etc/krb5.conf'
+
+    [libdefaults]
+            default_realm = GOODLIKE.EU.LOCAL
+            dns_lookup_realm = false
+            dns_lookup_kdc = false
+            ticket_lifetime = 24h
+            rdns = false
+            
+            # already present
+            forwardable = true
+            proxiable = true
+    
+    # already present from before, I just changed the realm
+    [realms]
+            GOODLIKE.EU.LOCAL = {
+                    kdc = 192.168.1.2
+                    admin_server = 192.168.1.2
+            }
+ 
+and '/etc/krb5kdc/kdc.conf'
+
+    [realms]
+            GOODLIKE.EU.LOCAL = {
+                    # lots of values deleted from here
+                    database_module = openldap_ldapconf
+            }
+    
+    [dbmodules]
+            openldap_ldapconf = {
+                    db_library = kldap
+    
+                    ldap_kerberos_container_dn = cn=kerberos,ou=Services,dc=example,dc=com
+    
+                    disable_last_success = true
+                    disable_lockout = true
+                    ldap_conns_per_server = 5
+                    ldap_servers = ldapi:///
+    
+                    ldap_kdc_dn = "uid=kdc,ou=kerberos,ou=Services,dc=example,dc=com"
+                    ldap_kadmind_dn = "uid=kadmin,ou=kerberos,ou=Services,dc=example,dc=com"
+                    ldap_service_password_file = /etc/krb5kdc/service.keyfile
+            }
+
+A few of the values were already there.
+Notably in 'kdc.conf' we're replacing the entire realm configuration.
 I assume previous config was the stuff we setup for Kerberos long time ago.
 The new configuration will make Kerberos use LDAP as a database, for what it's worth.
 In all cases I use 'GOODLIKE.EU.LOCAL' as the realm, which replaces the original 'GOODLIKE.EU'.
@@ -2005,14 +2285,15 @@ In all cases I use 'GOODLIKE.EU.LOCAL' as the realm, which replaces the original
 I skip editing '/etc/krb5kdc/kadm5.acl' as it already has been edited for admins long time ago.
 
 The next command actually has 'sudo' in it randomly. You're telling me the others would work
-without sudo? I don't believe you :D Anyway, here it is:
+without 'sudo'? I don't believe you :D Anyway, here it is:
 
     sudo kdb5_ldap_util -D cn=admin,dc=goodlike,dc=eu,dc=local create -subtrees dc=goodlike,dc=eu,dc=local -r GOODLIKE.EU.LOCAL -s -H ldapi:///
     
-I believe this creates a bunch of stuff you could see under 'sudo ldapsearch -x'.
-As always, same password.
+I believe this creates a bunch of stuff you could see under
 
-Speaking of same password, we set some more:
+    sudo ldapsearch -x
+    
+As always, same password. Speaking of same password, we set some more:
 
     sudo kdb5_ldap_util -D cn=admin,dc=goodlike,dc=eu,dc=local stashsrvpw -f /etc/krb5kdc/service.keyfile uid=kdc,ou=kerberos,ou=Services,dc=goodlike,dc=eu,dc=local
     sudo kdb5_ldap_util -D cn=admin,dc=goodlike,dc=eu,dc=local stashsrvpw -f /etc/krb5kdc/service.keyfile uid=kdc,ou=kerberos,ou=Services,dc=goodlike,dc=eu,dc=local
@@ -2117,15 +2398,31 @@ I thought, foolishly, well, it worked, it couldn't possibly break like this. Ha.
 HAHAHAHAHAHHAHAHAHAHHAHAHHAHAHAHHAAHAHAHAH!
 
 Anyway, I give up and install a whole new VM instance, download updates for it,
-the repeat the steps (except the index one) from this chapter and it now works.
+then repeat the steps (except the index one) from this chapter and it now works.
 Because of course. Must've been the wind that broke it.
 
-I re-configure the network which once again using 'nm-connection-editor', then
-re-configure the network on VirtualBox side as it has gone mad again, restart,
-network works. Hurray. I'm getting good at this. I wish I didn't have to.
+I re-configure the network once again using 'nm-connection-editor',
+then re-configure the network on VirtualBox side as it has gone mad again,
+restart, network works. Hurray. I'm getting good at this. I wish I didn't have to.
 
 I continue following [#fusion](#fusion) instructions all the way up to adding 'bob',
 where we had to stop due to insufficient privileges. And what do you know? It doesn't work.
 Same exact error of insufficient privileges. Because of course.
 At least we know now that originally we had not broken anything with our installation-on-top.
 Until we started fiddling, at least.
+
+I begin by adding rights to 'dn.subtree="dc=goodlike,dc=eu"' to olcAccess under {2}.
+This time I've added them as an addition for sure.
+But this only continues to brick everything, as I get this error:
+
+    kadmin.local: Cannot bind to LDAP server 'ldapi:///' as 'uid=kadmin,ou=kerberos,
+    ou=Services,dc=goodlike,dc=eu': Invalid credentials while initializing kadmin.lo
+    cal interface
+    
+At this point I review this entire document to see if I had missed anything, and indeed,
+I had not configured '/etc/ldap/ldap.conf' yet. But fixing it and restarting achieve nothing.
+
+I'm going to try to add the password to 'uid=kadmin' again, I guess? If this fails
+I guess I'm gonna re-install another VM instance and just add rights to "dc=goodlike,dc=eu"
+subtree from the beginning. This will put a nail in the coffin of whether that's the issue
+or not.
