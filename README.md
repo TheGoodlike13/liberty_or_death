@@ -2704,7 +2704,7 @@ on google we find [#common_errors](#common_errors), specifically
 
 Well, well, well. Looks familiar. GSSAPI, check. Permission denied, check.
 If only the command would tell me the file which it couldn't open, this would've
-been solved lickety split. But no, I had to **RANDOMLY** stumble upon the fact
+been solved lickety-split. But no, I had to **RANDOMLY** stumble upon the fact
 by looking at a **RANDOM** log file I only found **RANDOMLY**.
 
 The instructions provided by this error message look a bit different from what
@@ -2713,7 +2713,7 @@ we got in [#fusion](#fusion):
     chown ldap:ldap /etc/openldap/ldap.keytab
     chmod 600 /etc/openldap/ldap.keytab
 
-I've looked it up, and chmod can be decyphered by treating every number as
+I've looked it up, and chmod can be deciphered by treating every number as
 a set of 3 flags. 6 = 4 + 2 = write + read. There's 3 numbers because files
 have 3 boxes to select permissions in, I guess: owner, group and other.
 
