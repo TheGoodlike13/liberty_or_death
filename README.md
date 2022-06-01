@@ -20,6 +20,7 @@
 #### [2.11. The Fiddler fuses](#the-fiddler-fuses)
 #### [2.12. The Fiddler purges](#the-fiddler-purges)
 #### [2.13. It's time to back up a little](#its-time-to-back-up-a-little)
+#### [2.14. Final showdown](#final-showdown)
 
 Links to various resources referred to (try [web archive](https://archive.org/) if down, should work for most):
 
@@ -85,6 +86,7 @@ Links to various resources referred to (try [web archive](https://archive.org/) 
 ##### [#sudo_the_world](https://serverfault.com/questions/451869/ldap-modify-insufficient-access-50)
 ##### [#what_the_fuck_did_i_just_read](https://serverfault.com/questions/578710/wrong-attributetype-when-using-ldapadd)
 ##### [#burn_in_hell](https://askubuntu.com/questions/147277/sudo-apt-get-remove-does-not-remove-config-files)
+##### [#temporary_instanity](https://community.cloudera.com/t5/Support-Questions/Kerberos-cache-file-randomly-disappearing-from-tmp/m-p/290434)
 
 ## Setting up a liberty server that works
 
@@ -2487,6 +2489,9 @@ First things first, I cleanup my existing VMs and re-configure one of them to gi
 the original privilege error so we can continue to debug from there.
 I am so saving a snapshot for every bit of progress we make, you better believe it!
 
+For reference, the VM I will be using is configured with IP '192.168.1.5'.
+It started bricking if I re-used the IP, so I started switching them up.
+
 In an absolutely insane move, everything starts working when I Fiddler's surprise the rights a bit:
 
     # original
@@ -2539,3 +2544,128 @@ I guess we'll just have to use copies instead of snapshots. Fine by me!
 Hmm, even my fresh copy was bricked until I restarted it one more time.
 But after the restart, my snapshot wasn't bricked either. And if I re-applied the snapshot
 again, it wouldn't brick no more. So weird. Well, whatever, as long as it works!
+
+### [Final showdown](https://www.youtube.com/watch?v=9jK-NcRmVcw)
+
+Now that things are working, it's time to end this mess once and for all.
+Back to [#fusion](#fusion)!
+
+I skip creating 'alice' because I don't want to create users somewhere else.
+Seriously, I'd probably need to add more rights, and while its no longer
+mission impossible, it's still a pain in the ass.
+
+I do want to use Kerberos to secure stuff with clients, so I guess I need to follow
+the next steps.
+
+    sudo kadmin.local
+    > addprinc -randkey ldap/192.168.1.5
+    > ktadd -k /etc/krb5.ldap.keytab ldap/192.168.1.5
+    > q
+
+Well, would you look at that. There is a random key command after all!
+I'd make that the default though...
+
+    sudo chown root:openldap /etc/krb5.ldap.keytab
+    sudo chmod 0640 /etc/krb5.ldap.keytab
+
+I don't expect to be editing this file manually, so this is fine by me.
+I wish I know what 'chmod 0640' does though.
+
+Next I edit another file owned by root...
+
+    sudo chown mumkashi /etc/default/slapd
+    
+    # I just needed to remove '#' for this and slightly change the name
+    export KRB5_KTNAME=/etc/krb5.ldap.keytab
+    
+    sudo chown root /etc/default/slapd
+    sudo systemctl restart slapd
+
+So far so good. Next up is another modification to the LDAP database, so let's slow down...
+
+    sudo ldapmodify -H ldapi:/// -Y EXTERNAL << EOF
+    dn: cn=config
+    changetype: modify
+    replace: olcAuthzRegexp
+    olcAuthzRegexp: {0}"uid=([^/]*)/admin,(cn=goodlike.eu,)?cn=gssapi,cn=auth" "cn=admin,dc=goodlike,dc=eu"
+    olcAuthzRegexp: {1}"uid=([^/]*),(cn=goodlike.eu,)?cn=gssapi,cn=auth" "uid=$1,ou=People,dc=goodlike,dc=eu
+    EOF
+
+Oh boy, oh dear. Not regex! This was already fucked beyond fuckery,
+why did you have to add regex on top of it?
+Why do I feel like it'll have a syntax problem again?
+Also, I see the 'ou=People' part in it, but what about bob?
+He's still deep in kerberos somewhere. Why you gotta do bob so dirty?
+I'm taking a VM snapshot before running this, ugh.
+
+Seems to somehow have worked this time. It really is the final showdown.
+
+    kinit bob
+    klist
+    ldapwhoami -Q -Y GSSAPI -H ldapi:///
+    
+Looks like bob came through after all, a ticket was successfully created.
+BUT! ldapwhoami still doesn't work.
+
+    ldap_sasl_interactive_bind: Local error (-2)
+            additional info: SASL(-1): generic failure: GSSAPI error: Unspecified GS
+    S failure.  Minor code may provide more information (Server ldap/mumkashi-virtua
+    lbox@GOODLIKE.EU not found in Kerberos database)
+
+Screw the code, it sure looks like when I was adding the principal I used the wrong
+reference LOL. I mean, who would expect the name of the computer to pop up here?
+
+    sudo kadmin.local
+    > addprinc -randkey ldap/mumkashi-virtualbox
+    > ktadd -k /etc/krb5.ldap.keytab ldap/mumkashi-virtualbox
+    > q
+    ldapwhoami -Q -Y GSSAPI -H ldapi:///
+
+    ldap_sasl_interactive_bind: Other (e.g., implementation specific) error (80)
+            additional info: SASL(-1): generic failure: GSSAPI error: No credentials
+     were supplied, or the credentials were unavailable or inaccessible (Permission 
+    denied)
+
+Look who's back, it's error 80. Never a good sign.
+At least we seem to be on the right track.
+
+So credentials not available, huh? Either they failed to be added by 'kadmin.local',
+or the file in not accessible due to rights issues. Or I need to restart slapd.
+Let's try some of these things!
+
+    sudo systemctl restart slapd
+    ldapwhoami -Q -Y GSSAPI -H ldapi:///
+    
+Same error.
+
+    sudo ldapwhoami -Q -Y GSSAPI -H ldapi:///
+
+    ldap_sasl_interactive_bind: Other (e.g., implementation specific) error (80)
+            additional info: SASL(-1): generic failure: GSSAPI error: No credentials
+     were supplied, or the credentials were unavailable or inaccessible (No Kerberos
+    credentials available (default cache: FILE:/tmp/krb5cc_0)
+
+A different error, but the same issue...
+
+    sudo chown mumkashi:openldap /etc/krb5.ldap.keytab
+    
+I check the file manually and find no issues.
+It contains entries with both the IP and 'mumkashi-virtualbox'.
+    
+    ldapwhoami -Q -Y GSSAPI -H ldapi:///
+    sudo ldapwhoami -Q -Y GSSAPI -H ldapi:///
+    sudo chown root:openldap /etc/krb5.ldap.keytab
+    
+Same errors as before without sudo and with sudo respectively.
+
+It looks like 'sudo' is not the problem here. There's some kind of [#temporary_instanity](#temporary_instanity)
+going on, because this command returns no tickets:
+
+    sudo klist
+    
+But just 'klist' does. If I do
+
+    sudo kinit bob
+    
+Now I see one ticket with 'sudo klist' and two tickets with 'klist'. Furthermore,
+now 'ldapwhoami' gives the same error regardless of 'sudo' usage (Permission denied).
