@@ -89,6 +89,8 @@ Links to various resources referred to (try [web archive](https://archive.org/) 
 ##### [#temporary_instanity](https://community.cloudera.com/t5/Support-Questions/Kerberos-cache-file-randomly-disappearing-from-tmp/m-p/290434)
 ##### [#motherfucking_elrond](https://openldap-software.0penldap.narkive.com/uqC8jfoI/gssapi-and-openldap-permission-denied-in-replay-cache-code)
 ##### [#common_errors](https://www.openldap.org/doc/admin24/appendix-common-errors.html)
+##### [#the_dirty_truth](https://unix.stackexchange.com/questions/36580/how-can-i-look-up-a-username-by-id-in-linux)
+##### [#read_you_fools](https://www.linuxquestions.org/questions/linux-networking-3/why-permission-denied-though-chmod-666-a-369892/)
 
 ## Setting up a liberty server that works
 
@@ -2714,10 +2716,10 @@ we got in [#fusion](#fusion):
     chmod 600 /etc/openldap/ldap.keytab
 
 I've looked it up, and chmod can be deciphered by treating every number as
-a set of 3 flags. 6 = 4 + 2 = write + read. There's 3 numbers because files
-have 3 boxes to select permissions in, I guess: owner, group and other.
+a set of 3 flags. 6 = 4 + 2 = write + read. There are 3 numbers because files
+have 3 boxes to select permissions in, I guess: owner, group and others.
 
-But that's important. What's important is that the owner/group used here is 'ldap',
+But that's not important. What's important is that the owner/group used here is 'ldap',
 not 'openldap' like in the guide. And this is coming from 'openldap.org',
 so it can't be that they messed up. Well, it totally can, I have come to expect this.
 But I'm willing to give one last shot at good faith here.
@@ -2730,3 +2732,49 @@ But I'm willing to give one last shot at good faith here.
     > chown: invalid user 'ldap'
 
 Blegh, of course it doesn't work.
+
+    sudo chown slapd /etc/krb5.ldap.keytab
+    > chown: invalid user 'slapd'
+
+A long shot, but the log did contain 'slapd' as something specific.
+Hmm... I have an idea.
+
+    sudo chmod 666 /etc/krb5.ldap.keytab
+    sudo systemctl restart slapd
+
+Still doesn't work. Even **THE DEVIL** cannot make this file readable by slapd.
+Either that, or 'others' doesn't mean 'others' for some reason.
+
+Enough fucking around. We need to find out what user was ultimately used, I guess.
+It's time to discover [#the_dirty_truth](#the_dirty_truth)...
+
+    id -u openldap
+    > 128
+    id -nu 128
+    > openldap
+
+And from messing around with permissions, the log part 'fsuid=128' seems to indicate
+which user id was used.
+
+So... let me get this straight... you can... own the file... have the file belong
+to your group... have the file be readable by you, the group AND everyone else...
+**AND STILL NOT BE ABLE TO OPEN THE FILE???** WHAT THE ACTUAL FUCK???
+
+This can't be the case of "maybe it's trying to access the wrong file", because
+the logs also contain owner id: 'ouid=0', which changed to 'ouid=128' when I changed
+the owner from 'root' to 'openldap'.
+
+    sudo chmod 777 /etc/krb5.ldap.keytab
+    
+Still nothing.
+
+    sudo chmod 777 /
+    sudo chmod 777 /etc/
+    
+[#read_you_fools](#read_you_fools)! READ THE FILE DAMN IT! WHY WON'T YOU READ THE FILE???
+
+How? How is this even possible? It also can't be file weirdness, because I was able
+to open the file with a bloody text editor when I set it as owned by me.
+It's owned by 'openldap' now, but I guess it just can't do it. It won't open.
+It's bolted shut. I've seen better displays of foliage.
+I DON'T EVEN KNOW IF THAT IS THE RIGHT QUOTE AND I DON'T CARE ANYMORE!
