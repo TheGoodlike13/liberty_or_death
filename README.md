@@ -87,6 +87,8 @@ Links to various resources referred to (try [web archive](https://archive.org/) 
 ##### [#what_the_fuck_did_i_just_read](https://serverfault.com/questions/578710/wrong-attributetype-when-using-ldapadd)
 ##### [#burn_in_hell](https://askubuntu.com/questions/147277/sudo-apt-get-remove-does-not-remove-config-files)
 ##### [#temporary_instanity](https://community.cloudera.com/t5/Support-Questions/Kerberos-cache-file-randomly-disappearing-from-tmp/m-p/290434)
+##### [#motherfucking_elrond](https://openldap-software.0penldap.narkive.com/uqC8jfoI/gssapi-and-openldap-permission-denied-in-replay-cache-code)
+##### [#common_errors](https://www.openldap.org/doc/admin24/appendix-common-errors.html)
 
 ## Setting up a liberty server that works
 
@@ -2668,7 +2670,63 @@ But just 'klist' does. If I do
     sudo kinit bob
     
 ~~Now I see one ticket with 'sudo klist' and two tickets with 'klist'.~~
-Never mind, I can see both with both, I was confused I guess.
+~~Never mind, I can see both with both, I was confused I guess.~~
+Never mind, they are totally different pairs of tickets, what the fuck.
 
 Furthermore, now 'ldapwhoami' gives the same error regardless
 of 'sudo' usage (Permission denied).
+
+[#motherfucking_elrond](#motherfucking_elrond) was there, 3000 years ago...
+solving the same damn problem. Doesn't look like he had much luck.
+The cache files he's talking about can be found in '/tmp' directory.
+You can see the specific ones used by entering 'klist' or 'sudo klist'.
+I try to change permissions to let openldap read them, but to no avail.
+
+It's becaming clear that I need to dig deeper.
+Using something like '-d 63' on the commands was just not cutting it.
+I need something like the logs of the LDAP itself.
+
+There's some hints on [this page](https://support.microfocus.com/kb/doc.php?id=7006929).
+It says logs should be in this file '/var/log/messages'.
+Of course, it doesn't exist. But there are some random log files in the directory.
+I open one out of curiosity, namely 'syslog' and find this:
+
+    Jun  1 16:46:24 mumkashi-VirtualBox kernel: [15296,445433] audit: type=1400
+    audit(1654091184.503:107): apparmor="DENIED" operation="open" profile="/usr/
+    sbin/slapd" name="/etc/krb5.ldap.keytab" pid=2236 comm="slapd"
+    requested_mask="r" denied_mask="r" fsuid=128 ouid=0
+    
+Motherfucker... this entire time it couldn't even open the bloody keytab file.
+At least that's what I'm getting here. Looking up 'slapd cant open keytab file'
+on google we find [#common_errors](#common_errors), specifically
+
+    C.2.4. GSSAPI: gss_acquire_cred: Miscellaneous failure; Permission denied;
+
+Well, well, well. Looks familiar. GSSAPI, check. Permission denied, check.
+If only the command would tell me the file which it couldn't open, this would've
+been solved lickety split. But no, I had to **RANDOMLY** stumble upon the fact
+by looking at a **RANDOM** log file I only found **RANDOMLY**.
+
+The instructions provided by this error message look a bit different from what
+we got in [#fusion](#fusion):
+
+    chown ldap:ldap /etc/openldap/ldap.keytab
+    chmod 600 /etc/openldap/ldap.keytab
+
+I've looked it up, and chmod can be decyphered by treating every number as
+a set of 3 flags. 6 = 4 + 2 = write + read. There's 3 numbers because files
+have 3 boxes to select permissions in, I guess: owner, group and other.
+
+But that's important. What's important is that the owner/group used here is 'ldap',
+not 'openldap' like in the guide. And this is coming from 'openldap.org',
+so it can't be that they messed up. Well, it totally can, I have come to expect this.
+But I'm willing to give one last shot at good faith here.
+
+    sudo chown root:ldap /etc/krb5.ldap.keytab
+    > chown: invalid group 'root:ldap'
+    sudo chown ldap:ldap /etc/krb5.ldap.keytab
+    > chown: invalid user 'ldap:ldap'
+    sudo chown ldap /etc/krb5.ldap.keytab
+    > chown: invalid user 'ldap'
+
+Blegh, of course it doesn't work.
