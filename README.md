@@ -2667,5 +2667,8 @@ But just 'klist' does. If I do
 
     sudo kinit bob
     
-Now I see one ticket with 'sudo klist' and two tickets with 'klist'. Furthermore,
-now 'ldapwhoami' gives the same error regardless of 'sudo' usage (Permission denied).
+~~Now I see one ticket with 'sudo klist' and two tickets with 'klist'.~~
+Never mind, I can see both with both, I was confused I guess.
+
+Furthermore, now 'ldapwhoami' gives the same error regardless
+of 'sudo' usage (Permission denied).
