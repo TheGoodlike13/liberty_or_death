@@ -2314,6 +2314,9 @@ Next up we try to add Bob as a user:
     > q
 
 But this fails. Apparently the rights that were given are simply insufficient.
+
+    add_principal: Principal add failed: Insufficient access while creating "bob@GOODLIKE.EU"
+
 As always, there is just not enough information on what on earth is wrong.
 Normally, this wouldn't be an issue, as you could just, you know, look at things,
 see a discrepancy and fix it. But I can't tell what is and isn't a discrepancy because
@@ -2464,9 +2467,71 @@ catch-all bullshit that is usually associated with putting in one space instead 
 (that's a treat!) but even despite that being absolutely insane, that's not even the issue!
 No amount of fucking spaces work!
 
-Fuck it! I didn't actually try deleting the spaces to make less! Why not?
+Fuck it! Why don't I try deleting the spaces so that there's fewer of them?
 Of course it doesn't work. Why would it work? Nothing works. It's just bricked and broken
 and shit and garbage and every other possible mean word in existence that ever has, is
 or will be uttered simultaneously.
 
 ### It's time to back up a little
+
+Virtual machines are great. Somewhere. They are just not my thing.
+Nonetheless, we should exploit them to the maximum capacity now that we are here.
+Rather than constantly re-installing them, there should be some snapshot possibility.
+Let's try and find out!
+
+There's a button on the VMs that allows you to switch the menu on the right from details
+to snapshots. I happen to have a fresh VM with no Kerberos or LDAP yet, so I take a snapshot
+of that. We'll see how that goes!
+
+First things first, I cleanup my existing VMs and re-configure one of them to give
+the original privilege error so we can continue to debug from there.
+I am so saving a snapshot for every bit of progress we make, you better believe it!
+
+In an absolutely insane move, everything starts working when I Fiddler's surprise the rights a bit:
+
+    # original
+    olcAccess: {1}to dn.subtree="cn=krbContainer,ou=kerberos,ou=Services,dc=goodlike,dc=eu"
+    # fiddled
+    olcAccess: {1}to dn.subtree="cn=kerberos,ou=Services,dc=goodlike,dc=eu"
+
+Why did this not work with just 'dc=goodlike,dc=eu'? Nobody knows. There's a side effect, tho.
+
+    sudo ldapsearch -x
+    
+This command would previously give me a bunch of Kerberos principals and their data by default.
+But now, it only shows the principals under 'ou=kerberos'. Wait a minute... things are starting
+to make sense. It's all the fault of
+
+    by * none
+
+This stupid suffix must've blocked everyone from everything under 'dc=goodlike,dc=eu',
+which some yet unknown part probably depended on. Let's test this theory!
+
+So I Fiddler's surprise to remove that, but it still bricks in much exactly the same way.
+So either I didn't understand anything, and my epiphany is wrong, or 'by * none' is assumed
+by default. OK. Let's try 'by * write'. That'll definitely spin this system for a loop :D
+
+Yep, seems like I'm right. Now both the search and adding principals works flawlessly.
+This all could've been avoided by just explaining what the hell were the commands doing
+precisely... I admit, I should've been more anal about every single statement.
+But you can't deny that these systems have been anything but friendly for any kind of debugging.
+For all I know, there could be still some issues lingering down the line, but at least I know
+if all else fails, I can just 'by * write' them away, as far as rights are concerned :)
+
+Another thing to note is the extreme burden of making even minor changes to the configuration.
+If I hadn't gotten the VM snapshot figured out, I would need to practically re-install VMs
+over and over because the experience seemed to be "make a mistake, you're fucked".
+Fiddler's surprise is the only mechanism that actually worked when changing the config,
+but I needed to have knowledge (such as how to cut long lines in config files) before
+I could even use it. Once again, as much as of a detour we've taken, I can say with
+confidence, that every step of it was necessary to actually arrive at the conclusion.
+But it wouldn't be necessary if the guides didn't suck so much.
+
+Now back to snapshots, I decide to try out the rollback functionality.
+It does not go very well xD I saved the snapshot when the VM was online, and it restores.
+Seems to be fine, but restarting the VM bricks it. Uh oh. Here's what I'm gonna do.
+
+I'm gonna make a copy of my existing fresh VM. Then I'm gonna add all the changes we know
+so far to work. If that works, I'll snapshot this VM while offline, then do some changes
+and test the rollback. Then do a few restarts, etc. and hope it works. If it doesn't,
+I guess we'll just have to use copies instead of snapshots. Fine by me!
