@@ -2535,3 +2535,7 @@ I'm gonna make a copy of my existing fresh VM. Then I'm gonna add all the change
 so far to work. If that works, I'll snapshot this VM while offline, then do some changes
 and test the rollback. Then do a few restarts, etc. and hope it works. If it doesn't,
 I guess we'll just have to use copies instead of snapshots. Fine by me!
+
+Hmm, even my fresh copy was bricked until I restarted it one more time.
+But after the restart, my snapshot wasn't bricked either. And if I re-applied the snapshot
+again, it wouldn't brick no more. So weird. Well, whatever, as long as it works!
