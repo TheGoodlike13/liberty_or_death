@@ -2684,7 +2684,7 @@ The cache files he's talking about can be found in '/tmp' directory.
 You can see the specific ones used by entering 'klist' or 'sudo klist'.
 I try to change permissions to let openldap read them, but to no avail.
 
-It's becaming clear that I need to dig deeper.
+It's becoming clear that I need to dig deeper.
 Using something like '-d 63' on the commands was just not cutting it.
 I need something like the logs of the LDAP itself.
 
