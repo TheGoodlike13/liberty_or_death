@@ -91,6 +91,7 @@ Links to various resources referred to (try [web archive](https://archive.org/) 
 ##### [#common_errors](https://www.openldap.org/doc/admin24/appendix-common-errors.html)
 ##### [#the_dirty_truth](https://unix.stackexchange.com/questions/36580/how-can-i-look-up-a-username-by-id-in-linux)
 ##### [#read_you_fools](https://www.linuxquestions.org/questions/linux-networking-3/why-permission-denied-though-chmod-666-a-369892/)
+##### [#oh_my_fucking_god](https://ixnfo.com/en/solution-apparmor-denied-operation-open-profile-usr-sbin-mysqld.html)
 
 ## Setting up a liberty server that works
 
@@ -2778,3 +2779,28 @@ to open the file with a bloody text editor when I set it as owned by me.
 It's owned by 'openldap' now, but I guess it just can't do it. It won't open.
 It's bolted shut. I've seen better displays of foliage.
 I DON'T EVEN KNOW IF THAT IS THE RIGHT QUOTE AND I DON'T CARE ANYMORE!
+
+[#oh_my_fucking_god](#oh_my_fucking_god)! This entire time it was something else.
+I randomly google'd random parts of the system message 'apparmor="DENIED" operation="open"'
+and I discovered that some random program that I never setup in any way shape or form
+that I could remember was randomly blocking access to my random files for no fucking
+reason. And without informing me in any way, shape or form. What the fuck, Ubuntu?
+I only exposed almost everything with 'chmod 777' while trying to fix this.
+Such security, much carnage prevented.
+
+Like, seriously? Where was this "apparmor" when I was trying to edit the files
+using a text editor with my normal user account? Not important no more, eh?
+But a program reading a file owned by its user - can't have that!
+Computor might explode after all!
+
+I /spit on this garbage.
+
+    sudo apt install apparmor-utils
+    sudo aa-disable slapd
+    ldapwhoami -Q -Y GSSAPI -H ldapi:///
+    > dn:uid=bob,cn=gssapi,cn=auth
+
+I feel just about as betrayed and fucked as when I beat random Dark Souls 3 bosses
+finally after slamming my head against them. And if you somehow like Dark Souls 3
+just pretend I said Elden Ring, never played that but everyone that dislikes it
+uses the same exact arguments I used for Dark Souls 3, so it should still make sense.
