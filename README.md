@@ -2800,7 +2800,7 @@ I /spit on this garbage.
     ldapwhoami -Q -Y GSSAPI -H ldapi:///
     > dn:uid=bob,cn=gssapi,cn=auth
 
-I feel just about as betrayed and fucked as when I beat random Dark Souls 3 bosses
-finally after slamming my head against them. And if you somehow like Dark Souls 3
-just pretend I said Elden Ring, never played that but everyone that dislikes it
-uses the same exact arguments I used for Dark Souls 3, so it should still make sense.
+I feel just about as betrayed and fucked as when I beat random 'Dark Souls 3' bosses
+finally after slamming my head against them. And if you somehow like 'Dark Souls 3'
+just pretend I said 'Elden Ring', never played that but everyone that dislikes it
+uses the same exact arguments I used for 'Dark Souls 3', so it should still make sense.
