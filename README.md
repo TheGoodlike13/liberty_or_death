@@ -848,10 +848,13 @@ with my mouse... and it works! I can see inside the folder! Ye gods!
  4. Run console command 'sudo apt-get install -y dkms build-essential linux-headers-generic linux-headers-$(uname -r)'.
  5. If it fails, replace the $(uname -r) part with output from running 'uname -r' manually.
  6. Run 'sudo /media/{your username}/{Virtual Box CD name}/VBoxLinuxAdditions.run'.
- 7. Restart your VM.
- 8. Run 'sudo adduser {your username} vboxsf'.
- 9. Open the file explorer, select 'Other locations'
-10. Click on your shared folder, enter your password and enjoy.
+ 7. Shut down your VM.
+ 8. In Settings -> Shared Folders, add a folder you want to share.
+ 9. Make sure it's auto-mounted.
+10. Run your VM.
+11. Run 'sudo adduser {your username} vboxsf'.
+12. In file explorer, if direct link doesn't work, go to 'Other locations'.
+13. Click on your shared folder and enjoy. May need to enter password.
 
 #### HDD addendum
 
