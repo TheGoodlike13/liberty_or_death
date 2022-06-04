@@ -21,6 +21,7 @@
 #### [2.12. The Fiddler purges](#the-fiddler-purges)
 #### [2.13. It's time to back up a little](#its-time-to-back-up-a-little)
 #### [2.14. Final showdown](#final-showdown)
+#### [2.15. No place like home](#no-place-like-home)
 
 Links to various resources referred to (try [web archive](https://archive.org/) if down, should work for most):
 
@@ -92,6 +93,7 @@ Links to various resources referred to (try [web archive](https://archive.org/) 
 ##### [#the_dirty_truth](https://unix.stackexchange.com/questions/36580/how-can-i-look-up-a-username-by-id-in-linux)
 ##### [#read_you_fools](https://www.linuxquestions.org/questions/linux-networking-3/why-permission-denied-though-chmod-666-a-369892/)
 ##### [#oh_my_fucking_god](https://ixnfo.com/en/solution-apparmor-denied-operation-open-profile-usr-sbin-mysqld.html)
+##### [#open_security](https://www.openliberty.io/guides/security-intro.html)
 
 ## Setting up a liberty server that works
 
@@ -2804,3 +2806,154 @@ I feel just about as betrayed and fucked as when I beat random 'Dark Souls 3' bo
 finally after slamming my head against them. And if you somehow like 'Dark Souls 3'
 just pretend I said 'Elden Ring', never played that but everyone that dislikes it
 uses the same exact arguments I used for 'Dark Souls 3', so it should still make sense.
+
+### No place like home
+
+At this stage we finally have something working on our VM.
+Perhaps it's possible to connect this mess to the application at last?
+While LDAP & Kerberos specific things are still rather cryptic,
+[#open_security](#open_security) seems to be a nice introduction to just adding
+security to your application. It deals with both authentication and authorization,
+but I'd say we don't really care about the second part. SSO is all about the auth,
+after all.
+
+I download the source and try to run the finished product, as instructed.
+
+    mvn liberty:run
+
+But it doesn't work. 'mvn' doesn't exist. So I run it via IntelliJ Idea instead.
+
+But it doesn't work. It launches successfully, sure, but when I click on the link
+from console
+
+    http://localhost:9080/guide-security-intro-finish/
+
+It opens an error page that says:
+
+    Context Root Not Found
+    
+Hmm... it seems to have redirected me to
+
+    http://localhost:9080/home
+    
+which is the appropriate page, too. What if we follow the instructions and go to
+
+    http://localhost:9080/
+    
+That just brings up some kind of generic Open Liberty page.
+No links to anything relevant as far as I can see.
+
+Google doesn't reveal much, as this is a very generic error.
+[This page](https://github.com/OpenLiberty/archived-guide-microprofile-intro/issues/32)
+encounters it specifically when dealing with some guide, but no resolution
+can be found there.
+
+How about some insanity then? You see, I had renamed the project a bit.
+You can see in the link above that I added '-finish' suffix in pom.xml:
+
+    <artifactId>guide-security-intro-finish</artifactId>
+
+This is very logical. After all, the guide has two versions of the project.
+One that's 'just started' (it's clearly not JUST started), one that's 'finished'.
+If I import them both to IntelliJ idea, they end up under the same name.
+And I need to run the 'mvn' commands through there, so it would be very confusing
+and error prone to keep it this way. What could we do to avoid issues?
+I know! I'll add '-start' and '-finish' suffixes to their names!
+That way I can differentiate between them without issue!
+
+Except it doesn't work, as you've seen above.
+As soon as I removed the suffix '-finish', the link in console became
+
+    http://localhost:9080/
+    
+which matches what the guide says. It still sends me to the same generic page,
+but if I go to 
+
+    http://localhost:9080/home
+
+instead, I now finally see the login form.
+
+Why would the application work **DIFFERENTLY** when its **NAME** is changed?
+I think my feelings about this can be summarized by [a few seconds from this video](https://www.youtube.com/watch?v=M9x_koRZ2bA&t=163s).
+
+Anyway, now that it works, I'm going to systematically remove everything
+I possibly can until it stops working. This way I'll know precisely which parts
+I need to add to my project.
+
+The first thing I remove is the 'ServletSecurity' annotation and 'SecurityContext'.
+No issues as expected.
+
+I remove default httpEndpoint config as it seems to be useless.
+I do this on the pom.xml too.
+
+I can't seem to move the URL from '/home' to '/' as that bricks.
+But after doing a hard refresh (CTRL+F5) on '/', I no longer get the generic page.
+So all is good.
+
+I accidentally run the application twice which makes it brick.
+No, really, it's stuck on this:
+
+    [INFO] CWWKM2010I: Searching for CWWKZ0001I.*guide-security-intro.war in C:\Users\Goodlike\IdeaProjects\guide-security-intro\finish\target\liberty\wlp\usr\servers\defaultServer\logs\messages.log. This search will timeout after 40 seconds.
+    [INFO] CWWKM2011E: Timed out searching for CWWKZ0001I.*guide-security-intro.war in C:\Users\Goodlike\IdeaProjects\guide-security-intro\finish\target\liberty\wlp\usr\servers\defaultServer\logs\messages.log.
+    [INFO] ------------------------------------------------------------------------
+    [INFO] BUILD FAILURE
+
+And even restarting the PC doesn't help. Maybe if I delete the build folder?
+Yep, good enough.
+
+I try to remove references on @LoginToContinue annotation. Doesn't work.
+It does have default values, but they do not have '.html' suffix.
+If I rename the files to those values, they end up printed as text, not HTML.
+So the form doesn't work.
+
+I inline userRegistry.xml into server.xml. No problem.
+
+I try to move the html files to 'config' folder. Doesn't work.
+This means they have to be in their specific folder. Not good.
+I checked [#gradle_plugin_deeper](#gradle_plugin_deeper) and couldn't find
+any references to a web folder there. Maybe it's somewhere in the project?
+
+I delete the NoCacheFilter. I muck around with pages, they don't seem to be cached.
+
+Replacing the redirect with this code
+
+    response.getWriter().println("Well, would you look at that.");
+    
+Just prints the code. Even if I clear cookies. Hmm.
+Same thing happens if I redirect into a simple '.html' page. How odd.
+This only works when using '.jsf' redirect! How unnecessarily specific!
+
+If I remove the security configuration from 'web.xml', it no longer asks
+for login either. How annoying.
+
+First I remove just the user definition and related files, leaving just admin.
+Seems fine so far.
+
+It is possible to remove the 'security-role' for 'admin', but that seems a bit much.
+The reference to it in the 'auth-constraint' becomes red and it definitely cannot
+be removed itself. Although it works as long as its in 'auth-constraint' anyway.
+
+'welcome-file-list' seems unnecessary.
+
+'servlet' is needed, or all pages break, including home.
+'servlet-mapping' is needed, or you won't be able to redirect to '.jsf' files.
+
+'display-name' is not needed.
+
+'error-page' for HTTP403 is only needed if you care about authorization. I don't.
+
+All the extra users and groups in 'server.xml' are not needed.
+
+Groups themselves are not needed. You can do this:
+
+    <application-bnd>
+      <security-role name="admin">
+        <user name="bob"/>
+      </security-role>
+    </application-bnd>
+
+The application tag doesn't need anything but location and context root.
+We know about location from before, and context root is necessary to avoid
+the 'Context Root Not Found' error.
+
+Descriptions, ids and realm on the registry are not needed.
