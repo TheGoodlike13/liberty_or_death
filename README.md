@@ -3000,7 +3000,7 @@ In server.xml:
 In web directory:
 
 1. 'index.html' which will map onto the context root. All it will do it redirect
-to your servlet via '<body onload="window.location.assign('/home')"/>' ('home'
+to your servlet via '\<body onload="window.location.assign('/home')"/>' ('home'
 here refers to servlet location).
 2. Three HTML pages: login form, success (optional) and failure.
 3. In 'WEB-INF/web.xml' which defines 'security-role'and 'security-constraint'.
