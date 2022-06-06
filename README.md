@@ -22,6 +22,8 @@
 #### [2.13. It's time to back up a little](#its-time-to-back-up-a-little)
 #### [2.14. Final showdown](#final-showdown)
 #### [2.15. No place like home](#no-place-like-home)
+##### [2.15.1. Libery authentication in summary](liberty-authentication-in-summary)
+##### [2.15.2. Auth in this project](auth-in-this-project)
 
 Links to various resources referred to (try [web archive](https://archive.org/) if down, should work for most):
 
@@ -2890,8 +2892,10 @@ I remove default httpEndpoint config as it seems to be useless.
 I do this on the pom.xml too.
 
 I can't seem to move the URL from '/home' to '/' as that bricks.
+It doesn't work even if I remove 'index.html'.
+It also doesn't work if I replace 'index.html' with a servlet with redirect.
 But after doing a hard refresh (CTRL+F5) on '/', I no longer get the generic page.
-So all is good.
+So that's nice.
 
 I accidentally run the application twice which makes it brick.
 No, really, it's stuck on this:
@@ -2910,6 +2914,9 @@ If I rename the files to those values, they end up printed as text, not HTML.
 So the form doesn't work.
 
 I inline userRegistry.xml into server.xml. No problem.
+
+The in-lined XML is wrapped with a 'server' tag which seems duplicate.
+Removing it works fine.
 
 I try to move the html files to 'config' folder. Doesn't work.
 This means they have to be in their specific folder. Not good.
@@ -2960,3 +2967,47 @@ We know about location from before, and context root is necessary to avoid
 the 'Context Root Not Found' error.
 
 Descriptions, ids and realm on the registry are not needed.
+
+Microprofile dependency from 'pom.xml' seems optional.
+
+UserBean and Utils class seem to be not needed either.
+
+That seems to be the limit, so let's summarize what do we need.
+
+#### Liberty authentication in summary
+
+In pom.xml:
+
+1. 'jakarta.jakartaee-api' dependency (provided/compileOnly).
+
+In server.xml:
+
+1. 'app-security', 'servlet' and 'faces' features.
+2. Some kind of user registry, e.g. 'basicRegistry' for username and password pairs.
+3. Context root attribute for 'application'. This should NOT point to your servlet.
+4. 'application-bnd' sub-element for 'application' which defines a role for users.
+
+In web directory:
+
+1. 'index.html' which will map onto the context root. All it will do it redirect
+to your servlet via '<body onload="window.location.assign('/home')"/>' ('home'
+here refers to servlet location).
+2. Two HTML pages for login form & failure to login.
+3. An '.xhtml' page (java faces) for login success.
+4. In 'WEB-INF' directory, 'web.xml' which defines 'servlet', 'servlet-mapping',
+'security-role' and 'security-constraint'. The first two can be basic, but the
+role must match the one in 'server.xml' and must be used in constraint for '.jsf'
+file equivalent to the '.xhtml' file.
+
+In source:
+
+1. Servlet with mapping from 'index.html' redirect.
+2. Annotated with @FormAuthenticationMechanismDefinition, which is configured with
+@LoginToContinue, which is configured with login & error pages from web directory.
+3. On GET, redirect to '.jsf'.
+
+#### Auth in this project
+
+The most surprising parts of this are the requirement for faces.
+On second thought, perhaps it is only required due to security configuration...
+Let's investigate that.
