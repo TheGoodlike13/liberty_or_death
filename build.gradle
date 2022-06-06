@@ -14,7 +14,7 @@ buildscript {
 plugins {
     id 'idea'
     id 'war'
-    id 'io.openliberty.tools.gradle.Liberty' version '3.1.2'
+    id 'io.openliberty.tools.gradle.Liberty' version '3.3.1'
 
     // requires compatible gradle version
     id 'com.github.ben-manes.versions' version '0.42.0'
@@ -62,6 +62,7 @@ tasks.wrapper {
 
 tasks.dependencyUpdates {
     outputDir = '/.build/dependencyUpdates'
+    checkForGradleUpdate = false
 
     def isStable = { String version ->
         def hasStableKeyword = ['RELEASE', 'FINAL', 'GA'].any { key -> version.toUpperCase().contains(key) }
