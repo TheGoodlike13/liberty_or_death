@@ -2982,7 +2982,7 @@ with '/home', which is our servlet. That works.
 With this we can also remove 'servlet' and 'servlet-mapping' from 'web.xml'.
 It seems they were 'faces' related.
 
-That seems to be the limit, so let's summarize what do we need.
+That seems to be the limit, so let's summarize what we DO need.
 
 #### Liberty authentication in summary
 
