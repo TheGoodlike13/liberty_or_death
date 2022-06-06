@@ -1,10 +1,29 @@
 <server>
     <featureManager>
-        <feature>servlet-3.1</feature>
         <feature>appSecurity-2.0</feature>
+        <feature>servlet-3.1</feature>
+        <!--<feature>ldapRegistry-3.0</feature>-->
     </featureManager>
 
-    <kerberos configFile="goodlike.conf" keytab="goodlike.keytab"/>
+    <!--<kerberos configFile="goodlike.conf" keytab="goodlike.keytab"/>-->
 
-    <application location="${whereMyWarAt}"/>
+    <!--<ldapRegistry id="OpenLDAP" realm="GOODLIKE.EU"-->
+    <!--host="192.168.1.5" port="389" ignoreCase="true"-->
+    <!--baseDN="dn=goodlike,dn=eu"-->
+    <!--bindDN="cn=admin,dn=goodlike,dn=eu"-->
+    <!--bindPassword="uzakashi"-->
+    <!--ldapType="Microsoft Active Directory"/>-->
+    <!--type based on https://github.com/Azure-Samples/open-liberty-on-aro/blob/master/3-integration/aad-ldap/src/main/liberty/config/server.xml-->
+
+    <basicRegistry>
+        <user name="bobobo" password="bobobo" />
+    </basicRegistry>
+
+    <application location="${whereMyWarAt}" context-root="/">
+        <application-bnd>
+            <security-role name="wild">
+                <user name="bobobo"/>
+            </security-role>
+        </application-bnd>
+    </application>
 </server>

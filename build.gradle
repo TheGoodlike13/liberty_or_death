@@ -21,7 +21,7 @@ plugins {
 }
 
 dependencies {
-    implementation 'javax.servlet:javax.servlet-api:3.1.0'
+    compileOnly 'jakarta.platform:jakarta.jakartaee-api:9.1.0'
 }
 
 liberty {
@@ -78,6 +78,7 @@ tasks.dependencyUpdates {
 // I will not update my IDE because I dislike some changes that were made in future versions
 // it is far easier to deal with the older version of the language than newer version of the IDE...
 sourceCompatibility = JavaVersion.VERSION_1_8
+targetCompatibility = JavaVersion.VERSION_1_8
 
 repositories {
     mavenCentral()

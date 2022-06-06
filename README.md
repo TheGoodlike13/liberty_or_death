@@ -96,6 +96,7 @@ Links to various resources referred to (try [web archive](https://archive.org/) 
 ##### [#read_you_fools](https://www.linuxquestions.org/questions/linux-networking-3/why-permission-denied-though-chmod-666-a-369892/)
 ##### [#oh_my_fucking_god](https://ixnfo.com/en/solution-apparmor-denied-operation-open-profile-usr-sbin-mysqld.html)
 ##### [#open_security](https://www.openliberty.io/guides/security-intro.html)
+##### [#compatibility_issue](https://www.ibm.com/docs/en/was-liberty/zos?topic=architecture-supported-java-ee-7-8-feature-combinations)
 
 ## Setting up a liberty server that works
 
@@ -2925,6 +2926,9 @@ any references to a web folder there. Maybe it's somewhere in the project?
 
 I delete the NoCacheFilter. I muck around with pages, they don't seem to be cached.
 
+*Editor's note: Some pages (namely index.html) were cached.
+Better not delete this!*
+
 Replacing the redirect with this code
 
     response.getWriter().println("Well, would you look at that.");
@@ -2994,7 +2998,7 @@ In server.xml:
 
 1. 'app-security' and 'servlet' features.
 2. Some kind of user registry, e.g. 'basicRegistry' for username and password pairs.
-3. Context root attribute for 'application'. This should NOT point to your servlet.
+3. Context root attribute for 'application'. This should point to '/'.
 4. 'application-bnd' sub-element for 'application' which defines a role for users.
 
 In web directory:
@@ -3015,6 +3019,10 @@ In source:
 3. On GET, redirect to success page. Or do whatever.
 Success page with logout is convenient though.
 
+This is a very basic setup for demonstration purposes, and probably unfit for prod.
+But that's not the point. The point is to try to get it to work.
+So it can be understood :D
+
 #### Auth in this project
 
 With faces gone, the primary issue is finding the 'web' folder configuration.
@@ -3025,3 +3033,54 @@ I also guess we could use the default: 'src/main/liberty/webapp',
 but that would break my project structure.
 Plus, if we can configure away 'config' directory,
 surely we can also do the same for web?
+
+Let's try dumping it all into '/config' first. That would be nice if it worked.
+
+We run into a different error first, though:
+
+    [ERROR   ] CWWKF0044E: The appSecurity-4.0 and com.ibm.websphere.appserver.builtinAuthentication-1.0 features cannot be loaded at the same time. The appSecurity-4.0 feature of Jakarta EE 9 is incompatible with the com.ibm.websphere.appserver.builtinAuthentication-1
+    .0 feature of Java EE 6. The appSecurity-4.0 and appSecurity-4.0 configured features include an incompatible combination of features. Your configuration is not supported. Update the configuration to use features that support either the Jakarta EE or Java EE program
+    ming models, but not both.
+
+Odd, since this never happened with the other project...
+maybe something weird is cached.
+
+Nope, I get the same error when I delete the '.build' directory.
+
+I try to add
+
+    targetCompatibility = JavaVersion.VERSION_1_8
+    
+but this doesn't seem to be the issue.
+
+I comment away 'implementation 'javax.servlet:javax.servlet-api:3.1.0'
+as 'jakarta.jakartaee-api' provides those implementations already.
+I do need to fix the imports in 'TestServlet'.
+However, this does not fix the issue.
+
+It's clear there's some [#compatibility_issue](#compatibility_issue),
+but it's not clear how it has come about.
+'builtinAuthentication-1.0' isn't something I've configured, after all.
+I decide to revert to older versions that don't conflict:
+
+    <featureManager>
+        <feature>appSecurity-2.0</feature>
+        <feature>servlet-3.1</feature>
+    </featureManager>
+
+Finally the application runs. However, when I click the localhost I get
+redirected to... '/home'... even though my 'TestServlet' is in '/test'...
+
+I try to double check on my other application only to find it has ALSO bricked???
+Whether I remove 'index.html' or not, it redirects to '/home'?
+And gives the same error?
+
+    Error 404: java.io.FileNotFoundException: SRVE0190E: File not found: /home 
+    
+This is so weird I'm gonna assume something went wrong when closing a server
+and we have some zombie server eating my requests or something.
+I'm gonna restart PC and see what happens.
+
+Alright, now it makes sense. The stupid page which used to redirect to '/home'
+was cached by the browser. How utterly annoying. Such things should be off
+by default... I return the NoCacheFilter class back and this seems to fix it.

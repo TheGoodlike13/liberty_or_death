@@ -1,16 +1,25 @@
 package eu.goodlike;
 
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.security.enterprise.authentication.mechanism.http.FormAuthenticationMechanismDefinition;
+import jakarta.security.enterprise.authentication.mechanism.http.LoginToContinue;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+
 import java.io.IOException;
 
-@WebServlet("/*")
-public final class TestServlet extends HttpServlet {
+@WebServlet("/test")
+@FormAuthenticationMechanismDefinition(
+  loginToContinue = @LoginToContinue(
+    errorPage = "/error.html",
+    loginPage = "/login.html"
+  )
+)
+public class TestServlet extends HttpServlet {
 
   protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    response.getWriter().println("Well, would you look at that.");
+    response.sendRedirect("/success.html");
   }
 
 }
