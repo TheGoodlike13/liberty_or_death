@@ -3083,4 +3083,8 @@ I'm gonna restart PC and see what happens.
 
 Alright, now it makes sense. The stupid page which used to redirect to '/home'
 was cached by the browser. How utterly annoying. Such things should be off
-by default... I return the NoCacheFilter class back and this seems to fix it.
+by default... ~~I return the NoCacheFilter class back and this seems to fix it.~~
+And no matter what I do, it still caches the stupid localhost from another
+application... I give up. I don't care. I'll just make it redirect to '/test'
+in both cases. That'll fix it. Except this time even though i **REMOVED** the
+no-caching filter... it didn't cache it...
