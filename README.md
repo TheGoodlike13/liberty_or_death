@@ -2972,6 +2972,16 @@ Microprofile dependency from 'pom.xml' seems optional.
 
 UserBean and Utils class seem to be not needed either.
 
+Finally a breakthrough on the 'faces' front.
+You can remove 'faces' feature entirely, including the '.xhtml' file,
+replacing it with a simple '.html' file.
+All you need to do is replace the redirect in the servlet,
+and then in security configuration replace reference to '.jsf'
+with '/home', which is our servlet. That works.
+
+With this we can also remove 'servlet' and 'servlet-mapping' from 'web.xml'.
+It seems they were 'faces' related.
+
 That seems to be the limit, so let's summarize what do we need.
 
 #### Liberty authentication in summary
@@ -2982,7 +2992,7 @@ In pom.xml:
 
 In server.xml:
 
-1. 'app-security', 'servlet' and 'faces' features.
+1. 'app-security' and 'servlet' features.
 2. Some kind of user registry, e.g. 'basicRegistry' for username and password pairs.
 3. Context root attribute for 'application'. This should NOT point to your servlet.
 4. 'application-bnd' sub-element for 'application' which defines a role for users.
@@ -2992,22 +3002,26 @@ In web directory:
 1. 'index.html' which will map onto the context root. All it will do it redirect
 to your servlet via '<body onload="window.location.assign('/home')"/>' ('home'
 here refers to servlet location).
-2. Two HTML pages for login form & failure to login.
-3. An '.xhtml' page (java faces) for login success.
-4. In 'WEB-INF' directory, 'web.xml' which defines 'servlet', 'servlet-mapping',
-'security-role' and 'security-constraint'. The first two can be basic, but the
-role must match the one in 'server.xml' and must be used in constraint for '.jsf'
-file equivalent to the '.xhtml' file.
+2. Three HTML pages: login form, success (optional) and failure.
+3. In 'WEB-INF/web.xml' which defines 'security-role'and 'security-constraint'.
+The role must match the one in 'server.xml'.
+It must also be used to constrain '/home' (wherever your servlet is).
 
 In source:
 
-1. Servlet with mapping from 'index.html' redirect.
+1. Servlet with mapping from the redirect in 'index.html'.
 2. Annotated with @FormAuthenticationMechanismDefinition, which is configured with
 @LoginToContinue, which is configured with login & error pages from web directory.
-3. On GET, redirect to '.jsf'.
+3. On GET, redirect to success page. Or do whatever.
+Success page with logout is convenient though.
 
 #### Auth in this project
 
-The most surprising parts of this are the requirement for faces.
-On second thought, perhaps it is only required due to security configuration...
-Let's investigate that.
+With faces gone, the primary issue is finding the 'web' folder configuration.
+I suppose I'm also not sure why we can't have '/' secured,
+but if it doesn't work, it doesn't work.
+
+I also guess we could use the default: 'src/main/liberty/webapp',
+but that would break my project structure.
+Plus, if we can configure away 'config' directory,
+surely we can also do the same for web?
