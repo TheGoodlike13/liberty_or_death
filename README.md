@@ -3243,3 +3243,68 @@ Definitely feels like we're on the right track.
 I'll mention that this error only occurs when using 'bob' or 'bob@GOODLIKE.EU'
 as username. Using the long 'uid' thing just gives the same error with all
 configurations, leading me to believe that is not the way.
+
+Still, we have an error, but it's clearly at least making through to the server.
+And if something happens on the server... perhaps we can consult with our lord
+and savior '/var/log/syslog'?
+
+First I [clean up the log](https://stackoverflow.com/questions/35638219/ubuntu-large-syslog-and-kern-log-files)
+as it is getting annoyingly large:
+
+    sudo su
+    > /var/log/syslog
+    systemctl restart syslog
+    
+Then I close the console as I cannot escape 'sudo su' mode by any known means.
+I try to login again and find this error:
+
+    Jun  7 14:15:37 mumkashi-VirtualBox slapd[959]: 
+    SASL [conn=1039] Failure: GSSAPI Error: Unspecified GSS failure.  
+    Minor code may provide more information 
+    (Request ticket server ldap/192.168.1.5@GOODLIKE.EU found in keytab 
+    but does not match server principal ldap/mumkashi-virtualbox@)
+
+Interesting that the IP would pop out here. It's still in the keytab,
+as I wrote the 'mumkashi' principal on top of it.
+Other than that, I have no idea why it would be used or appear here.
+I quite specifically set Kerberos DN to 'mumkashi'.
+
+Thankfully, it seems we don't need to mess around with keytabs (thank God).
+[These](https://superuser.com/questions/1485808/ssh-user-not-getting-authenticated-through-kerberos)
+[three](https://stackoverflow.com/questions/14687245/apache-sends-wrong-server-principal-name-to-kerberos)
+[links](https://web.mit.edu/kerberos/krb5-1.13/doc/admin/princ_dns.html)
+point to the same simple fix, which is to add a line to '/etc/krb5.conf':
+
+    [libdefaults]
+        ignore_acceptor_hostname = true
+
+Then I restart the VM and this seems to fix the issue.
+I'll add it to our config here just so we have matching files.
+
+That being said, we still have an error to deal with:
+
+    javax.naming.InvalidNameException: dn=goodlike,dn=eu: 
+    [LDAP: error code 34 - invalid DN]; remaining name 'dn=goodlike,dn=eu'
+
+This is easy: I entered 'dn' instead of 'dc' by accident in 'server.xml'.
+I'm impressed that it only NOW caught on to the issue...
+It seems my bind username also had this issue which might explain why
+it didn't work before.
+
+Alright, we're back to a more familiar error:
+
+    com.ibm.wsspi.security.wim.exception.PasswordCheckFailedException: 
+    CWIML4537E: The login operation could not be completed. 
+    The specified principal name bob is not found in the back-end repository.
+
+Hmm... what about the other username options?
+
+    com.ibm.wsspi.security.wim.exception.PasswordCheckFailedException: 
+    CWIML4537E: The login operation could not be completed. 
+    The specified principal name bob@GOODLIKE.EU is not found in the back-end repository.
+
+    com.ibm.wsspi.security.wim.exception.PasswordCheckFailedException: 
+    CWIML4537E: The login operation could not be completed. 
+    The specified principal name krbPrincipalName=bob@GOODLIKE.EU,cn=GOODLIKE.EU,cn=kerberos,ou=Services,dc=goodlike,dc=eu is not found in the back-end repository.
+
+Well, shit. It's clearly connecting, but it can't find the ol' bob.
