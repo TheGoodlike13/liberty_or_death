@@ -9,17 +9,17 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 
-@WebServlet("/test")
+@WebServlet("test")
 @FormAuthenticationMechanismDefinition(
   loginToContinue = @LoginToContinue(
-    errorPage = "/error.html",
-    loginPage = "/login.html"
+    errorPage = "error.html",
+    loginPage = "login.html"
   )
 )
 public class TestServlet extends HttpServlet {
 
   protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    response.sendRedirect("/success.html");
+    response.sendRedirect("success.html");
   }
 
 }

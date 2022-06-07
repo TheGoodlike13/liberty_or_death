@@ -97,6 +97,7 @@ Links to various resources referred to (try [web archive](https://archive.org/) 
 ##### [#oh_my_fucking_god](https://ixnfo.com/en/solution-apparmor-denied-operation-open-profile-usr-sbin-mysqld.html)
 ##### [#open_security](https://www.openliberty.io/guides/security-intro.html)
 ##### [#compatibility_issue](https://www.ibm.com/docs/en/was-liberty/zos?topic=architecture-supported-java-ee-7-8-feature-combinations)
+##### [#gradle_example_app](https://openliberty.io/guides/gradle-intro.html)
 
 ## Setting up a liberty server that works
 
@@ -3029,7 +3030,7 @@ With faces gone, the primary issue is finding the 'web' folder configuration.
 I suppose I'm also not sure why we can't have '/' secured,
 but if it doesn't work, it doesn't work.
 
-I also guess we could use the default: 'src/main/liberty/webapp',
+I also guess we could use the default: 'src/main/webapp',
 but that would break my project structure.
 Plus, if we can configure away 'config' directory,
 surely we can also do the same for web?
@@ -3088,3 +3089,42 @@ And no matter what I do, it still caches the stupid localhost from another
 application... I give up. I don't care. I'll just make it redirect to '/test'
 in both cases. That'll fix it. Except this time even though i **REMOVED** the
 no-caching filter... it didn't cache it...
+
+Moving everything to '/config/webapp' doesn't help the app to find things.
+I am concerned, however, because I also couldn't find '/test' directory either.
+It used to be mapped, but when we changed everything to 'jakarta.jakartaee-api',
+it seems to be lost.
+
+After moving everything to '/src/main/webapp' in a last ditch effort,
+things go even more wild somehow. Instead of giving me the form,
+the page demands login... even in '/'. I refuse, which leaves the page blank.
+If I navigate to '/test' myself, then finally login using the browser form...
+it still gives me error. Although I can manually navigate to 'success.html'
+I suppose. That might be a good reason to put a limit on it instead of '/home'.
+This default behavior is making me go nuts.
+
+Except while this works in the example app, it doesn't work for this one,
+even if I clear cookies. Maybe I need to clear cookies AND cache?
+Nope, still no protection. What if I reset it to '/test' and restart?
+Nope. The browser has just gone nuts from this application. It only works
+like before in private window, and then (I assume) it prevents ANY page from
+being accessed without password. For no reason.
+
+At least there are no caching problems with webapp...
+
+So I re-install the WHOLE GRADLE and finally the features with updated versions
+work. Except they work the same as old versions, which is completely different
+from the example. What the fuck? I even try multiple jakarta versions, and we still
+get an error on the TestServlet.
+
+So I come back the other day and try to break the [#gradle_example_app](#gradle_example_app),
+but I am unsuccessful. What happens instead is that rather than the example app
+breaking as I port the changes over from this app, this app becomes RANDOMLY fixed.
+
+Yes, you read that right. This app started working now. For no reason.
+I even tried UNDOING any small changes I made in the process, but it literally
+continues to work no matter what. I even purged web cache every time to be sure.
+
+That's right folks! I have **NO IDEA** why this works. Only that it does.
+Somehow. I guess you should start with the example app, get it working,
+then start making changes. That's the only sane way to make sense of this.
