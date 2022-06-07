@@ -11,7 +11,7 @@
                   host="192.168.1.5" port="389"
                   baseDN="dc=goodlike,dc=eu"
                   bindAuthMechanism="GSSAPI"
-                  krb5Principal="ldap/mumkashi-virtualbox@GOODLIKE.EU"
+                  krb5Principal="ldap/192.168.1.1@GOODLIKE.EU"
                   ldapType="Custom"/>
 
     <application location="${whereMyWarAt}" context-root="/">

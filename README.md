@@ -3308,3 +3308,12 @@ Hmm... what about the other username options?
     The specified principal name krbPrincipalName=bob@GOODLIKE.EU,cn=GOODLIKE.EU,cn=kerberos,ou=Services,dc=goodlike,dc=eu is not found in the back-end repository.
 
 Well, shit. It's clearly connecting, but it can't find the ol' bob.
+
+Let's try adding something like 'ldap/192.168.1.1' to the keytab:
+
+    sudo kadmin.local
+    > addprinc -randkey ldap/192.168.1.1
+    > ktadd -k /etc/krb5.ldap.keytab ldap/192.168.1.1
+    > q
+
+Then copy over the keytab to this project. No effect. Restarting VM? No effect.
