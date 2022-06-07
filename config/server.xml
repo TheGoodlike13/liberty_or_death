@@ -2,27 +2,25 @@
     <featureManager>
         <feature>appSecurity-4.0</feature>
         <feature>servlet-5.0</feature>
-        <!--<feature>ldapRegistry-3.0</feature>-->
+        <feature>ldapRegistry-3.0</feature>
     </featureManager>
 
-    <!--<kerberos configFile="goodlike.conf" keytab="goodlike.keytab"/>-->
+    <kerberos configFile="krb5.conf" keytab="krb5.ldap.keytab"/>
 
-    <!--<ldapRegistry id="OpenLDAP" realm="GOODLIKE.EU"-->
-    <!--host="192.168.1.5" port="389" ignoreCase="true"-->
-    <!--baseDN="dn=goodlike,dn=eu"-->
-    <!--bindDN="cn=admin,dn=goodlike,dn=eu"-->
-    <!--bindPassword="uzakashi"-->
-    <!--ldapType="Microsoft Active Directory"/>-->
-    <!--type based on https://github.com/Azure-Samples/open-liberty-on-aro/blob/master/3-integration/aad-ldap/src/main/liberty/config/server.xml-->
-
-    <basicRegistry>
-        <user name="bobobo" password="bobobo" />
-    </basicRegistry>
+    <ldapRegistry id="LDAP" realm="GOODLIKE.EU"
+                  host="192.168.1.5" port="389"
+                  baseDN="dn=goodlike,dn=eu"
+                  bindAuthMechanism="GSSAPI"
+                  krb5Principal="ldap/mumkashi-virtualbox@GOODLIKE.EU"
+                  ldapType="Custom" />
 
     <application location="${whereMyWarAt}" context-root="/">
         <application-bnd>
             <security-role name="wild">
-                <user name="bobobo"/>
+                <!--still not sure which one is right...-->
+                <user name="bob"/>
+                <user name="bob@GOODLIKE.EU"/>
+                <user name="krbPrincipalName=bob@GOODLIKE.EU,cn=GOODLIKE.EU,cn=kerberos,ou=Services,dc=goodlike,dc=eu"/>
             </security-role>
         </application-bnd>
     </application>

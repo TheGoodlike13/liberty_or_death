@@ -98,6 +98,7 @@ Links to various resources referred to (try [web archive](https://archive.org/) 
 ##### [#open_security](https://www.openliberty.io/guides/security-intro.html)
 ##### [#compatibility_issue](https://www.ibm.com/docs/en/was-liberty/zos?topic=architecture-supported-java-ee-7-8-feature-combinations)
 ##### [#gradle_example_app](https://openliberty.io/guides/gradle-intro.html)
+##### [#finally_some_good_fucking_docs](https://openliberty.io/docs/latest/reference/config/ldapRegistry.html)
 
 ## Setting up a liberty server that works
 
@@ -3132,3 +3133,110 @@ then start making changes. That's the only sane way to make sense of this.
 As a final touch, I realize that the '.html' files are contained in '.war'.
 So changing their location is done via [war task](https://docs.gradle.org/6.9.2/dsl/org.gradle.api.plugins.WarPluginConvention.html)
 and not liberty. Thankfully this works easily.
+
+Next up is the task of replacing the 'basicRegistry' with 'ldapRegistry'.
+If you recall, we created a user named 'bob', which I'll add to 'application-bnd':
+
+    <application-bnd>
+        <security-role name="wild">
+            <user name="bobobo"/>
+            <user name="bob"/>
+        </security-role>
+    </application-bnd>
+
+And the LDAP configuration, with all optional stuff removed (courtesy of 
+[#finally_some_good_fucking_docs](#finally_some_good_fucking_docs)):
+
+    <ldapRegistry host="192.168.1.5" port="389"
+                  baseDN="dn=goodlike,dn=eu"
+                  bindDN="cn=admin,dn=goodlike,dn=eu"
+                  bindPassword="uzakashi"
+                  ldapType="Custom"/>
+
+We're not gonna use GSSAPI unless we have to because it is weird.
+Passwords are just fine as far as I'm concerned!
+
+Interestingly enough, this is even logical! Whether we use 'bobobo' or 'bob',
+both go through LDAP and give the following error now:
+
+    [ERROR   ] com.ibm.wsspi.security.wim.exception.WIMSystemException: 
+               CWIML4520E: The LDAP operation could not be completed. 
+               The LDAP naming exception javax.naming.InvalidNameException: [LDAP: error code 34 - invalid DN]; 
+               resolved object com.sun.jndi.ldap.LdapCtx@15daaab4 occurred during processing.
+
+What if I use a more Kerberos-like name, e.g. 'bob@GOODLIKE.EU'? Same error.
+
+What if I just dump the entire bloody Kerberos name?
+
+    krbPrincipalName=bob@GOODLIKE.EU,cn=GOODLIKE.EU,cn=kerberos,ou=Services,dc=goodlike,dc=eu
+
+Progress! We get a completely different error:
+
+    [ERROR   ] com.ibm.wsspi.security.wim.exception.PasswordCheckFailedException: 
+               CWIML4537E: The login operation could not be completed. 
+               The specified principal name krbPrincipalName=bob@GOODLIKE.EU,cn=GOODLIKE.EU,cn=kerberos,ou=Services,dc=goodlike,dc=eu is not found in the back-end repository.
+
+This is interesting, because if I run the command
+
+    ldapsearch -x -D cn=admin,dc=goodlike,dc=eu -W
+    > uzakashi
+    
+I can see the principal name in the list.
+I would assume these operations to be somewhat equivalent,
+at least in terms of visibility, as that is the DN used in configuration.
+
+Well, let's try some other configuration options. [#open_your_slap](#open_your_slap)
+gives an option to use '.cc' files, which were files we were messing around with
+back when we called 'kinit' and 'klist'.
+
+So, I call
+
+    kinit bob
+    
+and copy '/tmp/krb5cc_1000' to the project with this configuration:
+
+    <ldapRegistry id="LDAP" realm="GOODLIKE.EU"
+                  host="192.168.1.5" port="389"
+                  baseDN="dn=goodlike,dn=eu"
+                  bindAuthMechanism="GSSAPI"
+                  krb5Principal="ldap/mumkashi-virtualbox@GOODLIKE.EU"
+                  krb5TicketCache="${server.config.dir}/krb5cc_1000.cc"
+                  ldapType="Custom" />
+
+This leads to a completely different error:
+
+    Caused by: javax.security.auth.login.LoginException: 
+    CWIML4507E: Kerberos login failed with the ldap/mumkashi-virtualbox@GOODLIKE.EU Kerberos principal 
+    and the C:\Code Projects\liberty_or_death\.build\wlp\usr\servers\defaultServer\krb5cc_1000.cc Kerberos credential cache (ccache). 
+    javax.security.auth.login.LoginException: Unable to obtain password from user
+
+It would help if someone carefully explained what the hell is going on here.
+Like, is it gonna store the credentials in the cache? Or is it looking for them?
+Based on the fact it was almost working with simple auth,
+I assume it wants credentials for 'ldap/mumkashi', not 'bob'.
+
+What about using Kerberos config after all, then?
+
+    <kerberos configFile="krb5.conf" keytab="krb5.ldap.keytab"/>
+    <ldapRegistry id="LDAP" realm="GOODLIKE.EU"
+                  host="192.168.1.5" port="389"
+                  baseDN="dn=goodlike,dn=eu"
+                  bindAuthMechanism="GSSAPI"
+                  krb5Principal="ldap/mumkashi-virtualbox@GOODLIKE.EU"
+                  ldapType="Custom" />
+
+The '.conf' and '.keytab' files are copied from the VM '/etc/' folder.
+They were used by 'slapd' to perform 'kinit' and 'klist', I assume,
+so they should have the credentials for 'ldap/mumkashi'.
+And true enough the error changes:
+
+    Caused by: com.ibm.wsspi.security.wim.exception.WIMSystemException:
+    CWIML4520E: The LDAP operation could not be completed. 
+    The LDAP naming exception javax.naming.AuthenticationException: 
+    [LDAP: error code 49 - SASL(-13): authentication failure: GSSAPI Failure: gss_accept_sec_context]; 
+    resolved object com.sun.jndi.ldap.LdapCtx@79786e90 occurred during processing.
+
+Definitely feels like we're on the right track.
+I'll mention that this error only occurs when using 'bob' or 'bob@GOODLIKE.EU'
+as username. Using the long 'uid' thing just gives the same error with all
+configurations, leading me to believe that is not the way.
