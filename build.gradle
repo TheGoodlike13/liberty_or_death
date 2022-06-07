@@ -24,12 +24,18 @@ dependencies {
     providedCompile 'jakarta.platform:jakarta.jakartaee-api:9.1.0'
 }
 
+war {
+    webAppDirName = 'htmls'
+}
+
 liberty {
     server {
         configDirectory = file('config')
         bootstrapProperties = ['whereMyWarAt': war.archiveName]
     }
 }
+
+clean.dependsOn 'libertyStop'
 
 project.buildDir = '.build'
 def projectPath = project.rootDir.toPath()

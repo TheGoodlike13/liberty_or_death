@@ -3128,3 +3128,7 @@ continues to work no matter what. I even purged web cache every time to be sure.
 That's right folks! I have **NO IDEA** why this works. Only that it does.
 Somehow. I guess you should start with the example app, get it working,
 then start making changes. That's the only sane way to make sense of this.
+
+As a final touch, I realize that the '.html' files are contained in '.war'.
+So changing their location is done via [war task](https://docs.gradle.org/6.9.2/dsl/org.gradle.api.plugins.WarPluginConvention.html)
+and not liberty. Thankfully this works easily.
