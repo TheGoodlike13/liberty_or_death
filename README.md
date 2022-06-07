@@ -22,8 +22,9 @@
 #### [2.13. It's time to back up a little](#its-time-to-back-up-a-little)
 #### [2.14. Final showdown](#final-showdown)
 #### [2.15. No place like home](#no-place-like-home)
-##### [2.15.1. Libery authentication in summary](liberty-authentication-in-summary)
+##### [2.15.1. Liberty authentication in summary](liberty-authentication-in-summary)
 ##### [2.15.2. Auth in this project](auth-in-this-project)
+#### [2.16. Putting it all together](#putting-it-all-together)
 
 Links to various resources referred to (try [web archive](https://archive.org/) if down, should work for most):
 
@@ -3133,6 +3134,8 @@ then start making changes. That's the only sane way to make sense of this.
 As a final touch, I realize that the '.html' files are contained in '.war'.
 So changing their location is done via [war task](https://docs.gradle.org/6.9.2/dsl/org.gradle.api.plugins.WarPluginConvention.html)
 and not liberty. Thankfully this works easily.
+
+### Putting it all together
 
 Next up is the task of replacing the 'basicRegistry' with 'ldapRegistry'.
 If you recall, we created a user named 'bob', which I'll add to 'application-bnd':
