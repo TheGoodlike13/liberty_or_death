@@ -3089,7 +3089,7 @@ was cached by the browser. How utterly annoying. Such things should be off
 by default... ~~I return the NoCacheFilter class back and this seems to fix it.~~
 And no matter what I do, it still caches the stupid localhost from another
 application... I give up. I don't care. I'll just make it redirect to '/test'
-in both cases. That'll fix it. Except this time even though i **REMOVED** the
+in both cases. That'll fix it. Except this time even though I **REMOVED** the
 no-caching filter... it didn't cache it...
 
 Moving everything to '/config/webapp' doesn't help the app to find things.
