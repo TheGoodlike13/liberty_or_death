@@ -3414,3 +3414,37 @@ So the configuration could look like this?
                     groupMemberIdMap="memberOf:member"/>
 
 Does it work? Of course not. Same errors as before.
+
+Out of curiosity I attempt to introduce logging with this query on server:
+
+    ldapmodify -Q -H ldapi:/// -Y EXTERNAL <<EOF
+    dn: cn=config
+    changetype: modify
+    replace: olcLogLevel
+    olcLogLevel: stats
+    EOF
+
+Unfortunately, the syslog doesn't seem to have anything interesting even
+after restarting and trying to log in. I can't find any other related file,
+although it's entirely possible it exists with some incomprehensible name.
+
+Alright, after some searching I wind up back at [#open_your_slap](#open_your_slap)
+which defines custom classes! Great news! Maybe that's what I need! Let's try!
+I replace the activedFilters with this:
+
+    <ldapEntityType name="KerberosAccount">
+        <objectClass>krbPrincipal</objectClass>
+        <searchBase>dc=goodlike,dc=eu</searchBase>
+    </ldapEntityType>
+    <ldapEntityType name="JustKerberosCmon">
+        <objectClass>krbContainer</objectClass>
+        <searchBase>dc=goodlike,dc=eu</searchBase>
+    </ldapEntityType>
+    <idsFilters groupFilter="(&amp;(cn=%v)(objectclass=krbContainer))" 
+                userFilter="(&amp;(krbPrincipalName=%v)(objectclass=krbPrincipal))"/>
+
+Aaaaand... it doesn't work. Same errors.
+
+Looks like our custom setup is a lost cause.
+I think it's time to throw in the towel and look for this magical
+"default" or "standard" solution.

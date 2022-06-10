@@ -13,11 +13,22 @@
                   bindDN="cn=admin,dc=goodlike,dc=eu"
                   bindPassword="uzakashi"
                   ldapType="Custom">
-        <activedFilters userFilter="(&amp;(krbPrincipalName=%v)(objectclass=krbPrincipal))"
-                        groupFilter="(&amp;(cn=%v)(objectclass=krbContainer))"
-                        userIdMap="*:krbPrincipalName"
-                        groupIdMap="*:cn"
-                        groupMemberIdMap="memberOf:member"/>
+        <ldapEntityType name="KerberosAccount">
+            <objectClass>krbPrincipal</objectClass>
+            <searchBase>dc=goodlike,dc=eu</searchBase>
+        </ldapEntityType>
+        <ldapEntityType name="JustKerberosCmon">
+            <objectClass>krbContainer</objectClass>
+            <searchBase>dc=goodlike,dc=eu</searchBase>
+        </ldapEntityType>
+        <idsFilters groupFilter="(&amp;(cn=%v)(objectclass=krbContainer))"
+                    userFilter="(&amp;(krbPrincipalName=%v)(objectclass=krbPrincipal))"/>
+
+        <!--<activedFilters userFilter="(&amp;(krbPrincipalName=%v)(objectclass=krbPrincipal))"-->
+                        <!--groupFilter="(&amp;(cn=%v)(objectclass=krbContainer))"-->
+                        <!--userIdMap="*:krbPrincipalName"-->
+                        <!--groupIdMap="*:cn"-->
+                        <!--groupMemberIdMap="memberOf:member"/>-->
     </ldapRegistry>
 
     <!--bindAuthMechanism="GSSAPI"-->
