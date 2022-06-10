@@ -10,9 +10,12 @@
     <ldapRegistry id="LDAP" realm="GOODLIKE.EU"
                   host="192.168.1.5" port="389"
                   baseDN="dc=goodlike,dc=eu"
-                  bindAuthMechanism="GSSAPI"
-                  krb5Principal="ldap/192.168.1.1@GOODLIKE.EU"
+                  bindDN="cn=admin,dc=goodlike,dc=eu"
+                  bindPassword="uzakashi"
                   ldapType="Custom"/>
+
+    <!--bindAuthMechanism="GSSAPI"-->
+    <!--krb5Principal="ldap/mumkashi-virtualbox@GOODLIKE.EU"-->
 
     <application location="${whereMyWarAt}" context-root="/">
         <application-bnd>

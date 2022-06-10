@@ -3317,3 +3317,12 @@ Let's try adding something like 'ldap/192.168.1.1' to the keytab:
     > q
 
 Then copy over the keytab to this project. No effect. Restarting VM? No effect.
+
+It seems no matter what I do, the user which ends up performing the query
+is 'ldap/192.168.1.5', which is odd, as that is based on the server IP
+address. You'd expect the client IP to figure here, but no.
+
+Anyway, without the 'ignore_acceptor_hostname' it doesn't connect,
+but then it can't find bob. Maybe the basic auth approach is better after all...
+
+Well, we get same result with basic auth, same exact error. Blegh.
