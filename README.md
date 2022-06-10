@@ -22,8 +22,8 @@
 #### [2.13. It's time to back up a little](#its-time-to-back-up-a-little)
 #### [2.14. Final showdown](#final-showdown)
 #### [2.15. No place like home](#no-place-like-home)
-##### [2.15.1. Liberty authentication in summary](liberty-authentication-in-summary)
-##### [2.15.2. Auth in this project](auth-in-this-project)
+##### [2.15.1. Liberty authentication in summary](#liberty-authentication-in-summary)
+##### [2.15.2. Auth in this project](#auth-in-this-project)
 #### [2.16. Putting it all together](#putting-it-all-together)
 
 Links to various resources referred to (try [web archive](https://archive.org/) if down, should work for most):
