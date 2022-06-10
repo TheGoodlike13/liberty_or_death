@@ -100,6 +100,7 @@ Links to various resources referred to (try [web archive](https://archive.org/) 
 ##### [#compatibility_issue](https://www.ibm.com/docs/en/was-liberty/zos?topic=architecture-supported-java-ee-7-8-feature-combinations)
 ##### [#gradle_example_app](https://openliberty.io/guides/gradle-intro.html)
 ##### [#finally_some_good_fucking_docs](https://openliberty.io/docs/latest/reference/config/ldapRegistry.html)
+##### [#ldap_search](https://devconnected.com/how-to-search-ldap-using-ldapsearch-examples/)
 
 ## Setting up a liberty server that works
 
@@ -3326,3 +3327,90 @@ Anyway, without the 'ignore_acceptor_hostname' it doesn't connect,
 but then it can't find bob. Maybe the basic auth approach is better after all...
 
 Well, we get same result with basic auth, same exact error. Blegh.
+
+One possibility is that we must define 'activedFilters' under the LDAP registry.
+It seems it has some default values, but they might be not applicable for
+our 'custom' LDAP setup. I guess the approach we've been taking is actually
+beyond the pale, or something. Wowee.
+
+Unfortunately, the defaults make absolutely no sense to me:
+
+    <activedFilters userFilter="(&(sAMAccountName=%v)(objectcategory=user))"
+                    groupFilter="(&(cn=%v)(objectcategory=group))"
+                    userIdMap="*:sAMAccountName"
+                    groupIdMap="*:cn"
+                    groupMemberIdMap="memberOf:member"/>
+
+Users, fine, I get it. But groups? What are we mapping in the other tags exactly?
+The hell's a 'sAMAccountName'? Ask me anything? Objectcategory? memberOf:member?
+What?
+
+Well, let's try a guess. Maybe 'sAMAccountName' should be 'krbPrincipalName'?
+
+    <activedFilters userFilter="(&(krbPrincipalName=%v)(objectcategory=user))"
+                    groupFilter="(&(cn=%v)(objectcategory=group))"
+                    userIdMap="*:krbPrincipalName"
+                    groupIdMap="*:cn"
+                    groupMemberIdMap="memberOf:member"/>
+
+Nope, same error.
+
+Let's try to understand what's going on here with the help of [#ldap_search](#ldap_search).
+So immediately it is made clear that the filters are search queries.
+
+This is weird though. They have placeholders in them. So, presumably,
+these filters would work if you already *knew* the user id or group name.
+But I never provided the LDAP registry with any of those.
+I was sort of hoping that, just like the basic registry, it would query
+the LDAP server, find some entries, use the "objectclass" to figure out
+"ah, this must be a user!" and be done.
+
+Failing that, I expected I could provide some query information for it,
+so it can find them users. You know, just like how you would make an SQL
+query for a database. Logical stuff.
+
+But the queries I can provide seem like they're for steps *after* that?
+What is up, I say, what is up with that?
+
+Furthermore, the query used in default filters uses 'objectcategory',
+which is obviously wrong. The [#ldap_search](#ldap_search) **CLEARLY**
+uses 'objectclass'. And if I run the searches myself on the server:
+
+    ldapsearch -x -b dc=goodlike,dc=eu -D cn=admin,dc=goodlike,dc=eu -W objectcategory=user
+    ldapsearch -x -b dc=goodlike,dc=eu -D cn=admin,dc=goodlike,dc=eu -W objectcategory=group
+    ldapsearch -x -b dc=goodlike,dc=eu -D cn=admin,dc=goodlike,dc=eu -W objectcategory=*
+
+They predictably return nothing. Which is to say, it seems like you can't
+just have whatever old LDAP setup and have it work with a liberty server.
+Furthermore, whatever the hell we did with Kerberos and LDAP is definitely
+not standard in any way shape or form.
+
+It's so great to try to setup an application to work with a database,
+where the database **CLEARLY** has a super-strict pre-defined format...
+but the application doesn't give you the schema.
+
+Imagine if you had a JAVA application. Which needed to connect to a database.
+And someone expected that it would work.
+But it would have 0 references to the schema of that database.
+You'd kick the shit out of whichever smart-ass thought that would be a good idea.
+
+Well, let's try just one more time. If I want to find the users, I can query
+    
+    ldapsearch -x -b dc=goodlike,dc=eu -D cn=admin,dc=goodlike,dc=eu -W objectclass=krbPrincipal
+
+This also finds a lot of things that aren't strictly speaking users.
+But it also finds users, which is better than nothing.
+
+I also can find the container, which maybe, who knows, might work like a group?
+
+    ldapsearch -x -b dc=goodlike,dc=eu -D cn=admin,dc=goodlike,dc=eu -W objectclass=krbContainer
+
+So the configuration could look like this?
+
+    <activedFilters userFilter="(&(krbPrincipalName=%v)(objectclass=krbPrincipal))"
+                    groupFilter="(&(cn=%v)(objectclass=krbContainer))"
+                    userIdMap="*:krbPrincipalName"
+                    groupIdMap="*:cn"
+                    groupMemberIdMap="memberOf:member"/>
+
+Does it work? Of course not. Same errors as before.

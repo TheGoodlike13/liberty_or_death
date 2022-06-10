@@ -12,7 +12,13 @@
                   baseDN="dc=goodlike,dc=eu"
                   bindDN="cn=admin,dc=goodlike,dc=eu"
                   bindPassword="uzakashi"
-                  ldapType="Custom"/>
+                  ldapType="Custom">
+        <activedFilters userFilter="(&amp;(krbPrincipalName=%v)(objectclass=krbPrincipal))"
+                        groupFilter="(&amp;(cn=%v)(objectclass=krbContainer))"
+                        userIdMap="*:krbPrincipalName"
+                        groupIdMap="*:cn"
+                        groupMemberIdMap="memberOf:member"/>
+    </ldapRegistry>
 
     <!--bindAuthMechanism="GSSAPI"-->
     <!--krb5Principal="ldap/mumkashi-virtualbox@GOODLIKE.EU"-->
