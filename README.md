@@ -3390,12 +3390,12 @@ where the database **CLEARLY** has a super-strict pre-defined format...
 but the application doesn't give you the schema.
 
 Imagine if you had a JAVA application. Which needed to connect to a database.
-And someone expected that it would work.
 But it would have 0 references to the schema of that database.
+And someone expected that it would work.
 You'd kick the shit out of whichever smart-ass thought that would be a good idea.
 
 Well, let's try just one more time. If I want to find the users, I can query
-    
+
     ldapsearch -x -b dc=goodlike,dc=eu -D cn=admin,dc=goodlike,dc=eu -W objectclass=krbPrincipal
 
 This also finds a lot of things that aren't strictly speaking users.
