@@ -102,6 +102,8 @@ Links to various resources referred to (try [web archive](https://archive.org/) 
 ##### [#gradle_example_app](https://openliberty.io/guides/gradle-intro.html)
 ##### [#finally_some_good_fucking_docs](https://openliberty.io/docs/latest/reference/config/ldapRegistry.html)
 ##### [#ldap_search](https://devconnected.com/how-to-search-ldap-using-ldapsearch-examples/)
+##### [#ray_of_hope](https://stackoverflow.com/questions/24044383/configuring-was-liberty-ldap-authentication-settings-based-on-tomcat-configurati)
+##### [#where_is_the_slap](https://serverfault.com/questions/351084/openldap-where-is-my-slapd-conf)
 
 ## Setting up a liberty server that works
 
@@ -3451,3 +3453,28 @@ I think it's time to throw in the towel and look for this magical
 "default" or "standard" solution.
 
 ### Back to the roots
+
+So, let's start with a fresh VM copy, using a new IP `192.168.1.6` and [#dummy_slap](#dummy_slap).
+Once we have a basic OpenLDAP installation going,
+let's try to follow the answer from the [#ray_of_hope](#ray_of_hope).
+
+The answer is using a custom schema with hints that it *could* also work
+with the default schema. But given my track record, I'm not gonna bet on that.
+I'll use this new schema and the provided `LDIF` file with minimal adjustments.
+
+So, first we must find the `slapd.conf` file and include the schema.
+I search it across my entire VM system and find just 4 matching files:
+
+    slapd.config
+    slapd.conf.5.gz
+    slapd.conffiles
+    slapd.conf
+    
+And before you get excited, the last one is in `usr/share/doc/slapd/examples`,
+which implies it isn't a real config file, and even if it is, it's in the wrong
+directory to help us anyway. So [#where_is_the_slap](#where_is_the_slap)?
+
+Of course it doesn't exist anymore. It's been replaced with the absolutely rubbish
+mechanism known as `cn=config` that in of itself was enough to deepen my insanity
+beyond saving. You're telling me they had a normal text config file, and instead
+**CHOSE THIS**? God have mercy on their souls. Or rather don't. They deserve it.
