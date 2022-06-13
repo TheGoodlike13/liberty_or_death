@@ -24,7 +24,8 @@
 #### [2.15. No place like home](#no-place-like-home)
 ##### [2.15.1. Liberty authentication in summary](#liberty-authentication-in-summary)
 ##### [2.15.2. Auth in this project](#auth-in-this-project)
-#### [2.16. Putting it all together](#putting-it-all-together)
+#### [2.16. Not putting it all together](#not-putting-it-all-together)
+#### [2.17. Back to the roots](#back-to-the-roots)
 
 Links to various resources referred to (try [web archive](https://archive.org/) if down, should work for most):
 
@@ -3136,7 +3137,7 @@ As a final touch, I realize that the '.html' files are contained in '.war'.
 So changing their location is done via [war task](https://docs.gradle.org/6.9.2/dsl/org.gradle.api.plugins.WarPluginConvention.html)
 and not liberty. Thankfully this works easily.
 
-### Putting it all together
+### Not putting it all together
 
 Next up is the task of replacing the 'basicRegistry' with 'ldapRegistry'.
 If you recall, we created a user named 'bob', which I'll add to 'application-bnd':
@@ -3448,3 +3449,5 @@ Aaaaand... it doesn't work. Same errors.
 Looks like our custom setup is a lost cause.
 I think it's time to throw in the towel and look for this magical
 "default" or "standard" solution.
+
+### Back to the roots
