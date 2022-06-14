@@ -32,7 +32,8 @@
 #### [2.16. Not putting it all together](#not-putting-it-all-together)
 #### [2.17. Back to the roots](#back-to-the-roots)
 #### [2.18. Hell in summary](#authentication-hell-in-summary)
-### [?. Summary of summaries](#summary-of-summaries)
+### [3. (SPN)EGO death](#spn-ego-death)
+### [4. Summary of summaries](#summary-of-summaries)
 
 Links to various resources referred to (try [web archive](https://archive.org/) if down, should work for most):
 
@@ -3666,6 +3667,8 @@ Don't forget to set the correct IP, port, domain, etc. `baseDN` should be the do
 Finally, none of this should be considered reasonable for production whatsoever.
 But it can serve as a working example to try and understand what the configuration
 does, specifically.
+
+## (SPN)EGO death
 
 ## Summary of summaries
 
