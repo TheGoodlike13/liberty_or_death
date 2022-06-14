@@ -381,7 +381,7 @@ I do hope we can get away with not running multiple VMs though...
 
 ### Virtual Machine Arc
 
-*cue the music, you know the one*
+[*cue the music, you know the one*](https://www.youtube.com/watch?v=MFqtv8RfJQg)
 
 Last time, Goodlike finally succeeded in defeating Libertto
 in the grand martial tournament. But before he could receive his award,
@@ -390,61 +390,70 @@ To defeat this new menace, Goodlike will have to train in the Virtual Machine Ch
 which eats away at all the time that it takes to get inside it before you even notice.
 Let us begin this episode of Dragon Ball VM with a flashback.
 
-I vaguely recall having no luck whatsoever with running a VM on this computor over here.
+I vaguely recall having no luck whatsoever with a VM on this computor over here.
 And when I don't have luck with something, I purge it from existence.
 Therefore we must start from the beginning. Again. I found this website:
 [#ubuntu_tryhard](#ubuntu_tryhard).
-They are just obsessed with people migrating from windows 7, but they do reluctantly
-offer advice on how to run it on a VM. That sounds good enough.
+They are just obsessed with people migrating from windows 7,
+but they do reluctantly offer advice on how to run it on a VM.
+That sounds good enough.
 
-As an aside, my download hard-drive (so, the hard-drive where downloads go by default)
+As an aside, my download hard-drive (the hard-drive where downloads go by default)
 is getting quite full. All those videos downloaded with [youtube-dl](https://github.com/yt-dlp/yt-dlp)
-are starting to take a toll, if you catch my meaning. Thankfully it's just about enough to
-fit the latest Ubuntu ISO. Hurray!
+are starting to take a toll, if you catch my meaning.
+Thankfully it's just about enough to fit the latest Ubuntu ISO. Hurray!
 
 [VirtualBox](https://www.virtualbox.org/wiki/Downloads) is the next step.
-Their website says something or other about only older versions supporting certain
-features. Well, I haven't been told anything about which features I would need or not,
+The website says something or other about certain features
+being supported by older versions only.
+Well, I haven't been told anything about which features I would need or not,
 so latest version it is.
 
 Uh oh. There's some network feature that we probably need if we are to have any hope
 of using our VM as a Kerberos server. I've actually had a lot of problems with my
 network connection. From time to time it just refuses to consume DHCP responses.
+
 DHCP is, uh, I guess since it ends with 'P', a protocol? Uh, it's how your computer
 gets its IP address. You send out a DHCP message (of some kind) into the world.
 The DHCP server, I guess? It, uh, sends back a message with an IP address you can use.
-But then you have to respond with an acknowledgement that you're gonna use the IP address.
-It's something like that.
+But then you have to respond with an acknowledgement
+that you're gonna use the IP address. It's something like that.
 
-This process is considered 'leasing' the IP address for a little while, so you kinda
-have to keep pinging the server every now and then for an extension. If you don't,
-you lose your IP & the network connection drops until the process is restarted from
-beginning.
+This process is considered 'leasing' the IP address for a little while,
+so you kinda have to keep pinging the server every now and then for an extension.
+If you don't, you lose your IP & the network connection drops
+until the process is restarted from beginning.
 
-Well my stupid network adapter tries to renew the bloody thing... but when it gets
-the response, it pretends it didn't. So it just spams the server a few times and
-gives up for a while. It repeats this procedure at intervals until the lease expires.
-Then it has to restart the process from the beginning, and now that it's not an extension
-of the lease, correctly handles it and restores the connection.
+Well my stupid network adapter tries to renew the bloody thing...
+but when it gets the response, it pretends it didn't.
+So it just spams the server a few times and gives up for a while.
+It repeats this procedure at intervals until the lease expires.
+Then it has to restart the process from the beginning,
+and now that it's not an extension of the lease,
+correctly handles it and restores the connection.
 Doesn't sound that bad, right?
 
-Well, setting aside spontaneous disconnections from *everything*, at some point
-the DHCP server has had enough of my adapter's shit and just stops responding altogether.
+Well, setting aside spontaneous disconnections from *everything*,
+at some point the DHCP server has had enough of my adapter's shit
+and just stops responding altogether.
 Then the connection disappears until that server has calmed down.
 
-My process of fixing this has been along the lines of 'delete or disable everything
-related to networking that you don't need' and 'do not install anything that touches it
-or anything related to it whatsoever' and finally 'if all else fails, reset IP stack
-and restart the computer'. The first 2 steps seem to have significantly reduced the
-rate of these events. From sporadic to barely once a month, if that. The last step
-has successfully prevented any issues in the few remaining cases.
+My process of fixing this has been along the lines of
+`delete or disable everything related to networking that you don't need`
+and `do not install anything that touches it or anything related to it whatsoever`
+and finally `if all else fails, reset IP stack and restart the computer`.
+The first 2 steps seem to have significantly reduced the rate of these events.
+From sporadic to barely once a month, if that.
+The last step has successfully prevented any issues in the few remaining cases.
 
 The point of this aside is, great, now something might fuck up my network.
 I just love installing shit that can fuck up my network. Lovely.
 
-Installation has succeeded, so far. I'm following the steps. Unfortunately they are not
-specific enough. For example, when creating a virtual hard drive, you actually have
-3 options. VDI, VHD and VMDK. I guess I'll just stick to defaults and see what happens.
+Installation has succeeded, so far. I'm following the steps.
+Unfortunately they are not specific enough.
+For example, when creating a virtual hard drive,
+you actually have 3 options. VDI, VHD and VMDK.
+I guess I'll just stick to defaults and see what happens.
 
 Dynamically allocated! 10 GB! 1GB RAM! Let's go!
 
@@ -452,128 +461,149 @@ It seems that the optical drive was already created by default. Huh.
 I can't seem to find a way to select the Ubuntu ISO, so I just start the machine.
 
 Immediately it tells me to select the thing to put into a drive. Good boy!
-Now that's more like it! I keep clicking 'add' buttons until I can select it in files.
+Now that's more like it! I keep clicking `add` buttons until I can select it.
 
-Aaaand it crashes. Immediately. VT-x is disabled in the BIOS for all CPU modes.
-Sounds pretty familiar, probably the thing that prevented me from doing the VM
-thing before. But let's keep going.
+Aaaand it crashes. Immediately. `VT-x is disabled in the BIOS for all CPU modes`.
+Sounds pretty familiar, probably the thing that prevented me
+from doing the VM thing before. But let's keep going.
 
 [Stackoverflow](https://stackoverflow.com/questions/33304393/vt-x-is-disabled-in-the-bios-for-both-all-cpu-modes-verr-vmx-msr-all-vmx-disabl)
-graciously provides an answer that actually works too this time!
-Suspicious... if it's as easy as enabling some option in BIOS that has "virtualization"
-written next to it, sounds like a lot less than it would take to stop me from
-trying it... hmm...
+graciously provides an answer that actually works this time!
+Suspicious... if it's as easy as enabling some option in BIOS
+that has "virtualization" written next to it,
+sounds like a lot less than it would take to stop me from trying it... hmm...
 
-This time the virtual machine launches successfully. BUT! Not so fast! It asks me
-to select a boot option, and I select "Try or install Ubuntu". Then it leaves me with
-a black console screen. I know it's linux, but surely it can't be THAT bad? Ugh.
+This time the virtual machine launches successfully. BUT! Not so fast!
+It asks me to select a boot option, and I select `Try or install Ubuntu`.
+Then it leaves me with a black console screen.
+I know it's linux, but surely it can't be THAT bad? Ugh.
 
-Time to try some of the things suggest by [#black_ubuntu](#black_ubuntu)!
+Time to try some of the things suggested by [#black_ubuntu](#black_ubuntu)!
 Setting the OS to 64-bit and giving it 128 MB VRAM? No dice.
 
 What if we raise the RAM to 8GB and give it an extra processor? That's illegal!
 Or at least invalid. Some other option has to be enabled, a notification says.
-I/O APIC. Not quite epic, I see. Well, does it work? No.
+`I/O APIC`. Not quite epic, I see. Well, does it work? No.
 
-Turn ON accelerate 3D graphics, despite the comment saying "no, don't!" No effect.
+Turn ON accelerate 3D graphics, despite the comment saying "no, don't!"? No effect.
 
-Logs just kinda stop after I get the install selection. Nothing happens, until I shut it down.
+Logs just kinda stop after I get the install selection.
+Nothing happens, until I shut it down.
 
-I try every option under the sun. No effect. Time to change the approach. If everything is
-failing, then maybe the option I am choosing is wrong!
+I try every option under the sun. No effect. Time to change the approach.
+If everything is failing, then maybe the option I am choosing is wrong!
 
 Ubuntu (safe graphics) does not work.
 OEM install (for manufacturers) does not work.
-Test memory... uh... well it gives me something. It starts running something that looks like...
+Test memory... uh... well it gives me something.
+It starts running something that looks like...
 like a... like a... test! Imagine that.
 
-I ran memtest86 for 20 minutes. Nothing.
+I ran `memtest86` for 20 minutes. Nothing.
 
-There's some hint that some windows feature might be enabled, called Hyper-V that's
-stealing the glory of VM. I can't find anything in the logs to indicate that, but hey,
+There's some hint that some windows feature might be enabled,
+called Hyper-V that's stealing the glory of VM.
+I can't find anything in the logs to indicate that, but hey,
 might as well grasp at straws.
 
 And straws they are, as I can't even SEE the features as expected in control panel.
 I get a blank box. The fix from [windows tips](https://www.wintips.org/fix-windows-features-list-blank-or-empty-windows-7/)
 doesn't work. Well, the first one. I suppose there's 2 more?
 
-SFC /SCANNOW found no problems in safe mode! Woweeeeeee!
+`SFC /SCANNOW found no problems` in safe mode! Woweeeeeee!
 
-What about KB947821 update? Bupkis. All 1GB of useless junk that gets stuck in
-"initializing" stage. With no good way to fix it. Nothing I'm about to bother doing, anyway.
+What about `KB947821` update? Bupkis.
+All 1GB of useless junk that gets stuck in "initializing" stage.
+With no good way to fix it. Nothing I'm about to bother doing, anyway.
 
 I can't be the only person thinking this now: we really need a second opinion.
 That's right! Let's try a different VM software and see if we get similar results!
 
-First on the [#vm_list](#vm_list) is VMware Workstation Player. Latest version doesn't work.
+First on the [#vm_list](#vm_list) is `VMware Workstation Player`.
+Latest version doesn't work.
 Well, it might work somewhere, but this is Windows 7. It needs Windows 8.
 Why would you need something that's consigned to forgotten history? Nobody knows.
 
-How about a previous version? Well, the earliest they offer is 16.0.0, and it also
-requires Windows 8. Hurray.
+How about a previous version? Well, the earliest they offer is `16.0.0`,
+and it also requires Windows 8. Hurray.
 
 Any older versions? Definitely doesn't seem like it. But I did stumble upon this
 [page](https://docs.vmware.com/en/VMware-Workstation-Player/15/rn/player-15-release-notes.html).
 It's an old feature page which had an uncanny part referring to, and I quote,
-"New Guest operating systems support" followed by a list containing "Ubuntu 18.04".
-It strikes me that I've been trying to get the LATEST Ubuntu to launch as VM, but
-what if some weird shenanigan is preventing that from working? I mean, at some point
-I would've gone and tried a different version of linux anyway, so I guess this is as good
-an excuse as any.
+`New Guest operating systems support` followed by a list containing `Ubuntu 18.04`.
+It strikes me that I've been trying to get the LATEST Ubuntu to launch as VM,
+but what if some weird shenanigan is preventing that from working?
+I mean, at some point I would've gone and tried a different version of linux anyway,
+so I guess this is as good as an excuse as any.
 
-On a whim I decided to try googling for "best ubuntu for VM", which led me to
+On a whim I decided to try googling for `best ubuntu for VM`, which led me to
 [#vm_ubuntus](#vm_ubuntus) and the glorious top leader [#dynasty_warriors](#dynasty_warriors)
 Ubuntu version. What could possibly go more wrong than it already has?
 
 Well, for starters, the link to the download of the latest version juuuuuust might
-respond with HTTP404. For no reason. Great start! Is there anything in this world left
-that just works, for goodness sake???
+respond with `HTTP 404`. For no reason. Great start!
+Is there anything in this world left that just works, for goodness sake???
 
-Their older versions seem to not work either. But there's torrent links, that could work!
+Their older versions seem to not work either.
+But there's torrent links, that could work!
+
 But then... it doesn't! Well, technically, it did open just like the normal Ubuntu.
-But it also gave me a message! "This kernel requires an x86-64 CPU, but only detected
-an i686 CPU." So it's unable to boot and tells me to use the correct kernel.
-Which is what I thought I did. But apparently, I have i686 CPU. Whatever the fuck
-that is.
+But it also gave me a message!
+
+    This kernel requires an x86-64 CPU, but only detected an i686 CPU.
+    
+So it's unable to boot and tells me to use the correct kernel.
+Which is what I thought I did. But apparently, I have i686 CPU.
+Whatever the fuck that is.
 
 I don't think that's the problem. There's some weirdness with how this is going.
-Some random google search suggests that's a 32-bit architecture. I picked a 32-bit
-architecture at start, because I couldn't find 64-bit, but changed it later.
-Perhaps that change was invalid or ignored somehow? Hmm...
+Some random google search suggests that's a `32-bit` architecture.
+I picked a 32-bit architecture at start, because I couldn't find `64-bit`,
+but changed it later. Perhaps that change was invalid or ignored somehow? Hmm...
 
-Remarkably, restarting the process and picking 64-bit from the beginning
+Remarkably, restarting the process and picking `64-bit` from the beginning
 this time has allowed me to run Lubuntu without error (so far)!
 Following this great success I use the same exact procedure to run the newest Ubuntu
 as well. Seriously? That's all I had to do to fix it? Give me a break...
 
-Looks like stars are starting to align. Installation is proceeding smoothly, and one of
-the options even says "Use Active Directory". While I assume that's what we need for
-Kerberos, I'm also gonna assume that's not what we mean by "we need it" and this is
-just some extra stuff. In any case, it's a VM, I can just make another one if I have to.
+Looks like stars are starting to align. Installation is proceeding smoothly,
+and one of the options even says `Use Active Directory`.
+While I assume that's what we need for Kerberos,
+I'm also gonna assume that's not what we mean by "we need it"
+and this is just some extra stuff.
+In any case, it's a VM, I can just make another one if I have to.
 So no Active Directory. Not yet.
 
 While it's installing I'll clean up the other VM which had half started Lubuntu.
-The truth is, I got an error half way through the installation, something about
-hard drive being too small or whatever, and I thought, maybe Ubuntu won't do this to me.
-And it didn't! Don't worry guys, I'll still seed the Lubuntu ISO. For a bit.
+The truth is, I got an error half way through the installation,
+something about hard drive being too small or whatever, and I thought,
+maybe Ubuntu won't do this to me. And it didn't!
+Don't worry guys, I'll still seed the Lubuntu ISO. For a bit.
 
 Looks like we have a working Ubuntu. Wow. Never thought I'd see the day!
 Now the next question is, will it work enough to get Kerberos on it?
 Find out tomorrow on the next episode of Dragon Ball VM!
 
-*cue the music, you know, the other one*
+[*cue the music, you know, the other one*](https://www.youtube.com/watch?v=ElqB359i_Os)
 
 #### VM in summary
 
- 1. Before beginning, restart your PC and go into BIOS. BIOS is different for everyone.
- 2. In BIOS, find the 'virtualization/VT-x' setting for CPU and enable it.
+ 1. Before beginning, restart your PC and go into BIOS.
+ BIOS and the way to enter it is different for everyone.
+ But usually the first screen when running a PC tells you how to do it.
+ Just press some buttons.
+ 2. In BIOS, find the `virtualization/VT-x` setting for CPU and enable it.
  3. Save the changes and restart your PC normally.
- 4. Download an image of your favorite linux (.iso file), like [Ubuntu 22.04 LTS](https://ubuntu.com/download/desktop) or something.
- 5. Download and install and run [VirtualBox](https://www.virtualbox.org/wiki/Downloads). I chose latest version at the time: 6.1.34 r 150626 (Qt5.6.2).
+ 4. Download an image of your favorite linux (`.iso` file), like [Ubuntu 22.04 LTS](https://ubuntu.com/download/desktop).
+ 5. Download and install and run [VirtualBox](https://www.virtualbox.org/wiki/Downloads).
+ I chose latest version at the time: 6.1.34 r 150626 (Qt5.6.2).
  6. Create a new VM config. 
- 7. **Make sure you select the correct version in the first window (linux 64-bit in my case).**
- 8. The other settings are probably fine, but you can also increase them. 10GB HDD in particular was pushing it in my case.
- 9. Run the VM & make sure to select the downloaded .iso file to be inserted into the drive.
+ 7. **Make sure you select the correct version in the first window
+ (linux 64-bit in my case).**
+ 8. The other settings are probably fine, but you can also increase them.
+ 10GB HDD in particular was pushing it in my case. Try 13GB+.
+ 9. Run the VM & make sure to select the downloaded `.iso` file
+ to be inserted into the drive.
 10. Install & enjoy.
 
 ### Ubuntu Online
@@ -591,11 +621,12 @@ That could've been anything.
 Well, our first hurdle is to actually open the command line on ~~linux~~ Ubuntu.
 You'd think linux would be like "here! open this! it's the thing!", but no,
 I find no reference to it on the Ubuntu start screen.
-Quick google search tells me it's CTRL + ALT + T.
+Quick google search tells me it's `CTRL + ALT + T`.
 
-I'm perplexed by the first command on [#not_on_windows](#not_on_windows) because
-it seems to have very specific version information. But you know what, I've had
-enough fiddling with things along the way, I'm following this bitch to the letter.
+I'm perplexed by the first command on [#not_on_windows](#not_on_windows)
+because it seems to have very specific version information.
+But you know what, I've had enough fiddling with things along the way,
+I'm following this bitch to the letter.
 
 First hurdle: how to copy the damn command? It doesn't work between my PC and VM
 out of the box. Looks like some [plugin](https://superuser.com/questions/42134/how-do-i-enable-the-shared-clipboard-in-virtualbox)
@@ -608,99 +639,114 @@ specific pages online, but I can copy the command now! Hurray!
 
 Except it doesn't work.
 
-The command uses rpm, which I assume is a client for some place that you can download from.
-Well, this fresh Ubuntu ain't got that. But at least it tells me this! And even tells me
-how to install it!
+The command uses rpm, which I assume is a client for some place
+that you can download from. Well, this fresh Ubuntu ain't got that.
+But at least it tells me this! And even tells me how to install it!
 
     sudo apt install rpm
     
 It installs without a hitch.
 So how about running the command now? It still doesn't work.
 
-First thing that rpm does is immediately reprimand me for doing something I don't know what it is.
-'You should use Alien instead!' Oh yeah, I'll just take it up with the guys who wrote
-the guide. I'm sure they can point me to an alien or two.
+First thing that rpm does is immediately reprimand me
+for doing something I don't know what it is. `You should use Alien instead!`
+Oh yeah, I'll just take it up with the guys who wrote the guide.
+I'm sure they can point me to an alien or two.
 
-While at it, turns out there is no file named 'krb5-server-1.10.3-10.el6_4.6.x86_64.rpm'.
-What a surprise, using exact version number in your guide, then removing that version,
-breaks the guide.
+While at it, turns out there is no file named
+`krb5-server-1.10.3-10.el6_4.6.x86_64.rpm`.
+What a surprise, using an exact version number in your guide,
+then having that version disappear, breaks the guide.
 
-Let's leverage our options here. Number one, I continue trying to follow a guide that
-the very thing they suggest me I use warns me against doing. Number two, I try to follow
-the instructions of my new polite AI companion/overlord. I'm leaning towards number two,
-and it's because it has an Alien in it. At least it'll be, dunno, interesting or funny.
+Let's leverage our options here. Number one:
+I continue trying to follow a guide that the very thing they suggest me
+I use warns me against doing. Number two:
+I try to follow the instructions of my new polite AI companion/overlord.
+I'm leaning towards number two, and it's because it has an Alien in it.
+At least it'll be, dunno, interesting, or funny.
 
-The first page I find on [#it_was_aliens](#it_was_aliens) seems to imply its some kind of
-converter between types of packages, which I assume refers to the format in which
-applications are stored so they can be installed into linux, particularly via command line.
-
+The first page I find on [#it_was_aliens](#it_was_aliens) seems to imply
+it's some kind of converter between types of packages,
+which I assume refers to the format in which applications are stored
+so they can be installed into linux, particularly via command line.
 Well, why don't we try running
 
     alien --to-rpm krb5-server-1.10.3-10.el6_4.6.x86_64.rpm
     
-Well, I'd love to, but my Ubuntu has locked the screen. Now, I remember the password,
-but it would be really annoying to constantly get locked because I tab out to check
-something elsewhere. It's a VM, who cares.
+Well, I'd love to, but my Ubuntu has locked the screen.
+Now, I remember the password, but it would be really annoying
+to constantly get locked because I tab out to check something elsewhere.
+It's a VM, who cares.
 
 [Stackoverflow](https://superuser.com/questions/155881/how-do-i-prevent-ubuntu-from-putting-my-monitor-to-sleep)
-suggests looking at the 'preferences'. What I found instead was 'settings'. Except they
-don't fit all in the screen. You see, the VM by default is in a tiny screen.
-Something like 640x480 or whatever. I guess we should at least make it widescreen before
-we continue.
+suggests looking at the `preferences`. What I found instead was `settings`.
+Except they don't fit in the screen. You see, the VM by default is in a tiny screen.
+Something like `640x480` or whatever.
+I guess we should at least make it widescreen before we continue.
 
 I right click the desktop and select display settings, which includes resolution.
-It was actually 800x600. And the lowest widescreen is... 1280x720. Quite the jump. Oh well.
-Somehow the 'x' which closes the windows is still partially offscreen, but I guess
-that's not a big issue.
+It was actually `800x600`. And the lowest widescreen is... `1280x720`.
+Quite the jump. Oh well.
+Somehow the 'x' which closes the windows is still partially offscreen,
+but I guess that's not a big issue.
 
-Interestingly enough, the screen options for locking are under the 'privacy' tab in settings.
-I suppose it makes sense, as privacy would be one, if not primary reason to lock the screen,
-but somehow I didn't make that connection logically as I was just browsing randomly.
+Interestingly enough, the screen options for locking are under the `privacy` tab
+in settings. I suppose it makes sense, as privacy would be one,
+if not primary reason to lock the screen,
+but somehow I didn't make that connection logically.
+Instead I encountered the option as I was just browsing randomly.
 Anyhow, we've got ourselves a lock-less screen! Success!
 
-Unsurprisingly, our alien command doesn't work. Because alien was not installed either.
+Unsurprisingly, our alien command doesn't work.
+Because alien was not installed either.
 
     sudo apt install alien
 
-But, of course, even after installation, 'alien' still doesn't work.
+But, of course, even after installation, `alien` still doesn't work.
 
-It complains about not running as 'root' and that the ownership of files might be wrong?
-I guess that's just because I didn't prefix it with sudo. You know what, I'll just
-prefix everything with sudo from now on. I'm sure that's a good and helpful idea and
-doesn't break the security model that was intended whatsoever. Well, they should've
-thought of it sooner.
+It complains about not running as `root` and that the ownership of files is wrong?
+I guess that's just because I didn't prefix it with `sudo`.
+You know what, I'll just prefix everything with `sudo` from now on.
+I'm sure that's a good and helpful idea and doesn't break the security model
+that was intended whatsoever. Well, they should've thought of it sooner.
 
     sudo alien --to-rpm krb5-server-1.10.3-10.el6_4.6.x86_64.rpm
 
-But the fundamental problem is the same. There is no 'krb5-server-1.10.3-10.el6_4.6.x86_64.rpm'.
-Therefore I assume we must find a new version. Maybe if I remove the version it will
-figure it out by itself?
+But the fundamental problem is the same.
+There is no `krb5-server-1.10.3-10.el6_4.6.x86_64.rpm`.
+Therefore I assume we must find a new version.
+Maybe if I remove the version it will figure it out by itself?
  
     sudo alien --to-rpm krb5-server
  
 Nope. That was admittedly probably too much to ask :D
 
-Looking for something like a version, I find [#ubuntu_kerberos](#ubuntu_kerberos) instead.
-This guide seems a lot more well intentioned than the previous one AND it doesn't have
-random versions in it! Let's play along for now!
+Looking for something like a version,
+I find [#ubuntu_kerberos](#ubuntu_kerberos) instead.
+This guide seems a lot more well intentioned than the previous one
+AND it doesn't have random versions in it! Let's play along for now!
 
-This guide has made a very poor decision in handling commands, at least for purposes of copy-paste.
-They prefix every command with '#' when actually they mean that every command should
-be prefixed with 'sudo'. So whenever I copy the command I have to remember to manually
-type sudo, which is annoying and will continue to trip me up for some time.
-I assume that in some cases 'sudo' is not needed, but whoever would be copy-paste-ing
-the commands could just ignore the 'sudo' part. I'm sure they'd know that.
-And they could copy just the part that they want. I'm the one getting shafted here, seriously.
-Not to mention 'sudo' makes a lot more sense than '#' when explaining something...
+This guide has made a very poor decision in handling commands,
+at least for purposes of copy-paste.
+They prefix every command with `#` when actually
+they mean that every command should be prefixed with `sudo`.
+So whenever I copy the command I have to remember to manually type `sudo`,
+which is annoying and will continue to trip me up for some time.
+I assume that in some cases `sudo` is not needed,
+but whoever would be copy-paste-ing the commands could just ignore the `sudo` part.
+I'm sure they'd know to do that, and would copy just the part that they need.
+I'm the one getting shafted here, seriously.
+Not to mention `sudo` makes a lot more sense than `#` when explaining something...
 
     sudo apt install krb5-kdc krb5-admin-server krb5-config
 
 Running the install command succeeds, but we're met with an installation dialogue.
-This is somewhat different than the previous guide, which explains the difference in
-approach. I guess if you installed the package with 'rpm', you'd be manually configuring it.
-Now that I installed it via 'apt', I have to deal with whatever somebody thought
-would be a good wizard implementation for installation. At least the guide knows this
-and gives us help, even with screenshots! Very nice!
+This is somewhat different than the previous guide,
+which explains the difference in approach.
+I guess if you installed the package with `rpm`, you'd be manually configuring it.
+Now that I installed it via `apt`, I have to deal with whatever somebody thought
+would be a good wizard implementation for installation.
+At least the guide knows this and gives us help, even with screenshots! Very nice!
 
 I'm going to try to explain every step the way I understood it (oh boy).
 This is in the interest of perspective. And maybe even learning something!
