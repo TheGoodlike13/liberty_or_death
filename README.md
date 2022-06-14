@@ -104,6 +104,8 @@ Links to various resources referred to (try [web archive](https://archive.org/) 
 ##### [#ldap_search](https://devconnected.com/how-to-search-ldap-using-ldapsearch-examples/)
 ##### [#ray_of_hope](https://stackoverflow.com/questions/24044383/configuring-was-liberty-ldap-authentication-settings-based-on-tomcat-configurati)
 ##### [#where_is_the_slap](https://serverfault.com/questions/351084/openldap-where-is-my-slapd-conf)
+##### [#slap_23](https://www.openldap.org/doc/admin23/schema.html)
+##### [#slap_26](https://www.openldap.org/doc/admin26/schema.html)
 
 ## Setting up a liberty server that works
 
@@ -3478,3 +3480,16 @@ Of course it doesn't exist anymore. It's been replaced with the absolutely rubbi
 mechanism known as `cn=config` that in of itself was enough to deepen my insanity
 beyond saving. You're telling me they had a normal text config file, and instead
 **CHOSE THIS**? God have mercy on their souls. Or rather don't. They deserve it.
+
+This doesn't even make sense; the answer in [#where_is_the_slap](#where_is_the_slap)
+is from 2012, but the one from [#ray_of_hope](#ray_of_hope) is from 2014.
+Even then people could tell whatever OpenLDAP devs were smoking was bad.
+But I'm guessing the knowledge how to use the `.conf` files is now lost to the ages.
+Perhaps you'd even have to use an older version. So back to `cn=config` we go...
+
+I google `openldap include schema` and [#slap_23](#slap_23) pops out.
+It gives the same instruction as [#ray_of_hope](#ray_of_hope) - use `slapd.conf`.
+Well, that's odd. Maybe I'm looking at old documentation.
+
+How about [#slap_26](#slap_26) which is the latest? Literally the same. OK.
+What the hell's going on here?
