@@ -5,42 +5,26 @@
         <feature>ldapRegistry-3.0</feature>
     </featureManager>
 
-    <kerberos configFile="krb5.conf" keytab="krb5.ldap.keytab"/>
-
     <ldapRegistry id="LDAP" realm="GOODLIKE.EU"
-                  host="192.168.1.5" port="389"
+                  host="192.168.1.6" port="389"
                   baseDN="dc=goodlike,dc=eu"
                   bindDN="cn=admin,dc=goodlike,dc=eu"
                   bindPassword="uzakashi"
-                  ldapType="Custom">
-        <ldapEntityType name="KerberosAccount">
-            <objectClass>krbPrincipal</objectClass>
-            <searchBase>dc=goodlike,dc=eu</searchBase>
-        </ldapEntityType>
-        <ldapEntityType name="JustKerberosCmon">
-            <objectClass>krbContainer</objectClass>
-            <searchBase>dc=goodlike,dc=eu</searchBase>
-        </ldapEntityType>
-        <idsFilters groupFilter="(&amp;(cn=%v)(objectclass=krbContainer))"
-                    userFilter="(&amp;(krbPrincipalName=%v)(objectclass=krbPrincipal))"/>
-
-        <!--<activedFilters userFilter="(&amp;(krbPrincipalName=%v)(objectclass=krbPrincipal))"-->
-                        <!--groupFilter="(&amp;(cn=%v)(objectclass=krbContainer))"-->
-                        <!--userIdMap="*:krbPrincipalName"-->
-                        <!--groupIdMap="*:cn"-->
-                        <!--groupMemberIdMap="memberOf:member"/>-->
+                  ldapType="Custom"
+                  recursiveSearch="true">
+        <customFilters
+                id="customFilters"
+                userFilter="&amp;(uid=%v)(objectClass=inetOrgPerson)"
+                groupFilter="&amp;(cn=%v)(objectClass=groupOfNames)"
+                userIdMap="*:uid"
+                groupMemberIdMap="groupOfNames:member"/>
     </ldapRegistry>
-
-    <!--bindAuthMechanism="GSSAPI"-->
-    <!--krb5Principal="ldap/mumkashi-virtualbox@GOODLIKE.EU"-->
 
     <application location="${whereMyWarAt}" context-root="/">
         <application-bnd>
             <security-role name="wild">
-                <!--still not sure which one is right...-->
-                <user name="bob"/>
-                <user name="bob@GOODLIKE.EU"/>
-                <user name="krbPrincipalName=bob@GOODLIKE.EU,cn=GOODLIKE.EU,cn=kerberos,ou=Services,dc=goodlike,dc=eu"/>
+                <user name="cn=Bob,ou=people,dc=goodlike,dc=eu"/>
+                <user name="uid=testuser,ou=people,dc=goodlike,dc=eu"/>
             </security-role>
         </application-bnd>
     </application>

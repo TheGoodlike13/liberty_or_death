@@ -26,6 +26,7 @@
 ##### [2.15.2. Auth in this project](#auth-in-this-project)
 #### [2.16. Not putting it all together](#not-putting-it-all-together)
 #### [2.17. Back to the roots](#back-to-the-roots)
+#### [2.18. Hell in summary](#authentication-hell-in-summary)
 
 Links to various resources referred to (try [web archive](https://archive.org/) if down, should work for most):
 
@@ -3493,3 +3494,150 @@ Well, that's odd. Maybe I'm looking at old documentation.
 
 How about [#slap_26](#slap_26) which is the latest? Literally the same. OK.
 What the hell's going on here?
+
+I use the search from the website, which internally uses the disgraced DuckDuckGo
+search engine. We arrive at [this page](https://www.openldap.org/doc/admin26/slapdconfig.html),
+although I did have to set the version to `26` manually again.
+Apparently you can't trust the search engines to give you the latest one,
+go figure.
+
+So we finally have something like a directory, namely `/usr/local/etc/openldap`.
+I'm gonna put the file there and then... uh... I guess hope it works.
+Yet another case where I have no way to verify something work without
+proceeding forward, which could have drastic results.
+I suppose a snapshot is in order.
+
+Houston, we have a problem. Multiple problems of varying degree, actually.
+First, of course, the folder `/usr/local/etc/openldap` doesn't exist.
+Predictable. Second, I can't create it, because I don't own the parent folder.
+So I change ownership...
+
+    sudo chown mumkashi /usr/local/etc/
+
+Then create the folder, then create the file inside the folder, then try to add
+the line which would include the schema:
+
+    include /usr/local/etc/openldap/schema/inetorgperson.schema
+    
+Well, as you may notice, there's definitely an issue here.
+After all, I just created `/usr/local/etc/openldap/`, so I obviously
+didn't create `/usr/local/etc/openldap/schema/`, let alone a schema in it.
+Because I thought it would already be there. Which would make sense.
+But it's not and it does not. Thanks, latest docs! You're so useful.
+
+Looks like `inetorgperson.schema` does exist though, back in the `/etc/ldap/schema/`,
+which is also near `ldap.conf` and `slapd.d`, home of the notorious `cn=config`.
+Well, whatever, I'll just point to that instead then.
+
+I restart the VM and at the very least this has not broken anything, it seems.
+Then I prepare the `org.ldif` file:
+
+    dn: ou=people,dc=goodlike,dc=eu
+    objectClass: organizationalUnit
+    description: All people in organisation
+    ou: people
+    
+    dn: cn=Bob,ou=people,dc=goodlike,dc=eu
+    objectClass: inetOrgPerson
+    cn: bob
+    sn: smith
+    uid: bob
+    userPassword: {CRYPT}x
+    
+    dn: uid=testUser,ou=people,dc=goodlike,dc=eu
+    objectClass: inetOrgPerson
+    objectClass: organizationalPerson
+    objectClass: person
+    objectClass: top
+    cn: testUserCN
+    sn: testUserSN
+    uid: testUser
+    
+    dn: ou=groups,dc=goodlike,dc=eu
+    objectClass: organizationalUnit
+    objectClass: top
+    ou: groups
+    
+    dn: cn=testGroup1,ou=groups,dc=goodlike,dc=eu
+    objectClass: groupOfNames
+    objectClass: top
+    cn: testGroup1
+    member: uid=TESTUSER,ou=PEOPLE,dc=goodlike,dc=eu
+
+And add it to LDAP and fix the password:
+
+    sudo ldapadd -x -W -D cn=admin,dc=goodlike,dc=eu -f org.ldif
+    sudo ldappasswd -x -W -D cn=admin,dc=goodlike,dc=eu -S cn=Bob,ou=people,dc=goodlike,dc=eu
+
+Finally, I set my server.xml config to this:
+
+    <!-- kerberos removed -->
+
+    <ldapRegistry id="LDAP" realm="GOODLIKE.EU"
+                  host="192.168.1.6" port="389"
+                  baseDN="dc=goodlike,dc=eu"
+                  bindDN="cn=admin,dc=goodlike,dc=eu"
+                  bindPassword="uzakashi"
+                  ldapType="Custom"
+                  recursiveSearch="true">
+        <customFilters
+                id="customFilters"
+                userFilter="&amp;(uid=%v)(objectClass=inetOrgPerson)"
+                groupFilter="&amp;(cn=%v)(objectClass=groupOfNames)"
+                userIdMap="*:uid"
+                groupMemberIdMap="groupOfNames:member"/>
+    </ldapRegistry>
+
+    <application location="${whereMyWarAt}" context-root="/">
+        <application-bnd>
+            <security-role name="wild">
+                <user name="Bob"/>
+                <user name="bob"/>
+                <user name="cn=Bob,ou=people,dc=goodlike,dc=eu"/>
+            </security-role>
+        </application-bnd>
+    </application>
+
+Notably, I've updated the host IP address, added `recursiveSearch="true"`,
+replaced all random config with `customFilters` and finally added my guesses
+as to what the correct `user name` would be.
+
+I run the application and try to login using `bob`/`Bob`:
+
+    Caused by: com.ibm.wsspi.security.wim.exception.WIMSystemException:
+    CWIML4520E: The LDAP operation could not be completed.
+    The LDAP naming exception javax.naming.directory.InvalidSearchFilterException: invalid attribute description;
+    remaining name 'dc=goodlike,dc=eu'
+
+Not good. What about `cn=Bob,ou=people,dc=goodlike,dc=eu`? Success!
+It actually logs in with that bizarre name! It is also not case-sensitive.
+
+It does bring the question of how would you go about doing this the right way.
+I mean, we've clearly setup it to use something like 'uid', but then we went
+and used `cn=Bob` instead :/
+
+How about the `uid=testuser,ou=people,dc=goodlike,dc=eu`?
+
+    com.ibm.wsspi.security.wim.exception.PasswordCheckFailedException:
+    CWIML4541E: The login operation could not be completed as the password is either missing or empty.
+
+Figures. Let me add a password real quick...
+
+    sudo ldappasswd -x -W -D cn=admin,dc=goodlike,dc=eu -S uid=testuser,ou=people,dc=goodlike,dc=eu
+
+Now if I login I get a generic `HTTP 403` response.
+Makes sense, as I never added the `testuser` as authorized, let's try it:
+
+    <security-role name="wild">
+        <user name="cn=Bob,ou=people,dc=goodlike,dc=eu"/>
+        <user name="uid=testuser,ou=people,dc=goodlike,dc=eu"/>
+    </security-role>
+
+Now it successfully logs in, but like previously, just `testuser` doesn't work.
+Ugh, not very good, but I suppose if you know in advance that the prefix will be
+`uid=` and the suffix will be `,ou=people,dc=goodlike,dc=eu`, you could manage it.
+
+So, I guess we're done here? Liberty authentication with LDAP complete?
+I mean, Kerberos got lost somewhere along the way, but that's a plus in my book.
+
+### ~~Authentication~~ Hell in summary
