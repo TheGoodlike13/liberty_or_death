@@ -1,7 +1,7 @@
 # WARNING!
 
 ### The following document is rated R18 for violence and nudity.
-### Please refer to [Summary of summaries](#summary-of-summaries) for a SFW version.
+### Please refer to [Summary of summaries](#summary-of-summaries) for a (relatively) SFW version.
 
 # Trying to setup SSO for a liberty application (from zero)
 
