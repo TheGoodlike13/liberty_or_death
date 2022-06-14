@@ -3641,3 +3641,22 @@ So, I guess we're done here? Liberty authentication with LDAP complete?
 I mean, Kerberos got lost somewhere along the way, but that's a plus in my book.
 
 ### ~~Authentication~~ Hell in summary
+
+1. Follow instructions from [#dummy_slap](#dummy_slap) to install LDAP.
+Notably, make sure that `URI` in `/etc/ldap/ldap.conf` uses a real IP address,
+not the made up domain one.
+2. Continue configuring LDAP as advised by the answer in [#ray_of_hope](#ray_of_hope).
+Notably `slapd.conf` step may or may not be needed, and may or may not actual work.
+Nobody knows. Also, replace all references to `o=ibm,c=in` with domain from step 1.
+3. Use `sudo ldapadd -x -W -D {admin} -f file.ldif` specifically to import the file.
+Admin is usually of the form `cn=admin,dc=your,dc=configured,dc=domain`.
+The password was entered in step 1.
+4. Use `sudo ldappasswd -x -W -D {admin} -S {user}` to set passwords for users.
+Example user from [#ray_of_hope](#ray_of_hope): `uid=testuser,ou=people,o=ibm,c=in`.
+5. Configure `server.xml` of your liberty application as recommended by [#ray_of_hope](#ray_of_hope).
+Don't forget to set the correct IP, port, domain, etc. `baseDN` should be the domain.
+`bindDN` and `bindPassword` should be admin username and password.
+
+Finally, none of this should be considered reasonable for production whatsoever.
+But it can serve as a working example to try and understand what the configuration
+does, specifically.
