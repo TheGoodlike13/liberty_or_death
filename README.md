@@ -1,3 +1,8 @@
+# WARNING!
+
+### The following document is rated R18 for violence and nudity.
+### Please refer to [Summary of summaries](#summary-of-summaries) for a SFW version.
+
 # Trying to setup SSO for a liberty application (from zero)
 
 ### [1. Setting up a liberty server that works](#setting-up-a-liberty-server-that-works)
@@ -27,6 +32,7 @@
 #### [2.16. Not putting it all together](#not-putting-it-all-together)
 #### [2.17. Back to the roots](#back-to-the-roots)
 #### [2.18. Hell in summary](#authentication-hell-in-summary)
+### [?. Summary of summaries](#summary-of-summaries)
 
 Links to various resources referred to (try [web archive](https://archive.org/) if down, should work for most):
 
@@ -3660,3 +3666,12 @@ Don't forget to set the correct IP, port, domain, etc. `baseDN` should be the do
 Finally, none of this should be considered reasonable for production whatsoever.
 But it can serve as a working example to try and understand what the configuration
 does, specifically.
+
+## Summary of summaries
+
+* [Liberty in summary](#liberty-in-summary)
+* [VM in summary](#vm-in-summary)
+* [Shared folder in summary](#shared-folder-in-summary)
+* [HDD addendum](#hdd-addendum)
+* [Liberty authentication in summary](#liberty-authentication-in-summary)
+* [Hell in summary](#authentication-hell-in-summary)
