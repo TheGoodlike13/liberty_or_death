@@ -32,7 +32,7 @@
 #### [2.16. Not putting it all together](#not-putting-it-all-together)
 #### [2.17. Back to the roots](#back-to-the-roots)
 #### [2.18. Hell in summary](#authentication-hell-in-summary)
-### [3. (SPN)EGO death](#spn-ego-death)
+### [3. (SPN)EGO death](#spnego-death)
 ### [4. Summary of summaries](#summary-of-summaries)
 
 Links to various resources referred to (try [web archive](https://archive.org/) if down, should work for most):
