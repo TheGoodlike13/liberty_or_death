@@ -1781,170 +1781,205 @@ They are ordered the same way you set them up in the VM settings.
 ### Test your [slap](https://www.youtube.com/watch?v=juaunbIGCcw)
 
 During my lunch break, an e-mail arrived, oddly addressed to nobody.
-"I have detected security problems with your computer.
-Please tell me when you're at the office so I can come to your computer and fix this.
-I will only take 5 minutes." Oh yeah? You think you got me fooled?
-I see right through your indian scammer ways! Reported for phishing.
+
+    I have detected security problems with your computer.
+    Please tell me when you're at the office
+    so I can come to your computer and fix this.
+    I will only take 5 minutes.
+
+Oh yeah? You think you got me fooled?
+I see right through your Indian scammer ways! Reported for phishing.
 Let the company figure that one out.
 
-So next I'm gonna try to either hook up LDAP to liberty, or at least test that it works
-somehow. All I have to go with for configuration is [#open_your_slap](#open_your_slap),
+So next I'm gonna try to either hook up LDAP to liberty,
+or at least test that it works somehow.
+All I have to go with for configuration is [#open_your_slap](#open_your_slap),
 which admittedly uses very similar XML to what I can see in working projects.
-The problem is, half of the things don't really make sense to me, which makes sense
-in of itself, since we've just setup LDAP and didn't actually learn anything about it
-or do anything with it.
+The problem is, half of the things don't really make sense to me,
+which makes sense in of itself, since we've just setup LDAP
+and didn't actually learn anything about it or do anything with it.
 
-Like, what are baseDN & bindDN? Whose password is bound? There are different LDAP types?
-The last one seems to be just fine as 'Microsoft Active Directory'. I base this entirely
-on this [example](https://github.com/Azure-Samples/open-liberty-on-aro/blob/master/3-integration/aad-ldap/src/main/liberty/config/server.xml),
+Like, what are `baseDN` & `bindDN`? Whose password is bound?
+There are different LDAP types?
+The last one seems to be just fine as `Microsoft Active Directory`.
+I base this entirely on this [example](https://github.com/Azure-Samples/open-liberty-on-aro/blob/master/3-integration/aad-ldap/src/main/liberty/config/server.xml),
 as it's for openLDAP.
 
-There's a Spring guide on [#not_getting_started](#not_getting_started). Unfortunately
-it's a guide for situations where you already know everything about LDAP, so it's
-useless to me. Kinda hard to find an actual raw example, to be honest. Everyone kinda
-insists on hooking on their own technology for demonstration, making things even
-more cryptic than they were originally.
+There's a Spring guide on [#not_getting_started](#not_getting_started).
+Unfortunately it's a guide for where you already know everything about LDAP,
+so it's useless to me. Kinda hard to find an actual raw example, to be honest.
+Everyone kinda insists on hooking on their own technology for demonstration,
+making things even more cryptic than they should be.
 
-I mean look at [this guy](https://www.youtube.com/watch?v=0FwOcZNjjQA) trying to explain
-this shit. Doesn't event take 3 minutes to devolve into some kind of weird ApacheDS
-server bullshit. I don't even think it's the guy's fault, this shit is just that
-convoluted you can't explain it otherwise. String theory was easier to understand than this.
+I mean look at [this guy](https://www.youtube.com/watch?v=0FwOcZNjjQA)
+trying to explain this shit. Doesn't event take 3 minutes
+to devolve into some kind of weird ApacheDS server bullshit.
+I don't even think it's the guy's fault,
+this shit is just that convoluted you can't explain it otherwise.
+String theory was easier to understand than this.
 
 Also, as an aside, this is but one of [many](https://www.youtube.com/watch?v=QyhNaY5O468)
 attempts by the same guy to explain it. It really is that ridiculous, isn't it.
 
 Let's start off by creating "an account" in LDAP, whatever that means.
-[#slap_account](#slap_account) seems like a guide, but immediately it asks me to create
-gibberish-ridden files. If I create an account, but have no idea if I did it properly,
-that's useless. I'll have to use [#slap_intro](#slap_intro) to try to decode what in the
+[#slap_account](#slap_account) seems like a guide,
+but immediately it asks me to create gibberish-ridden files.
+If I create an account, but have no idea if I did it properly, that's useless.
+I'll have to use [#slap_intro](#slap_intro) to try to decode what in the
 fuck is going on here.
 
-Now, let's set aside 'LDIF', as I cannot see any mention of it in the intro.
-I can however decode this: 'dn: uid=adam,ou=users,dc=tgs,dc=com'
+Now, let's set aside `LDIF`, as I cannot see any mention of it in the intro.
+I can however decode this: `dn: uid=adam,ou=users,dc=tgs,dc=com`
 Supposedly that's what passes for a username in LDAP system. Gloriously fucked.
-Well, this 'adam' is kind of the real username, and the rest of the values
-are something like an inverted directory? Soooo '/com/tgs/users/adam' is a good approximation.
-Of course, they're using something more like a "readable" URL format, so maybe
-'adam.users.tgs.com' is closer to what they were going for. But nobody (sane) would
-create APIs like that either. 'tgs.com/users/adam' is the sane(r) version of such an idea.
+Well, this `adam` is kind of the real username, and the rest of the values
+are something like an inverted directory?
+Soooo `/com/tgs/users/adam` is a good approximation.
+Of course, they're using something more like a "readable" URL format,
+so maybe `adam.users.tgs.com` is closer to what they were going for.
+But nobody (sane) would create APIs like that either.
+`tgs.com/users/adam` is the sane(r) version of such an idea.
 
-Given the examples that [#slap_intro](#slap_intro) provides, I think it's safe to assume
-that the 'dc=', 'ou=' and 'uid=' are just made up. Well, they *do* stand for something
-specific, but I have to assume they are just 'conventions' decided by some grand long
-forgotten architect of this system.
+Given the examples that [#slap_intro](#slap_intro) provides,
+I think it's safe to assume that the `dc=`, `ou=` and `uid=` are just made up.
+Well, they *do* stand for something specific, but I assume they are just conventions
+decided by some long forgotten grand architect of this system.
 
 On the other hand, looking at the [RFC](https://www.rfc-editor.org/rfc/rfc4514.txt),
-it says these are X.500 attribute types. That still doesn't necessarily mean that they
-aren't "made up", just that perhaps they were "made up" at the X.500 level.
+it says these are `X.500` attribute types.
+That still doesn't necessarily mean that they aren't "made up",
+just that perhaps they were "made up" at the `X.500` level.
 
 For reference, when I say "made up", I mean that I could replace references to them
-in all configurations and everything would continue working. I would consider this to be
-**CRITICAL INFORMATION** that **SHOULD BE INCLUDED UP FRONT AND CENTER** but alas,
-unless I'm willing to dig through cryptic RFC bullshit, I won't know. And at this
-point the only interaction I want to have with RFC is through my shotgun, which I
-do not yet have. It's a blocker, so no can do. Let's wait for the next release.
+in all configurations and **everything** would continue working.
+I would consider this to be **CRITICAL INFORMATION**
+that **SHOULD BE INCLUDED UP FRONT AND CENTER** but alas,
+unless I'm willing to dig through cryptic RFC bullshit, I won't know.
+And at this point the only interaction I want to have with RFC
+is through my shotgun, which I do not yet have.
+It's a blocker, so no can do. Let's wait for the next release.
 
-So how in the bloody hell should I know how to adapt this username idiom to my LDAP
-case? Looking back, we already have a user 'dc=goodlike,dc=eu,dc=local', so perhaps
-we can prefix some random bullshit and it would work. Let's go with this:
-'uid=eve,ou=users,dc=goodlike,dc=eu,dc=local'
+So how in the bloody hell do I adapt this username idiom to my LDAP case?
+Looking back, we already have a user `dc=goodlike,dc=eu,dc=local`,
+so perhaps we can prefix some random bullshit and it would work.
+Let's go with this: `uid=eve,ou=users,dc=goodlike,dc=eu,dc=local`
 
-Next we have a list of 'objectClass'. According to the [#slap_intro](#slap_intro),
-it defines what attributes are required for the entry. So basically it's like a JAVA
-interface. Nice. This gives a little more insight on what exactly we're doing here.
+Next we have a list of `objectClass`. According to the [#slap_intro](#slap_intro),
+it defines what attributes are required for the entry.
+So basically it's like a JAVA `interface`. Nice.
+This gives a little more insight on what exactly we're doing here.
 
 It seems like LDAP is just a weird and convoluted database along the lines of [elasticsearch](https://www.elastic.co/).
 I use this as an example because I have (some minor) experience with it.
-All that is associated with the 'username' is a map of keys & values, which can be
-explicitly defined by this 'objectClass', of which there can be multiple.
-The obvious followup question is, what the hell does this have to do with authentication???
-Usually data (such as pairs or keys & values) is something you authenticate *for*, not *with*.
-Either some shit is seriously fucked, or we're off to one of the greatest tangents YET.
+All that is associated with the `username` is a map of keys & values,
+which can be explicitly defined by this `objectClass`,
+of which there can be multiple. The obvious followup question is,
+what the hell does this have to do with authentication???
+Usually data (such as pairs or keys & values) is something you authenticate *for*,
+not *with*. Either some shit is seriously fucked,
+or we're off to one of the greatest tangents YET.
 
 Behold, the [#table_of_death](#table_of_death). It lists a bunch of these classes,
-naturally, all defined in some RFC or another. In any case, we can try and glimpse
-into what the suggested object classes do.
+naturally, all defined in some RFC or another.
+In any case, we can try and glimpse into what the suggested object classes do.
 
-'top' seems to be something like a JAVA equivalent of Object. The "top" class.
-I know it's not in the table, but you can find it hidden at the bottom of the page itself.
-Now, the page we're referencing **is** using Oracle specific bullshit, but I think
-at least to some degree they have to be adhering to the things defined in RFCs, so
-maybe we can glean some kind of minor understanding.
+`top` seems to be something like a JAVA equivalent of `Object`. The "top" class.
+I know it's not in the table, but you can find it hidden at the bottom of the page.
+Now, the page we're referencing **is** using Oracle specific bullshit,
+but I think at least to some degree they have to be adhering to the things
+defined in RFCs, so maybe we can glean some kind of minor understanding.
 
-For example, because these classes are defined as part of Oracle Identity Management system,
-the "top" class seems to have a lot to do with passwords'n'shit. So irrespective of whether
-this is Oracle using the concept of these classes to satisfy their insanity, at least we can
-say with certainty that it is possible to define a set of keys for objects such as those in
-LDAP that could be used to store information in some way related to authentication such that
-it can then be used as part of some identity management system. I would be much happier
-knowing, for example, that this **is** the intended purpose and doing anything else with
-this system is purely dumb, unsupported and liable to get you slapped across the face by
-any and all senior administrators in 500 yard radius. I would be even more happier if some
-sorry person would, you know, write that shit down in a bloody guide about LDAP for
-beginners. So either it is **NOT** the case, and this LDAP thing **CAN** and **HAS BEEN**
-used in whatever way whoever decided at whatever juncture, or everyone just sucks at
-explaining shit properly. You know what's the worst? Given the state of various "documentation"
+For example, because these classes are defined as part of Oracle Identity Management
+system, the `top` class seems to have a lot to do with passwords'n'shit.
+So irrespective of whether this is Oracle using the concept of these classes
+to satisfy their insanity, at least we can say with certainty that it is possible
+to define a set of keys for objects such as those in LDAP that could be used
+to store information in some way related to authentication
+such that it can then be used as part of some identity management system.
+
+I would be much happier knowing, for example, that this **is** the intended purpose
+and doing anything else with this system is purely dumb, unsupported
+and liable to get you slapped across the face by any and all senior administrators
+in 500 yard radius. I would be even more happier if some sorry person would,
+you know, write that shit down in a bloody guide about LDAP for beginners.
+So either it is **NOT** the case, and this LDAP thing **CAN** and **HAS BEEN**
+used in whatever way whoever decided at whatever juncture,
+or everyone just sucks at explaining shit properly. You know what's the worst?
+Given the state of various "documentation"
 I've read over my relatively short carrier, it's a bloody coin-flip on which it is.
 
-It's like the Schrodinger's cat. Every single thing I read about this stuff only continues
-to propagate the bloody wave function instead of collapsing it, making it ever more increasingly
-confusing as to what the actual state of the thing I'm trying to understand actually is.
-At some point the cat will have hypothetical babies and I still won't know if it died or not.
+It's like the Schrodinger's cat. Every single thing I read about this stuff
+only continues to propagate the bloody wave function instead of collapsing it,
+making it ever more increasingly confusing as to what the actual state of the thing
+I'm trying to understand actually is.
+At some point the cat will have hypothetical babies
+and I still won't know if it died or not.
 
-The next object class is 'account'. Sounds reasonable enough, what it do? According to [RFC](https://datatracker.ietf.org/doc/html/rfc1274#section-8.3.3),
+The next object class is `account`. Sounds reasonable enough, what it do?
+According to [RFC](https://datatracker.ietf.org/doc/html/rfc1274#section-8.3.3),
 it seems to basically add a user id and some metadata. But we have a problem here.
-You see, there is no 'userid' key in the [#slap_account](#slap_account) example.
-I mean, sure, there's 'uid' which OBVIOUSLY is supposed to refer to the user id.
-But the RFC clearly says 'userid'. So, on one hand you could say that the name of the
-attribute is probably "made up" by everyone who ends up using it. On the other hand,
-if that's the case, then how on earth would you ensure the attribute exists if you want
-to follow the RFC requirements? Does each LDAP implementation provide their own attribute
-names for compliance with RFC? Do they just not comply with RFC? Does some future RFC
-I don't know of expand the definition and this is just an outdated version? Is RFC even
-important??? The ~~dream~~ world is collapsing. Great.
+You see, there is no `userid` key in the [#slap_account](#slap_account) example.
+I mean, sure, there's `uid` which OBVIOUSLY is supposed to refer to the user id.
+But the RFC clearly says `userid`.
 
-Let's investigate the next one, 'posixAccount'. This leads us to a different RFC that is
-somehow also rebelling against itself in [this example](https://datatracker.ietf.org/doc/html/rfc2307#appendix-A).
-Clearly the example shows "uid" instead of "userid", so I guess we can just trash the
-previous RFC because it was drunk.
+So, on one hand you could say that the name of the attribute is probably "made up"
+by everyone who ends up using it. On the other hand, if that's the case,
+then how on earth would you ensure the attribute exists
+if you want to follow the RFC requirements?
+Does each LDAP user provide their own attribute names for compliance with RFC?
+Do they just not comply with RFC? Does some future RFC I don't know of
+expand the definition and this is just an outdated version?
+Is RFC even important??? The ~~dream~~ world is collapsing. Great.
 
-Actually it seems that "uid" is pulled in as required by 'posixAccount' itself.
-So technically it could be entirely unrelated to "userid". Because of course.
+Let's investigate the next one, `posixAccount`.
+This leads us to a different RFC that is somehow also rebelling against itself
+in [this example](https://datatracker.ietf.org/doc/html/rfc2307#appendix-A).
+Clearly the example shows `uid` instead of `userid`,
+so I guess we can just trash the previous RFC because it was drunk.
 
-One thing that seems prudent to note is the requirement for a 'home directory'.
-This seems to be equivalent to the "user home folder" in the OS. Makes me wonder,
-if I had installed "Active Directory" when I installed Ubuntu, would that have created
-this "database" somewhere with an entry which would have my username and this property
-which would be set to my home directory which would then be used by OS somehow.
-Since I'm not at all familiar with the internals of any OS, this isn't so much helpful
-as stalling for time daydreaming so the day ends sooner, but still nice to think about.
+Actually it seems that `uid` is pulled in as required by `posixAccount` itself.
+So technically it could be entirely unrelated to `userid`. Because of course.
 
-It does seem like I have to make a revision on LDAP being a database, as this whole
-Active Directory thing seems like the actual database. The line between the two is
-so blurry to me, I may as well be watching Japanese porn. And I'm a practitioner of OOP
-anyways, so "the way to use something" to me is the same as "something" anyways.
+One thing that seems prudent to note is the requirement for a `home directory`.
+This seems to be equivalent to the "user home folder" in the OS.
+Makes me wonder, if I had installed `Active Directory` when I installed Ubuntu,
+would that have created this "database" somewhere with an entry
+which would have my username and a property set to my home directory
+which would then be used by the OS somehow.
+Since I'm not at all familiar with the internals of any OS,
+this isn't so much helpful as stalling for time daydreaming so the day ends sooner,
+but still nice to think about.
+
+It does seem like I have to make a revision on LDAP being a database,
+as this whole `Active Directory` thing seems like the actual database.
+The line between the two is so blurry, I may as well be watching Japanese porn.
+And I'm a practitioner of OOP anyways, so "the way to use something"
+to me is the same as "something" anyways.
 So I guess I'll continue calling LDAP something it probably isn't when I mean AD.
 If I even understand anything at all, LOL.
 
-Looking back to [#slap_account](#slap_account), even they use "LDAP directory".
-So I'm totally not alone on this. Hurray! What's 'shadowAccount' btw? Uh... no idea.
-It looks like an account... with 'shadow' prefix to everything. Given how 'posixAccount'
-seems like a "real" thing, not "made up", I guess this is also a thing? Whatever.
+Looking back to [#slap_account](#slap_account), even they use `LDAP directory`.
+So I'm totally not alone on this. Hurray! What's `shadowAccount` btw? Uh... no idea.
+It looks like an account... with `shadow` prefixed to everything.
+Given how `posixAccount` seems like a "real" thing,
+not "made up", I guess this is also a thing? Whatever.
 
-My point is, what the hell are we doing here? How on earth am I supposed to set this up?
-So I need to have an account on the Linux VM? And then use the information from there?
-Or am I supposed to use the LDAP system as my account management system, and then set this up?
-Which comes first? Chicken? Egg? Ham? Cranberry juice? Fuck it. I'll just use my existing
-account and see what happens. What's the worst that could happen, amirite?
+My point is, what the hell are we doing here?
+How on earth am I supposed to set this up?
+So I need to have an account on the Linux VM?
+And then use the information from there?
+Or am I supposed to use the LDAP system as my account management system,
+and then set this up? Which comes first? Chicken? Egg? Ham? Cranberry juice?
+Fuck it. I'll just use my existing account and see what happens.
+What's the worst that could happen, amirite?
 
 We need to adjust our previous approach and change the username to
-'uid=mumkashi,ou=users,dc=goodlike,dc=eu,dc=local'.
+`uid=mumkashi,ou=users,dc=goodlike,dc=eu,dc=local`.
 
 What the hell is a [mumkashi](https://www.youtube.com/playlist?list=PLh0Ul3zO7LAhPnJh-SF59Le5Ui1NDEXU1),
-you ask? It's become my standard go-to nickname when 'goodlike' is taken. Yes, indeed.
-It is at this point that I reveal that I am, in fact, an esteemed video game developer
-whose game even has been played on youtube once! Amazing. If my game needed LDAP, I'd
-have just ended myself then and there.
+you ask? It's become my standard go-to nickname when `goodlike` is taken.
+Yes, indeed. It is at this point that I reveal that I am, in fact,
+an esteemed video game developer whose game even has been played on youtube once!
+Amazing. If my game needed LDAP, I'd have just ended myself then and there.
 
 So let's see, we should be able to fill the file this far:
 
@@ -1959,88 +1994,101 @@ So let's see, we should be able to fill the file this far:
     gidNumber: ???
     homeDirectory: /home/mumkashi
 
-The rest of the attributes seem to be optional according to RFC, so we'll go with that.
-The issue is that we need two random numbers to fill. I wonder what they're supposed to be.
+The rest of the attributes seem to be optional according to RFC,
+so we'll go with that. The issue is that we need two random numbers to fill.
+I wonder what they're supposed to be.
 
-'uidNumber' is "An integer uniquely identifying a user in an administrative domain".
-'gidNumber' is "An integer uniquely identifying a group in an administrative domain".
+`uidNumber` is `An integer uniquely identifying a user in an administrative domain`.
+`gidNumber` is `An integer uniquely identifying a group in an administrative domain`.
 
-Cool, so I guess I can just enter whatever number I want? How about 13? and 37? Let's go
-with those. Respectively.
+Cool, so I guess I can just enter whatever number I want? How about 13? and 37?
+Let's go with those. Respectively.
 
-So now that I have 'mumkashi.ldif' file, I should add it to LDAP somehow. But we have
-a problem immediately. The suggested command is weird:
+So now that I have a `mumkashi.ldif` file, I should add it to LDAP somehow.
+But we have a problem immediately. The suggested command is weird:
 
     # ldapadd -x -W -D "cn=ramesh,dc=tgs,dc=com" -f adam.ldif
 
-Let's ignore the fact it also starts with '#' which I assume means I need sudo.
+Let's ignore the fact it also starts with `#` which I assume means I need `sudo`.
 Let's also ignore the single char options, I'm sure they're important.
-Replacing 'adam' with 'mumkashi' is easy enough.
-But who the fuck is ramesh?????
+Replacing `adam` with `mumkashi` is easy enough.
+But who the fuck is `ramesh`?????
 
-'cn' can be seen in [#slap_intro](#slap_intro) using an entirely different structure.
-Where the hell did it suddenly pop in from? Can I just ignore it? I'm gonna ignore it.
+`cn` in [#slap_intro](#slap_intro) is from using an entirely different structure.
+Where the hell did it suddenly pop in from? Can I just ignore it?
+I'm gonna ignore it.
 
     sudo ldapadd -x -W -D "dc=goodlike,dc=eu,dc=local" -f mumkashi.ldif
 
-This asks me for LDAP password. No idea which password is that supposed to be, but
-luckily I used the same password FOR EVERYTHING just in case this would happen, so
-we should be fine. Except we're not fine because it gives an error.
+This asks me for an LDAP password. No idea which password is that supposed to be,
+but luckily I used the same password FOR EVERYTHING just in case this would happen,
+so we should be fine. Except we're not fine because it gives an error.
 
     ldap_bind: Invalid credentials (49)
 
 Bruh, the first google search is [#reading_a_book_he_says](#reading_a_book_he_says).
-Do we really need a book for this? Jesus Christ... Nothing in the response makes much sense
-to me, but I tried out the "debug" command!
+Do we really need a book for this? Jesus Christ...
+Nothing in the response makes much sense to me, but I tried out the `debug` command!
 
     sudo ldapadd -v -d 63 -W -D "dc=goodlike,dc=eu,dc=local" -f mumkashi.ldif
  
 It did print a lot more gibberish this time.
-I could even see that it connected to the LDAP server, AND sent the password in plaintext!
-Hurray! Still doesn't work.
+I could even see that it connected to the LDAP server,
+AND sent the password in plaintext! Hurray! Still doesn't work.
 
-Look, irrespective of this being the right thing to do or not, or even relevant or not,
-I still want to at least be able to do it, such that I could at least attempt to verify
-the relevancy of it all. And, as it stands, I can't, because it doesn't fucking work :D
+Look, irrespective of this being the right thing to do or not,
+or even relevant or not, I still want to at least be able to do it,
+such that I could at least attempt to verify the relevancy of it all.
+And, as it stands, I can't, because it doesn't fucking work :D
 
-New week, new [#aneurysm_overload](#aneurysm_overload). The last answer in particular
-is just *beyond* horrifying. "It may be the configured password, but not the loaded one!"
+New week, new [#aneurysm_overload](#aneurysm_overload).
+The last answer in particular is just *beyond* horrifying.
+
+    It may be the configured password, but not the loaded one!
+
 That is not a sentence that should exist in this universe as a result of any system.
 
-In any case, I notice a trend of having some file being configured. 'slapd.conf' they call it.
-I don't recall adding anything specifically like that to any configuration, but honestly
-at this point my memory might just be failing me to protect my mind from the horrors
-I had to experience. Either way, if we configure this file with "credentials" like
-the "username" we use in our ldapadd query, things might start working. Might.
+In any case, I notice a trend of having some file being configured.
+`slapd.conf` they call it.
+I don't recall adding anything specifically like that to any configuration,
+but honestly at this point my memory might just be failing me
+to protect my mind from the horrors I had to experience.
+Either way, if we configure this file with "credentials" like
+the "username" we use in our `ldapadd` query, things might start working. Might.
 
-Looking through the comments in the [#slap_account](#slap_account) page, it seems that
-this guide is part 2 of another guide. I start looking for it by entering 'LDAP' into
-the search bar. This produces a few pages with incomprehensible gibberish, and one page
-with gibberish that looks familiar! That's right, [#i_found_ramesh_guys](#i_found_ramesh_guys)!
+Looking through the comments in the [#slap_account](#slap_account) page,
+it seems that this guide is part 2 of another guide.
+I start looking for it by entering `LDAP` into the search bar.
+This produces a few pages with incomprehensible gibberish,
+and one page with gibberish that looks familiar!
+That's right, [#i_found_ramesh_guys](#i_found_ramesh_guys)!
 It seems that there is a link to this article in [#slap_account](#slap_account) too,
-but it's misleadingly titled "install LDAP", when clearly you're going to both install
-AND configure it in this article. Well, at least we found it, eventually.
+but it's misleadingly titled `install LDAP`,
+when clearly you're going to both install AND configure it in this article.
+Well, at least we found it, eventually.
 
 So, since we've already installed LDAP, we can skip to the configuration!
 Except we can't. Because it doesn't work.
 
-We're supposed to edit file '/etc/openldap/slapd.d/cn=config/olcDatabase={2}bdb.ldif',
-but no such file exists. To be precise, '/etc/openldap/' directory doesn't exist.
-Which, I suppose, implies the installation is not complete, at least not as far as
-this guide is considered.
+We're supposed to edit `/etc/openldap/slapd.d/cn=config/olcDatabase={2}bdb.ldif`,
+but no such file exists. To be precise, `/etc/openldap/` directory doesn't exist.
+Which, I suppose, implies the installation is not complete,
+at least not as far as this guide is considered.
 
     sudo yum install -y openldap openldap-clients openldap-servers
 
-Doesn't work. Command 'yum' not found. But not so fast!
+Doesn't work. Command `yum` not found. But not so fast!
 By sheer coincidence during the last few days I stumbled upon [this video](https://odysee.com/@SomeOrdinaryGamers:a/please-stop-using-windows...:f)
-which gives a bit of an explanation. As we've seen before, there are different
-distributions (a weird word for 'types' or 'kinds') of Linux. But it wasn't enough
-for them to make the Linuxes different, they also made the installation programs
-different. Gotta style on those other tribes somehow, you know.
+which gives a bit of an explanation.
+As we've seen before, there are different distributions
+(a weird word for 'types' or 'kinds') of Linux.
+But it wasn't enough for them to make the Linuxes different,
+they also made the installation programs different.
+Gotta style on those other tribes somehow, you know.
 
-In other words, as long as I replace 'yum' with the equivalent of whatever the hell
-installs things into Ubuntu, I should be fine. And we've had some things installed
-using apt, so surely that should work.
+In other words, as long as I replace `yum` with the equivalent of
+whatever the hell installs things into Ubuntu, I should be fine.
+And we've had some things installed using `apt`, so surely that should work.
 
     sudo apt install -y openldap openldap-clients openldap-servers
  
