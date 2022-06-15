@@ -2199,84 +2199,96 @@ What is wrong with these people???
 
 ### The Fiddler is born
 
-Fine. It's time to get my hands dirty. If we can't use 'ldapmodify', but we still have to
-modify the 'cn=config.ldif' file, then I'll just have to reverse engineer the logic for
-the checksum calculation. We already know it's CRC32, so I just need to figure out the input.
+Fine. It's time to get my hands dirty. If we can't use `ldapmodify`,
+but we still have to modify the `cn=config.ldif` file,
+then I'll just have to reverse engineer the logic for the checksum calculation.
+We already know it's `CRC32`, so I just need to figure out the input.
 
-It seems that calculating the CRC32 is as simple as typing
+It seems that calculating the `CRC32` is as simple as typing
  
     crc32 {filename}
     
-Well, let's give that a shot on our config file. Predictably the value does not match
-the one in the file. But what if we remove those lines temporarily? Bingo.
+Well, let's give that a shot on our config file.
+Predictably the value does not match the one in the file.
+But what if we remove those lines temporarily? Bingo.
 
-I re-add the line I had previously deleted and run CRC32, then re-add the documentation lines
-at the top with the new CRC value. 
+I re-add the line I had previously deleted and run `crc32`,
+then re-add the documentation lines at the top with the new CRC value. 
 
     sudo slaptest -u
     
 now no longer produces the checksum error. Hurray!
-Now let's hope 'ldapmodify' doesn't have any hidden side-effects
-that are not at all covered by this CRC32 magic trick.
+Now let's hope `ldapmodify` doesn't have any hidden side-effects
+that are not at all covered by this `CRC32` magic trick.
 
 That's 1 out of 3 errors taken care of! NEXT!
 
     <olcRootPW> can only be set when rootdn is under suffix
 
 It would help if you could tell us, you know,
-what do you think these 'rootdn' and 'suffix' values are,
+what do you think these `rootdn` and `suffix` values are,
 because the ones I entered into the file seem just fine.
 Then again, I made that file myself,
 so it's entirely possible the system hasn't even looked there.
 Google it is!
 
-[#god_bodg_it](#god_bodg_it) seems to have exactly the same issue. The answer, unfortunately,
-is entirely useless because we go back to the Fiddler's riddle (that's the thing from previous
-chapter). It does seem that editing this 'cn=config.ldif' file using the advice from the guide
-is perilous to the extreme. Which is confusing, because the comment section seems to think it
-helped them. I mean, they could all be bots, but cmon.
+[#god_bodg_it](#god_bodg_it) seems to have exactly the same issue.
+The answer, unfortunately, is entirely useless because we go back to
+the Fiddler's riddle (that's the thing from previous chapter).
+It does seem that editing this `cn=config.ldif` file using the advice
+from the guide is perilous to the extreme.
+Which is confusing, because the comment section seems to think it helped them.
+I mean, they could all be bots, but cmon.
 
-Anyway, what if we take the lines from 'database{2}bdb.ldif', which didn't exist anyway,
-and put them into 'cn=config.ldif', but also adjust them to have the prefix 'cn=config'?
+Anyway, what if we take the lines from `database{2}bdb.ldif`,
+which didn't exist anyway, and put them into `cn=config.ldif`,
+but also adjust them to have the prefix `cn=config`?
 That's just insane enough to work.
 
 HAHAHAHAHAHAHAHAHAHAHAHAHAHA! No seriously. The Fiddler's riddle no.2:
 
     suffix <cn=config> not allowed in frontend database
 
-1. I want to add an admin account to 'cn=config.ldif'.
-2. If I use a suffix that is not 'cn=config', it's a bad suffix.
-3. If I use a suffix that is 'cn=config', it's a bad suffix.
+1. I want to add an admin account to `cn=config.ldif`.
+2. If I use a suffix that is not `cn=config`, it's a bad suffix.
+3. If I use a suffix that is `cn=config`, it's a bad suffix.
 
 Well, this one is less cryptic. Maybe if I make the suffix longer, it would work.
-Or maybe it just doesn't like the 'olcSuffix' property. Let's try these.
+Or maybe it just doesn't like the `olcSuffix` property. Let's try these.
 
-Well, no. Both of those turn out to be false. Other suffixes, like 'cn=deeper,cn=config'
-give the same error. Removing the 'olcSuffix' goes back to the original error. The Fiddler wins.
+Well, no. Both of those turn out to be false.
+Other suffixes, like `cn=deeper,cn=config` give the same error.
+Removing the `olcSuffix` goes back to the original error.
+The Fiddler wins. Or loses. I'm not really sure anymore.
 
-The issue seems to be EVEN DEEPER, because in my madness I tried just using original values
-from the database file. Turns out those are ALSO not allowed in frontend database!
+The issue seems to be EVEN DEEPER, because in my madness
+I tried just using original values from the database file.
+Turns out those are ALSO not allowed in frontend database!
 Well, that should help with searching for an answer, at least.
 
-I find nothing but cryptic garbage and somebody who thinks telling someone to read
-the fucking manual, when the manual is the size of a fucking book, is a serious answer.
-Seriously. I did find some [#german_science](#german_science) which doesn't help in of itself,
+I find nothing but cryptic garbage and somebody who thinks telling someone
+to read the fucking manual, when the manual is the size of a fucking book,
+is a serious answer. Seriously.
+I did find some [#german_science](#german_science) which doesn't help in of itself,
 but gives me the impression that the current approach can't possibly work.
-I probably would have to configure the whole system to use BDB in order for it to recognize
-the file. The file probably also needs a lot more values. Probably.
+I probably would have to configure the whole system to use BDB
+in order for it to recognize the file.
+The file probably also needs a lot more values. Probably.
 
-So I return the 'cn=config' file back to normal (I even kept the original CRC, hehe).
+So I return the `cn=config` file back to normal (I even kept the original CRC, heh).
 Surely things should work? No, of course not. 
 
     entry -1 has no dn
 
 What?
 
-Ah, [#another_victim](#another_victim). The answer does contain some more instructions which
-might be cool enough to follow through, so I'll give it a shot. BUT. The guy in the comments
-says they tried it. And then they got the error I get. Then the answer given is to re-install.
-Well, shit. I knew it would happen sooner or later, but it's not happening today, I'm done xD
-Let's just hope a quick re-install will be sufficient. Of course, his instructions use 'yum',
+Ah, [#another_victim](#another_victim). The answer does contain
+some more instructions which might be cool enough to follow through,
+so I'll give it a shot. BUT. The guy in the comments says they tried it.
+And then they got the error I get. Then the answer given is to re-install.
+Well, shit. I knew it would happen sooner or later, but it's not happening today,
+I'm done xD Let's just hope a quick re-install will be sufficient.
+Of course, his instructions use `yum`,
 so that's another YUMMY snack for tomorrow to figure out. Hurray!
 
 Reinstall went quite smoothly, all things considered. [This page](https://www.cyberciti.biz/faq/debian-ubuntu-linux-reinstall-a-package-using-apt-get-command/)
@@ -2286,44 +2298,50 @@ is what I end up using to craft the commands
     sudo apt install aptitude
     sudo aptitude reinstall slapd ldap-utils
     
-It seems it has regenerated successfully. At first I thought it failed, because 'slaptest -u'
-still gave me errors, but when I did 'sudo slaptest -u', it didn't no more. How annoying.
-It's possible that there were no errors before and I just forgot 'sudo' again. Yay.
+It seems it has regenerated successfully. At first I thought it failed,
+because '`slaptest -u` still gave me errors, but when I did `sudo slaptest -u`,
+it didn't fail no more. How annoying.
+It's possible that there were no errors before and I just forgot `sudo` again. Yay.
 
 So will we no longer be [#another_victim](#another_victim)? Yes, yes we will.
 
     sudo ldapsearch -Y EXTERNAL -H ldapi:/// -b "cn=config"
     
 Allegedly this is the thing I complained didn't exist, that is, admin access.
-Except it doesn't work, because I still get the same fucking stupid invalid credentials (49)
-error.
+Except it doesn't work,
+because I still get the same fucking stupid `invalid credentials (49)` error.
 
-My last ditch attempt at fixing this was the other files that did exist, namely
-'olcDatabase={1}mdb.ldif'. It already contained 'olcSuffix' and similar values,
-so I thought if I could just change the password, it would work. Unfortunately,
-even if I manually edit the password using the Fiddler way, the 'ldapadd' command still
-fails with bad credentials error.
+My last ditch attempt at fixing this was the other files that did exist,
+namely `olcDatabase={1}mdb.ldif`.
+It already contained `olcSuffix` and similar values,
+so I thought if I could just change the password, it would work.
+Unfortunately, even if I manually edit the password using the Fiddler way,
+the `ldapadd` command still fails with bad credentials error.
 
-I restart the computer to see if something changes, and yes, things are even more broken!
-Now the LDAP server cannot even be reached at all. It might be related to [permissions](https://www.linuxquestions.org/questions/linux-networking-3/ldap_bind-can%27t-contact-ldap-server-383602/).
+I restart the computer to see if something changes, and yes,
+things are even more broken!
+Now the LDAP server cannot even be reached at all.
+It might be related to [permissions](https://www.linuxquestions.org/questions/linux-networking-3/ldap_bind-can%27t-contact-ldap-server-383602/).
 Easy enough, just change back ownership... uh... to what again?
 
     ls -la /etc/ldap/slapd.d/cn=config/
  
-This tells me the user is 'openldap'.
+This tells me the user is `openldap`.
 So the command should be
 
     sudo chown openldap /etc/ldap/slapd.d/cn=config/olcDatabase{1}.ldif
 
-Except that doesn't work because the file doesn't exist. Except it was just clearly listed
-and I can go to the folder and see it is there.
+Except that doesn't work because the file doesn't exist.
+Except it was just clearly listed and I can go to the folder and see it is there.
 
-I right click on the file, go to properties, then permissions tab, there I can change
-the settings for the group 'openldap' to 'read & write', then restart again. Server works again!
+I right click on the file, go to properties, then permissions tab,
+there I can change the settings for the group `openldap` to `read & write`,
+then restart again. Server works again!
 
     sudo ldapadd -x -W -D cn=admin,dc=goodlike,dc=eu,dc=local -f mumkashi.ldif
 
-OH. MY. GOD. It worked! We hacked our way into a system! It even says 'adding new entry'!
+OH. MY. GOD. It worked! We hacked our way into a system!
+It even says `adding new entry`!
 
 Unfortunately, it also says
  
@@ -2331,14 +2349,15 @@ Unfortunately, it also says
     
 but at least the error now is different and we can try to move on :D
 
-Predictably, the issue was that the new "user" had an organizational unit component "ou=users"
-which didn't exist. [#you_must_construct_additional_pylons](#you_must_construct_additional_pylons)
-for that to work. Or just delete the "ou=users" part. I don't think I have to tell you which
-one I picked :)
+Predictably, the issue was that the new "user" had
+an organizational unit component `ou=users` which didn't exist.
+[#you_must_construct_additional_pylons](#you_must_construct_additional_pylons)
+for that to work. Or just delete the `ou=users` part.
+I don't think I have to tell you which one I picked :)
 
-So after this long journey we successfully added something to LDAP. Still no idea why, or what
-does this do, but at least, in theory, if we understood what we were doing, we could do it.
-Because we have.
+So after this long journey we successfully added something to LDAP.
+Still no idea why, or what does this do, but at least, in theory,
+if we understood what we were doing, we could do it. Because we have.
 
 ### The Fiddler fuses
 
