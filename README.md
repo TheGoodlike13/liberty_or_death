@@ -2361,70 +2361,86 @@ if we understood what we were doing, we could do it. Because we have.
 
 ### The Fiddler fuses
 
-The next obvious step would be to perform the [#fusion](#fusion) between LDAP and Kerberos.
-I suppose we could do a quick recap on what we know so far first, to get on the same page.
-So LDAP is a protocol used to access a "directory", a fancy name for a database of key-value
-mappings. Kerberos is a protocol that facilitates "logging in", whatever that might mean
-for any system. I suppose that since LDAP is basically a database, you could make Kerberos
-use it somehow to store something in some way. Why would you want to do that? Who knows.
-Maybe you just don't wanna write shit and want to integrate everything magically. That's
-probably it. In other words, bad idea.
+The next obvious step would be to perform the [#fusion](#fusion)
+between LDAP and Kerberos.
+I suppose we could do a quick recap on what we know so far first,
+to get on the same page. So LDAP is a protocol used to access a "directory",
+a fancy name for a database of key-value mappings.
+Kerberos is a protocol that facilitates "logging in",
+whatever that might mean for any system.
+I suppose that since LDAP is basically a database,
+you could make Kerberos use it somehow to store something in some way.
+Why would you want to do that? Who knows.
+Maybe you just don't wanna write shit and want to integrate everything magically.
+That's probably it. In other words, bad idea.
 
 But bad ideas are all we've got, so let's get on with this [#fusion](#fusion) stuff.
-[#fusion_but_old](#fusion_but_old) is the actual website I found, but it links to the new one.
-Nonetheless, it at least attempts to give some insight to the motivation: apparently if you
-JUST used LDAP, you'd need to do something crazy, like, store a password in the database.
-I know, who would do such a thing? So instead we'll not store it, and make it magically
-disappear into the stomach of a three headed mythical monster. That's definitely better.
+[#fusion_but_old](#fusion_but_old) is the actual website I found,
+but it links to the new one.
+Nonetheless, it at least attempts to give some insight to the motivation:
+apparently if you JUST used LDAP, you'd need to do something crazy, like,
+store a password in the database. I know, who would do such a thing?
+So instead we'll not store it, and make it magically disappear
+into the stomach of a three headed mythical monster. That's definitely better.
 
-OK, OK, enough foreplay. What's the first thing? Install LDAP enabled Kerberos servers? Uh oh.
-I just have normal Kerberos servers. Are you telling me this is so complicated that the devs
-decided to give up on even attempting configuring such things, and just created a whole separate
-installation package for this case? That's crazy.
+OK, OK, enough foreplay. What's the first thing?
+Install LDAP enabled Kerberos servers? Uh oh.
+I just have normal Kerberos servers.
+Are you telling me this is so complicated that the devs decided to give up
+on even attempting configuring such things,
+and just created a whole separate installation package for this case? That's crazy.
 
-You know, at some point you'd think they'd realize: we've gone too far. This is too much.
-This is not a reasonable approach. It's not gonna work.
+You know, at some point you'd think they'd realize: we've gone too far.
+This is too much. This is not a reasonable approach. It's not gonna work.
 
 But no. These madmen keep going forward, probably while listening to [this](https://www.youtube.com/watch?v=2S4qGKmzBJE).
-So what are our options here? Uninstall Kerberos and install this new one? I haven't had much
-luck uninstalling things, as random settings remain unchanged for no reason. And because these
-people thought it's a good idea to drop settings in some random esoteric directory somewhere
-in the OS, it's not like I can just go and delete it manually, at least not easily. A reinstall
-of the OS itself would be faster and simpler. Honestly, the more I write about these programs,
-the more they sound like a virus! :D
+So what are our options here? Uninstall Kerberos and install this new one?
+I haven't had much luck uninstalling things, as random settings remain unchanged
+for no reason. And because these people thought it's a good idea to drop settings
+in some random esoteric directory somewhere in the OS,
+it's not like I can just go and delete it manually, at least not easily.
+A reinstall of the OS itself would be faster and simpler.
+Honestly, the more I write about these programs, the more they sound like a virus!
+:D
 
-Alright, how about this. Let's just try *installing this on top of the existing installation*.
-If that fails miserably, it will be a good enough excuse to start over with the OS. Let's go!
+Alright, how about this. Let's just try
+*installing this on top of the existing installation*.
+If that fails miserably, it will be a good enough excuse to start over with the OS.
+Let's go!
 
-Unfortunately, it seems I've made a horrible mistake. I got a pop-up to install "updates" for
-the VM OS. 10MB it says. How long could it possibly take, I think. Well, it's taking forever.
+Unfortunately, it seems I've made a horrible mistake.
+I got a pop-up to install "updates" for the VM OS. `10MB` it says.
+How long could it possibly take, I think. Well, it's taking forever.
 Great. At least it finishes eventually.
 
     sudo apt install krb5-kdc-ldap krb5-admin-server schema2ldif
 
 Surprisingly, the installation goes through successfully.
 It only says that the admin server is already installed, and the latest version,
-which makes sense since we did install some Kerberos stuff and we had just updated everything.
+which makes sense since we did install some Kerberos stuff
+and we had just updated everything.
 
 Things stop going well with step 2.
 
     sudo zcat /usr/share/doc/krb5-kdc-ldap/kerberos.openldap.ldif.gz | ldapadd -Q -Y EXTERNAL -H ldapi:///
     
-We're loading a schema, which I wonder what it does. Normally, schema refers to something like,
-dunno, table column definitions. So perhaps this contains proprietary objectClass definitions?
+We're loading a schema, which I wonder what it does.
+Normally, schema refers to something like, dunno, table column definitions.
+So perhaps this contains proprietary `objectClass` definitions?
 Doesn't matter much because we get this error:
 
     Insufficient access (50)
 
 Given that we're trying to use the same broken mechanism
 some other comment suggested before, this is hardly surprising.
-I'm just gonna peek into this .gz file quickly, and then let the fiddling begin!
+I'm just gonna peek into this `.gz` file quickly, and then let the fiddling begin!
 
-Well, a quick glance does reveal it to be some bizarre .ldif file with a lot of definitions.
-A lot of them say 'SUP', and I can just say 'nothin' back.
+A quick glance reveals it to be some bizarre `.ldif` file with a lot of definitions.
+A lot of them say `SUP`, and I can just say `nothin'` back.
 
-It turns out all we had to do is [#sudo_the_world](#sudo_the_world). Apparently if you use a pipe,
-that does not, in fact, keep sudo going. So the command that works is this:
+It turns out all we had to do is [#sudo_the_world](#sudo_the_world).
+Apparently if you use a pipe, that does not, in fact, keep `sudo` going.
+So the command that works is this:
 
     sudo zcat /usr/share/doc/krb5-kdc-ldap/kerberos.openldap.ldif.gz | sudo ldapadd -Q -Y EXTERNAL -H ldapi:///
 
@@ -2445,42 +2461,51 @@ seems to work. I keep entering more things as explained by the guide:
     EOF
 
 Seems promising, because we're using something that actually should exist,
-namely, olcDatabase={1}mdb. But it doesn't work. We get an error
+namely, `olcDatabase={1}mdb`. But it doesn't work. We get an error
  
     wrong attributeType at line 3, entry "olcDatabase={1}mdb,cn=config"
 
-I find this kind of odd, because 'olcDatabase={1}mdb,cn=config' is in line 1.
+I find this kind of odd, because `olcDatabase={1}mdb,cn=config` is in line 1.
 And I'm not sure what part is wrong in line 3 then.
-olcDbIndex? krbPrincipalName? eq,pres,sub? et tu, Kerberos?
+`olcDbIndex`? `krbPrincipalName`? `eq,pres,sub`? `et tu, Kerberos`?
 
-My best guess is 'olcDatabase={1}mdb,cn=config' doesn't understand what krbPrincipalName is,
-since it seems very Kerberos-specific? Wasn't the schema imported to avoid such things, though?
+My best guess is `olcDatabase={1}mdb,cn=config` doesn't understand
+what `krbPrincipalName` is, since it seems very Kerberos-specific?
+Wasn't the schema imported to avoid such things, though?
 
 I have but a simple thought coming from reading the first google search answer.
 [#what_the_fuck_did_i_just_read](#what_the_fuck_did_i_just_read)? Seriously?
-That's the level of bullshit we're dealing with here? A MERE SPACE COULD BREAK THINGS???
+That's the level of bullshit we're dealing with here?
+**A MERE SPACE COULD BREAK THINGS???**
 
-I have to admit, that for the most part, I felt I have been somewhat exaggerated in terms of my,
-uh, criticisms regarding these systems, because I'm new and angry. It's only natural.
-But after reading that, I'm doubling down, motherfuckers. Whoever made this must be destroyed.
-They are actively making the world of software engineering worse and making our name slanderous.
+I have to admit, that for the most part, I felt I have been somewhat exaggerated
+in terms of my, uh, criticisms regarding these systems, because I'm new and angry.
+It's only natural. But after reading that, I'm doubling down, motherfuckers.
+Whoever made this must be destroyed. They are actively making
+the world of software engineering worse and making our name slanderous.
 I will not stand for this. You should not stand for this. Down with the systems!
 
-Meanwhile, google has a bit of a stroke. I search for "olcDatabase={1}mdb,cn=config".
-It says, "no results". Then it prints the results for the search query *without the quotes*.
-The first page literally has "olcDatabase={1}mdb,cn=config" as its title, meaning, by definition,
-it should've been picked up with the quotes search. Not that it helps, as they have a different
-kind of error.
+Meanwhile, google has a bit of a stroke. I search `"olcDatabase={1}mdb,cn=config"`.
+It says, `no results`.
+Then it prints the results for the search query *without the quotes*.
+The first page literally has `olcDatabase={1}mdb,cn=config` as its title, meaning,
+by definition, it should've been picked up with the quotes search.
+Not that it helps, as they have a different kind of error.
 
-You know what, fuck it. This step is optional anyways. No better solution than not doing it.
-And while it's true that we're just running away from the problem, perhaps follow-up steps
-will give more insight into what's wrong. It's worked so far!
+You know what, fuck it. This step is optional anyways.
+No better solution than not doing it.
+And while it's true that we're just running away from the problem,
+perhaps follow-up steps will give more insight into what's wrong.
+It's worked so far!
 
-Next is another optional step, but it's so big and weird I find it hard to believe its optional.
-Let's try it anyway. Plus, it says something about organizational units, maybe we'll learn
-how to add those.
+Next is another optional step, but it's so big and weird
+I find it hard to believe its optional. Let's try it anyway.
+Plus, it says something about organizational units,
+maybe we'll learn how to add those.
 
-Holy shit! I actually managed to enter everything correctly first time and it worked. Like this:
+Holy shit!
+I actually managed to enter everything correctly first time and it worked!
+Like this:
     
     sudo ldapadd -x -D cn=admin,dc=goodlike,dc=eu,dc=local -W <<EOF
     dn: ou=Services,dc=goodlike,dc=eu,dc=local
@@ -2508,22 +2533,25 @@ Holy shit! I actually managed to enter everything correctly first time and it wo
     description: Kerberos Admin Server Account
     EOF
 
-Then I entered the password twice (once for sudo and once for ldapadd) and it's all added.
-So far this is within my expectations. These accounts, because they're not "user" accounts
-like 'posixAccount', are much simpler.
+Then I entered the password twice (once for `sudo` and once for `ldapadd`)
+and it's all added. So far this is within my expectations.
+These accounts, because they're not "user" accounts like `posixAccount`,
+are much simpler.
 
 I continue to pop off by entering these without errors:
 
     sudo ldappasswd -x -D cn=admin,dc=goodlike,dc=eu,dc=local -W -S uid=kdc,ou=kerberos,ou=Services,dc=goodlike,dc=eu,dc=local
     sudo ldappasswd -x -D cn=admin,dc=goodlike,dc=eu,dc=local -W -S uid=kadmin,ou=kerberos,ou=Services,dc=goodlike,dc=eu,dc=local
 
-Admittedly, the second one was easy, as I just had to press 'up' and modify the previous command.
-But that's still going strong! And of course, every single password is still the same.
+Admittedly, the second one was easy, as I just had to press `up`
+and modify the previous command. But that's still going strong!
+And of course, every single password is still the same.
 
-Now the next part gives me pause, because it says, and I quote, "something like this:",
-which is not what I wanna see. It seems like we're doing another typical DB thing of granting
-rights. Since I'm not too sure about the rights mechanism, I'll just copy the command verbatim,
-except for the 'dn' parts, of course:
+Now the next part gives me pause, because it says, and I quote,
+`something like this:`, which is not what I wanna see.
+It seems like we're doing another typical DB thing of granting rights.
+Since I'm not too sure about the rights mechanism,
+I'll just copy the command verbatim, except for the `dn` parts, of course:
 
     sudo ldapmodify -Q -Y EXTERNAL -H ldapi:/// <<EOF
     dn: olcDatabase{1}mdb,cn=config
@@ -2543,8 +2571,8 @@ except for the 'dn' parts, of course:
     EOF
 
 Unfortunately, this is as far as our streak goes.
-I end up making a few typos, although it seems correcting them is not a big deal after all.
-But none of the typos were the problem. The problem is "Invalid DN syntax (34)".
+I end up making a few typos, although correcting them is not a big deal.
+But none of the typos were the problem. The problem is `Invalid DN syntax (34)`.
 Great. I'm so glad you told me which one is the problem so I can fix it...
 
 Turns out I had misspelled the very first DN! Look:
@@ -2552,14 +2580,17 @@ Turns out I had misspelled the very first DN! Look:
     dn: olcDatabase{1}mdb,cn=config    # my mistake
     dn: olcDatabase={1}mdb,cn=config   # correct
 
-I did mess around with other DNs first, but I suppose the fact that no other typos before
-affected the error should've clued me in. But, you see, I can be forgiven, because that's
-an assumption you could make in a system designed by sane people. This is definitely not
-such a system. I guess even a broken mind is sane twice a day, as the saying goes.
+I did mess around with other DNs first, but I suppose the fact
+that no other typos before affected the error should've clued me in.
+But, you see, I can be forgiven, because that's an assumption
+you could make in a system designed by sane people.
+This is definitely not such a system.
+I guess even a broken mind is sane twice a day, as the saying goes.
 
-The other steps seem to be unnecessary, so we're gonna jump straight into Kerberos next!
+The other steps seem to be unnecessary,
+so we're gonna jump straight into Kerberos next!
 
-I modify '/etc/krb5.conf'
+I modify `/etc/krb5.conf`:
 
     [libdefaults]
             default_realm = GOODLIKE.EU.LOCAL
@@ -2579,7 +2610,7 @@ I modify '/etc/krb5.conf'
                     admin_server = 192.168.1.2
             }
  
-and '/etc/krb5kdc/kdc.conf'
+and `/etc/krb5kdc/kdc.conf`:
 
     [realms]
             GOODLIKE.EU.LOCAL = {
@@ -2604,15 +2635,17 @@ and '/etc/krb5kdc/kdc.conf'
             }
 
 A few of the values were already there.
-Notably in 'kdc.conf' we're replacing the entire realm configuration.
+Notably in `kdc.conf` we're replacing the entire realm configuration.
 I assume previous config was the stuff we setup for Kerberos long time ago.
-The new configuration will make Kerberos use LDAP as a database, for what it's worth.
-In all cases I use 'GOODLIKE.EU.LOCAL' as the realm, which replaces the original 'GOODLIKE.EU'.
+The new configuration will use LDAP as a database, for what it's worth.
+In all cases I use `GOODLIKE.EU.LOCAL` as the realm,
+which replaces the original `GOODLIKE.EU`.
 
-I skip editing '/etc/krb5kdc/kadm5.acl' as it already has been edited for admins long time ago.
+I skip editing `/etc/krb5kdc/kadm5.acl` as it already has been edited long time ago.
 
-The next command actually has 'sudo' in it randomly. You're telling me the others would work
-without 'sudo'? I don't believe you :D Anyway, here it is:
+The next command actually has `sudo` in it randomly.
+You're telling me the others would work without `sudo`?
+I don't believe you :D Anyway, here it is:
 
     sudo kdb5_ldap_util -D cn=admin,dc=goodlike,dc=eu,dc=local create -subtrees dc=goodlike,dc=eu,dc=local -r GOODLIKE.EU.LOCAL -s -H ldapi:///
     
@@ -2625,10 +2658,10 @@ As always, same password. Speaking of same password, we set some more:
     sudo kdb5_ldap_util -D cn=admin,dc=goodlike,dc=eu,dc=local stashsrvpw -f /etc/krb5kdc/service.keyfile uid=kdc,ou=kerberos,ou=Services,dc=goodlike,dc=eu,dc=local
     sudo kdb5_ldap_util -D cn=admin,dc=goodlike,dc=eu,dc=local stashsrvpw -f /etc/krb5kdc/service.keyfile uid=kdc,ou=kerberos,ou=Services,dc=goodlike,dc=eu,dc=local
 
-You can actually find them in (sort of) plaintext in '/etc/krb5kdc/service.keyfile'.
+You can actually find them in (sort of) plaintext in `/etc/krb5kdc/service.keyfile`.
 
-Next we need to start Kerberos... but it's probably already running, so I try to stop it
-while at it:
+Next we need to start Kerberos... but it's probably already running,
+so I try to stop it while at it:
 
     systemctl stop krb5-kdc krb5-admin-server
     systemctl start krb5-kdc krb5-admin-server
@@ -2647,8 +2680,8 @@ But this fails. Apparently the rights that were given are simply insufficient.
 
 As always, there is just not enough information on what on earth is wrong.
 Normally, this wouldn't be an issue, as you could just, you know, look at things,
-see a discrepancy and fix it. But I can't tell what is and isn't a discrepancy because
-at no point or step was anything explained to such a degree.
+see a discrepancy and fix it. But I can't tell what is and isn't a discrepancy
+because at no point or step was anything explained to such a degree.
 
 For example, in the statement where we granted rights, we did so to
  
@@ -2658,9 +2691,9 @@ But the DN suffix we configured in Kerberos was this:
 
     ldap_kerberos_container_dn = cn=kerberos,ou=Services,dc=goodlike,dc=eu,dc=local
     
-I mean, it doesn't take a genius to tell these are different. Yet the guide clearly
-provided both, and everything else so far seems to be working.
-I can't just edit 'ldap_kerberos_container_dn' either, because as far as I am concerned,
+I mean, it doesn't take a genius to tell these are different.
+Yet the guide clearly provided both, and everything else so far seems to be working.
+I can't just edit `ldap_kerberos_container_dn` either, because for all I know,
 that could break some other assumption of this proprietary setup elsewhere.
 
 What if I give it more rights then? Like this?
@@ -2670,20 +2703,22 @@ What if I give it more rights then? Like this?
 That's about as many rights as you could possibly need, right? WRONG! Doesn't work!
 Breaks both LDAP and Kerberos.
 
-Admittedly, this might just be an issue with me editing the olcDatabase file.
-If I try to use 'ldapmodify' to change 'olcAccess', it deletes it completely first.
+Admittedly, this might just be an issue with me editing the `olcDatabase` file.
+If I try to use `ldapmodify` to change `olcAccess`, it deletes it completely first.
 As I didn't copy all pre-existing things, this may have broken something.
 
-So I delete 'slapd.d' folder again, re-install using 'aptitude' like before,
-perform the Fiddler's surprise to manually change the password for 'cn=admin'
-(a very painful process, by the way), then try to add the rights. This time I even use
-a file instead of typing it manually! Except that doesn't work. Unlike last time,
-it rejects my addition by saying olcAccess{0} and olcAccess{1} are already taken.
-And true, they are taken. They were also taken the last time, and the program managed
-to insert them into 0 & 1 respectively without issue. But now that I'm using a file,
-which is 100% more logical, it doesn't work no more. So I have to manually change
-the numbers to {3} and {4}. But after all of this, things still don't work, and I have
-no idea if its because of 3 & 4 or some other reason >.<
+So I delete `slapd.d` folder again, re-install using `aptitude` like before,
+perform the Fiddler's surprise to manually change the password for `cn=admin`
+(a very painful process, by the way), then try to add the rights.
+This time I even use a file instead of typing it manually!
+Except that doesn't work. Unlike last time,
+it rejects my addition because `olcAccess{0}` and `olcAccess{1}` are already taken.
+And true, they are taken. They were also taken the last time,
+and the program managed to insert them into `0` & `1` respectively without issue.
+But now that I'm using a file, which is 100% more logical, it doesn't work no more.
+So I have to manually change the numbers to `{3}` and `{4}`.
+But after all of this, things still don't work,
+and I have no idea if its because of `3` & `4` or some other reason >.<
 
 ### The Fiddler purges
 
