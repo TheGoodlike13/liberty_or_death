@@ -3521,8 +3521,8 @@ and not `liberty`. Thankfully this works easily.
 
 ### Not putting it all together
 
-Next up is the task of replacing the 'basicRegistry' with 'ldapRegistry'.
-If you recall, we created a user named 'bob', which I'll add to 'application-bnd':
+Next up is the task of replacing the `basicRegistry` with `ldapRegistry`.
+If you recall, we created a user named `bob`, which I'll add to `application-bnd`:
 
     <application-bnd>
         <security-role name="wild">
@@ -3540,10 +3540,10 @@ And the LDAP configuration, with all optional stuff removed (courtesy of
                   bindPassword="uzakashi"
                   ldapType="Custom"/>
 
-We're not gonna use GSSAPI unless we have to because it is weird.
+We're not gonna use `GSSAPI` unless we have to because it is weird.
 Passwords are just fine as far as I'm concerned!
 
-Interestingly enough, this is even logical! Whether we use 'bobobo' or 'bob',
+Interestingly enough, this is even logical! Whether we use `bobobo` or `bob`,
 both go through LDAP and give the following error now:
 
     [ERROR   ] com.ibm.wsspi.security.wim.exception.WIMSystemException: 
@@ -3551,7 +3551,7 @@ both go through LDAP and give the following error now:
                The LDAP naming exception javax.naming.InvalidNameException: [LDAP: error code 34 - invalid DN]; 
                resolved object com.sun.jndi.ldap.LdapCtx@15daaab4 occurred during processing.
 
-What if I use a more Kerberos-like name, e.g. 'bob@GOODLIKE.EU'? Same error.
+What if I use a more Kerberos-like name, e.g. `bob@GOODLIKE.EU`? Same error.
 
 What if I just dump the entire bloody Kerberos name?
 
@@ -3573,14 +3573,14 @@ I would assume these operations to be somewhat equivalent,
 at least in terms of visibility, as that is the DN used in configuration.
 
 Well, let's try some other configuration options. [#open_your_slap](#open_your_slap)
-gives an option to use '.cc' files, which were files we were messing around with
-back when we called 'kinit' and 'klist'.
+gives an option to use `.cc` files, which were files we were messing around with
+back when we called `kinit` and `klist`.
 
 So, I call
 
     kinit bob
     
-and copy '/tmp/krb5cc_1000' to the project with this configuration:
+and copy `/tmp/krb5cc_1000` to the project with this configuration:
 
     <ldapRegistry id="LDAP" realm="GOODLIKE.EU"
                   host="192.168.1.5" port="389"
@@ -3600,7 +3600,7 @@ This leads to a completely different error:
 It would help if someone carefully explained what the hell is going on here.
 Like, is it gonna store the credentials in the cache? Or is it looking for them?
 Based on the fact it was almost working with simple auth,
-I assume it wants credentials for 'ldap/mumkashi', not 'bob'.
+I assume it wants credentials for `ldap/mumkashi`, not `bob`.
 
 What about using Kerberos config after all, then?
 
@@ -3612,9 +3612,9 @@ What about using Kerberos config after all, then?
                   krb5Principal="ldap/mumkashi-virtualbox@GOODLIKE.EU"
                   ldapType="Custom" />
 
-The '.conf' and '.keytab' files are copied from the VM '/etc/' folder.
-They were used by 'slapd' to perform 'kinit' and 'klist', I assume,
-so they should have the credentials for 'ldap/mumkashi'.
+The `.conf` and `.keytab` files are copied from the VM `/etc/` folder.
+They were used by `slapd` to perform `kinit` and `klist`, I assume,
+so they should have the credentials for `ldap/mumkashi`.
 And true enough the error changes:
 
     Caused by: com.ibm.wsspi.security.wim.exception.WIMSystemException:
@@ -3624,13 +3624,13 @@ And true enough the error changes:
     resolved object com.sun.jndi.ldap.LdapCtx@79786e90 occurred during processing.
 
 Definitely feels like we're on the right track.
-I'll mention that this error only occurs when using 'bob' or 'bob@GOODLIKE.EU'
-as username. Using the long 'uid' thing just gives the same error with all
+I'll mention that this error only occurs when using `bob` or `bob@GOODLIKE.EU`
+as username. Using the long `uid` thing just gives the same error with all
 configurations, leading me to believe that is not the way.
 
 Still, we have an error, but it's clearly at least making through to the server.
 And if something happens on the server... perhaps we can consult with our lord
-and savior '/var/log/syslog'?
+and savior `/var/log/syslog`?
 
 First I [clean up the log](https://stackoverflow.com/questions/35638219/ubuntu-large-syslog-and-kern-log-files)
 as it is getting annoyingly large:
@@ -3639,7 +3639,7 @@ as it is getting annoyingly large:
     > /var/log/syslog
     systemctl restart syslog
     
-Then I close the console as I cannot escape 'sudo su' mode by any known means.
+Then I close the console as I cannot escape `sudo su` mode by any known means.
 I try to login again and find this error:
 
     Jun  7 14:15:37 mumkashi-VirtualBox slapd[959]: 
@@ -3648,16 +3648,16 @@ I try to login again and find this error:
     (Request ticket server ldap/192.168.1.5@GOODLIKE.EU found in keytab 
     but does not match server principal ldap/mumkashi-virtualbox@)
 
-Interesting that the IP would pop out here. It's still in the keytab,
-as I wrote the 'mumkashi' principal on top of it.
+Interesting that the IP would pop out here. It's still in the `keytab`,
+as I wrote the `mumkashi` principal on top of it.
 Other than that, I have no idea why it would be used or appear here.
-I quite specifically set Kerberos DN to 'mumkashi'.
+I quite specifically set Kerberos DN to `mumkashi`.
 
-Thankfully, it seems we don't need to mess around with keytabs (thank God).
+Thankfully, it seems we don't need to mess around with `keytabs` (thank God).
 [These](https://superuser.com/questions/1485808/ssh-user-not-getting-authenticated-through-kerberos)
 [three](https://stackoverflow.com/questions/14687245/apache-sends-wrong-server-principal-name-to-kerberos)
 [links](https://web.mit.edu/kerberos/krb5-1.13/doc/admin/princ_dns.html)
-point to the same simple fix, which is to add a line to '/etc/krb5.conf':
+point to the same simple fix, which is to add a line to `/etc/krb5.conf`:
 
     [libdefaults]
         ignore_acceptor_hostname = true
@@ -3670,7 +3670,7 @@ That being said, we still have an error to deal with:
     javax.naming.InvalidNameException: dn=goodlike,dn=eu: 
     [LDAP: error code 34 - invalid DN]; remaining name 'dn=goodlike,dn=eu'
 
-This is easy: I entered 'dn' instead of 'dc' by accident in 'server.xml'.
+This is easy: I entered `dn` instead of `dc` by accident in `server.xml`.
 I'm impressed that it only NOW caught on to the issue...
 It seems my bind username also had this issue which might explain why
 it didn't work before.
@@ -3691,29 +3691,29 @@ Hmm... what about the other username options?
     CWIML4537E: The login operation could not be completed. 
     The specified principal name krbPrincipalName=bob@GOODLIKE.EU,cn=GOODLIKE.EU,cn=kerberos,ou=Services,dc=goodlike,dc=eu is not found in the back-end repository.
 
-Well, shit. It's clearly connecting, but it can't find the ol' bob.
+Well, shit. It's clearly connecting, but it can't find the ol' `bob`.
 
-Let's try adding something like 'ldap/192.168.1.1' to the keytab:
+Let's try adding something like `ldap/192.168.1.1` to the `keytab`:
 
     sudo kadmin.local
     > addprinc -randkey ldap/192.168.1.1
     > ktadd -k /etc/krb5.ldap.keytab ldap/192.168.1.1
     > q
 
-Then copy over the keytab to this project. No effect. Restarting VM? No effect.
+Then copy over the `keytab` to this project. No effect. Restarting VM? No effect.
 
 It seems no matter what I do, the user which ends up performing the query
-is 'ldap/192.168.1.5', which is odd, as that is based on the server IP
-address. You'd expect the client IP to figure here, but no.
+is `ldap/192.168.1.5`, which is odd, as that is based on the server IP address.
+You'd expect the client IP to figure here, but no.
 
-Anyway, without the 'ignore_acceptor_hostname' it doesn't connect,
-but then it can't find bob. Maybe the basic auth approach is better after all...
+Anyway, without the `ignore_acceptor_hostname` it doesn't connect,
+but then it can't find `bob`. Maybe the basic auth approach is better after all...
 
 Well, we get same result with basic auth, same exact error. Blegh.
 
-One possibility is that we must define 'activedFilters' under the LDAP registry.
+One possibility is that we must define `activedFilters` under the LDAP registry.
 It seems it has some default values, but they might be not applicable for
-our 'custom' LDAP setup. I guess the approach we've been taking is actually
+our "custom" LDAP setup. I guess the approach we've been taking is actually
 beyond the pale, or something. Wowee.
 
 Unfortunately, the defaults make absolutely no sense to me:
@@ -3725,10 +3725,10 @@ Unfortunately, the defaults make absolutely no sense to me:
                     groupMemberIdMap="memberOf:member"/>
 
 Users, fine, I get it. But groups? What are we mapping in the other tags exactly?
-The hell's a 'sAMAccountName'? Ask me anything? Objectcategory? memberOf:member?
+The hell's a `sAMAccountName`? Ask me anything? `Objectcategory`? `memberOf:member`?
 What?
 
-Well, let's try a guess. Maybe 'sAMAccountName' should be 'krbPrincipalName'?
+Well, let's try a guess. Maybe `sAMAccountName` should be `krbPrincipalName`?
 
     <activedFilters userFilter="(&(krbPrincipalName=%v)(objectcategory=user))"
                     groupFilter="(&(cn=%v)(objectcategory=group))"
@@ -3745,7 +3745,7 @@ This is weird though. They have placeholders in them. So, presumably,
 these filters would work if you already *knew* the user id or group name.
 But I never provided the LDAP registry with any of those.
 I was sort of hoping that, just like the basic registry, it would query
-the LDAP server, find some entries, use the "objectclass" to figure out
+the LDAP server, find some entries, use the `objectclass` to figure out
 "ah, this must be a user!" and be done.
 
 Failing that, I expected I could provide some query information for it,
@@ -3755,9 +3755,9 @@ query for a database. Logical stuff.
 But the queries I can provide seem like they're for steps *after* that?
 What is up, I say, what is up with that?
 
-Furthermore, the query used in default filters uses 'objectcategory',
+Furthermore, the query used in default filters uses `objectcategory`,
 which is obviously wrong. The [#ldap_search](#ldap_search) **CLEARLY**
-uses 'objectclass'. And if I run the searches myself on the server:
+uses `objectclass`. And if I run the searches myself on the server:
 
     ldapsearch -x -b dc=goodlike,dc=eu -D cn=admin,dc=goodlike,dc=eu -W objectcategory=user
     ldapsearch -x -b dc=goodlike,dc=eu -D cn=admin,dc=goodlike,dc=eu -W objectcategory=group
@@ -3813,7 +3813,7 @@ although it's entirely possible it exists with some incomprehensible name.
 
 Alright, after some searching I wind up back at [#open_your_slap](#open_your_slap)
 which defines custom classes! Great news! Maybe that's what I need! Let's try!
-I replace the activedFilters with this:
+I replace the `activedFilters` with this:
 
     <ldapEntityType name="KerberosAccount">
         <objectClass>krbPrincipal</objectClass>
