@@ -20,6 +20,7 @@
 #### [2.6. Enter the slap](#enter-the-slap)
 #### [2.7. Depression](#depression)
 #### [2.8. Fire in the hole](#fire-in-the-hole)
+##### [2.8.1. VM network in summary](#vm-network-in-summary)
 #### [2.9. Test your slap](#test-your-slap)
 #### [2.10. The Fiddler is born](#the-fiddler-is-born)
 #### [2.11. The Fiddler fuses](#the-fiddler-fuses)
@@ -31,7 +32,7 @@
 ##### [2.15.2. Auth in this project](#auth-in-this-project)
 #### [2.16. Not putting it all together](#not-putting-it-all-together)
 #### [2.17. Back to the roots](#back-to-the-roots)
-#### [2.18. Hell in summary](#authentication-hell-in-summary)
+##### [2.17.1. Hell in summary](#authentication-hell-in-summary)
 ### [3. (SPN)EGO death](#spnego-death)
 ### [4. Summary of summaries](#summary-of-summaries)
 
@@ -373,7 +374,7 @@ Hey! It's my long lost brother speaking to [#the_void](#the_void)!
 Excellent to see how many resources are out there!
 There's so many it's hard to choose one from them :D
 
-Well, if we're gonna need a virtual machine, it may as well be linux.
+Well, if we're gonna need a virtual machine, it may as well be Linux.
 I can't imagine the configuration on the liberty side would be any different
 because of the OS of the machine the Kerberos server is running on.
 And ultimately, that's the goal of this whole shebang.
@@ -476,7 +477,7 @@ sounds like a lot less than it would take to stop me from trying it... hmm...
 This time the virtual machine launches successfully. BUT! Not so fast!
 It asks me to select a boot option, and I select `Try or install Ubuntu`.
 Then it leaves me with a black console screen.
-I know it's linux, but surely it can't be THAT bad? Ugh.
+I know it's Linux, but surely it can't be THAT bad? Ugh.
 
 Time to try some of the things suggested by [#black_ubuntu](#black_ubuntu)!
 Setting the OS to 64-bit and giving it 128 MB VRAM? No dice.
@@ -533,7 +534,7 @@ It's an old feature page which had an uncanny part referring to, and I quote,
 `New Guest operating systems support` followed by a list containing `Ubuntu 18.04`.
 It strikes me that I've been trying to get the LATEST Ubuntu to launch as VM,
 but what if some weird shenanigan is preventing that from working?
-I mean, at some point I would've gone and tried a different version of linux anyway,
+I mean, at some point I would've gone and tried a different version of Linux anyway,
 so I guess this is as good as an excuse as any.
 
 On a whim I decided to try googling for `best ubuntu for VM`, which led me to
@@ -594,12 +595,12 @@ Find out tomorrow on the next episode of Dragon Ball VM!
  Just press some buttons.
  2. In BIOS, find the `virtualization/VT-x` setting for CPU and enable it.
  3. Save the changes and restart your PC normally.
- 4. Download an image of your favorite linux (`.iso` file), like [Ubuntu 22.04 LTS](https://ubuntu.com/download/desktop).
+ 4. Download an image of your favorite Linux (`.iso` file), like [Ubuntu 22.04 LTS](https://ubuntu.com/download/desktop).
  5. Download and install and run [VirtualBox](https://www.virtualbox.org/wiki/Downloads).
  I chose latest version at the time: 6.1.34 r 150626 (Qt5.6.2).
  6. Create a new VM config. 
  7. **Make sure you select the correct version in the first window
- (linux 64-bit in my case).**
+ (Linux 64-bit in my case).**
  8. The other settings are probably fine, but you can also increase them.
  10GB HDD in particular was pushing it in my case. Try 13GB+.
  9. Run the VM & make sure to select the downloaded `.iso` file
@@ -608,7 +609,7 @@ Find out tomorrow on the next episode of Dragon Ball VM!
 
 ### Ubuntu Online
 
-Now that I'm in this whole new world of ~~fantasy~~ linux, I can start my life anew!
+Now that I'm in this whole new world of ~~fantasy~~ Linux, I can start my life anew!
 A brand new day marks a brand new adventure! That being said, the guide for [#not_on_windows](#not_on_windows)
 seemed to be quite reasonable. At a glance. Perhaps all will be well.
 
@@ -618,8 +619,8 @@ By the way, on the network front, we only have minor signs of impending disaster
 Like, websites randomly broke twice yesterday. But let's not jump to conclusions.
 That could've been anything.
 
-Well, our first hurdle is to actually open the command line on ~~linux~~ Ubuntu.
-You'd think linux would be like "here! open this! it's the thing!", but no,
+Well, our first hurdle is to actually open the command line on ~~Linux~~ Ubuntu.
+You'd think Linux would be like "here! open this! it's the thing!", but no,
 I find no reference to it on the Ubuntu start screen.
 Quick google search tells me it's `CTRL + ALT + T`.
 
@@ -668,7 +669,7 @@ At least it'll be, dunno, interesting, or funny.
 The first page I find on [#it_was_aliens](#it_was_aliens) seems to imply
 it's some kind of converter between types of packages,
 which I assume refers to the format in which applications are stored
-so they can be installed into linux, particularly via command line.
+so they can be installed into Linux, particularly via command line.
 Well, why don't we try running
 
     alien --to-rpm krb5-server-1.10.3-10.el6_4.6.x86_64.rpm
@@ -835,7 +836,7 @@ Just to a nearby building, but it's still something to consider and take time wi
 
 But life finds a way. For my personal reasons,
 I needed to connect a shared folder to the VM.
-Mostly to try something in linux.
+Mostly to try something in Linux.
 
 You can probably guess how this goes. Yes, more pages to the web archive.
 
@@ -1359,13 +1360,13 @@ The first thing that immediately pops out is the extreme focus on Windows.
 That's strange. After all, when I was installing Ubuntu it offered to install
 something or other called `Active Directory`. If it was something exclusively
 related to Windows, surely that would not be possible. Surely the installation
-would just offer me some other equally bizarrely named linux alternative.
+would just offer me some other equally bizarrely named Linux alternative.
 Is this a case for the Mobius chair to explain how there are actually two
 Active Directories all along?
 
 At least we can see the familiar faces like LDAP and Kerberos mentioned here.
 Although I'm not very happy when it says `Microsoft's version of Kerberos`.
-I'd be pretty mad if my linux setup was all a wild goose chase.
+I'd be pretty mad if my Linux setup was all a wild goose chase.
 
 At first I thought my problem was that I was reading wikipedia.
 Or that I had just recently waken up from a headache induced nap.
@@ -1376,7 +1377,7 @@ Fuck it! We will trust this random person on the internet and put AD aside.
 Let's focus on setting up LDAP. Whatever that looks like.
 
 According to [#slapped](#slapped) I need to start off by installing `OpenLDAP`.
-That's the key to LDAP in linux. They even provide links for more details
+That's the key to LDAP in Linux. They even provide links for more details
 if things go south. Let's get started!
 
 I just gotta do that `sudo apt install openldap` and... it doesn't work.
@@ -1395,7 +1396,7 @@ So, `openldap` package does not exist. I guess it's time to consult the
 Why so serious? I'll just ignore that.
 
 Immediately we're sent to [#not_so_apt](#not_so_apt) to download things.
-Normally, I'd love this shit, but I'm trying to get this done on a linux VM here.
+Normally, I'd love this shit, but I'm trying to get this done on a Linux VM here.
 What happened to all the slick one liner programs that just magically install shit?
 Wasn't that part of the appeal? I feel like my illusion has been shattered.
 
@@ -1459,7 +1460,7 @@ This does indeed report an active status.
 
     sudo nano /etc/ldap/ldap.conf
     
-This opens what passes for a text editor in linux. Eew. No thanks.
+This opens what passes for a text editor in Linux. Eew. No thanks.
 I'll just find the file in a directory and edit it with notepad equivalent.
 At least I can escape by using `CTRL+X`.
 
@@ -1524,71 +1525,82 @@ This hydra sure feels like it'll never run out of heads.
 
 ### Depression
 
-I've started feeling physically sick from all the bullshit that I have to deal with here.
-And that's after having some days off recently.
+I've started feeling physically sick from all the bullshit
+that I have to deal with here. And that's after having some days off recently.
 
-It seems that the default configuration for the network in VirtualBox is 'NAT'.
+It seems that the default configuration for the network in VirtualBox is NAT.
 Haha, so funny, it's almost "NOT", which is quite an apt comparison.
 Sure, it'll get you connected to the internet. But you can probably already do that.
-On your host machine. The connection between the VM and host is much more interesting.
+On your host machine. Connection between the VM and host is much more interesting.
 
 I've looked over a few videos and other resources. I'll link relevant ones promptly.
 The impression I get is that there's all kinds of different ways to set things up
 depending on your situation. For example, this here [video](https://www.youtube.com/watch?v=jdOHJ0NZ47M)
-uses a bridged adapter instead of NAT. This seems to make the VM a full fledged entity
-on the network, perhaps even getting its own IP address from DHCP out there, or something.
-Which is crippling enough to make the guy in the video have to use his personal router
-configuration to set a static IP address, or something. I dunno, I was feeling too sick
-to continue watching.
+uses a bridged adapter instead of NAT.
+This seems to make the VM a full fledged entity on the network,
+perhaps even getting its own IP address from a DHCP out there, or something.
+Which is crippling enough to make the guy in the video have to use
+his personal router configuration to set a static IP address, or something.
+I dunno, I was feeling too sick to continue watching.
 
-The [#slut_network](#slut_network) video uses 'internal network', which I don't know
-what or how it does, but it magically works. Neat, right? Except it's a video on Windows
-VMs, so I've no idea how to put it to use or if it would magically work on Linux.
-At least I'll keep the IP address scheme as a memo. It's easy to remember, because it
-has 168 in it. And 168 is easy to remember because that's how many primes there are
-less than 1000. Commonly known, I know, but I thought I'd mention it anyways.
+The [#slut_network](#slut_network) video uses `internal network`,
+which I don't know what or how it does, but it magically works.
+Neat, right? Except it's a video on Windows VMs,
+so I've no idea how to put it to use or if it would magically work on Linux.
+At least I'll keep the IP address scheme as a memo.
+It's easy to remember, because it has `168` in it.
+And 168 is easy to remember because that's how many primes there are less than 1000.
+Commonly known, I know, but I thought I'd mention it anyways.
 
 [#old_but_bold](#old_but_bold) features a guide on setting up exactly what we need.
-The problem is, it's using a completely different, possibly outdated version of VirtualBox.
+But it's using a completely different & possibly outdated version of VirtualBox.
 None of the windows in their screenshots seem to exist anymore.
 All I learned from that is to put the non-NAT network adapter first.
-And that's not even right, as all that achieved is fuck my NAT adapter IP, causing all
-the existing config I had done to break. Thankfully, it's as easy as setting it back
-to its original place and it works again.
+And that's not even right, as all that achieved is fuck my NAT adapter IP,
+causing all the existing config I had done to break. Thankfully,
+it's as easy as setting it back to its original place and it works again.
 
-[#wrong_linux](#wrong_linux) gives another glimpse into possible convoluted GUI options
-for VirtualBox. This one seems more up to date, as it refers me to 'Global tools'.
-No such thing I'm afraid, but 'Tools' does exist, and one of the options there is
-in fact 'Network'. Due to previously messing around, an adapter already exists,
-although I can't seem to change its name. I disable DHCP and enter the magic IP
-'192.168.1.1' as well as mask '255.255.255.0'. Don't forget to apply changes!
+[#wrong_linux](#wrong_linux) gives another glimpse into possible convoluted
+GUI options for VirtualBox.
+This one seems more up to date, as it refers me to `Global tools`.
+No such thing I'm afraid, but `Tools` does exist,
+and one of the options there is in fact `Network`.
+Due to previously messing around, an adapter already exists,
+although I can't seem to change its name.
+I disable DHCP and enter the magic IP `192.168.1.1` as well as mask `255.255.255.0`.
+Don't forget to apply changes!
 
-Unfortunately the rest of the guide is for CentOS 7, which is apparently a different
-Linux version. So different, in fact, that they put their configurations in different
-places in different ways. Great. Excited to be working with you guys.
+Unfortunately the rest of the guide is for CentOS 7,
+which is apparently a different Linux version. So different, in fact,
+that they put their configurations in different places in different ways.
+Great. Excited to be working with you guys.
 
-So Fedora-like Linuxes use '/etc/sysconfig/network-scripts/'. What does Ubuntu use?
+So Fedora-like Linuxes use `/etc/sysconfig/network-scripts/`. What does Ubuntu use?
 Apparently it depends on who you ask. There's [this](https://ubuntuforums.org/showthread.php?t=783101)
 and [this](https://askubuntu.com/questions/320537/where-is-the-equivalent-of-etc-sysconfig-networking-devices-directory-in-ubunt)
 and also just [#the_batman](#the_batman).
 
-But wait! [#old_but_bold](#old_but_bold) part 2 seems to have some similar configuration
-in one of those places! Eh, what the hell, let's give it a shot.
+But wait! [#old_but_bold](#old_but_bold) part 2 matches one of those places!
+Eh, what the hell, let's give it a shot.
 
-To start off, we must edit '/etc/network/interfaces' which notably does not exist.
-Since it doesn't exist, I can't give ownership to myself of it. Leaving me with no choice.
+To start off, we must edit `/etc/network/interfaces` which notably does not exist.
+Since it doesn't exist, I can't give ownership to myself of it.
+Leaving me with no choice.
 
     sudo vi /etc/network/interfaces
 
 I foolishly decide to try out using Vim! Kill me now. Please. Just end this misery.
-Can you guess, can you just imagine the procedure you must follow to save a file with Vim?
-Oh, it's no big deal. Just press escape, then type ':w', then Enter. Obviously.
-What else could it possibly be? That just makes sense. Everyone knows that.
-Did you know that adjoining the fifth root of unity to the field of rational numbers
-also automatically adjoins the square root of 5? Yeah, it's basically the same type of
-knowledge, I know.
+Can you guess, can you just imagine the procedure you must follow
+to save a file with Vim? Oh, it's no big deal. Just press `escape`, then type `:w`,
+then `Enter`. Obviously. What else could it possibly be? That just makes sense.
+Everyone knows that.
 
-So anyway, I manage to save the file '/etc/network/interfaces' with random inputs in it.
+Did you know that adjoining the fifth root of unity to the field of rational numbers
+also automatically adjoins the square root of 5?
+Yeah, it's basically the same type of knowledge, I know.
+
+So anyway, I manage to save the file `/etc/network/interfaces`
+with random inputs in it.
 Then I change the ownership of the file so I can edit it with a sane program.
 
     sudo chown {user} /etc/network/interfaces
@@ -1603,25 +1615,27 @@ Then I copy paste and adjust the file contents as instructed. They end up like t
      gateway  192.168.1.1
      dns-nameservers  8.8.8.8  192.168.1.1
 
-Notably, I use 'enp0s8', as 'enp0s3' is the first network adapter which I left as NAT
-for internet access. Then the IP is just the next available IP address after the one
-I entered in the VirtualBox settings. Network could be anything, so I left its suffix as 0.
-Gateway and netmask are just the VirtualBox settings. Dns-nameservers is whatever the
-hell it is, but I changed the one IP address to match the gateway as in the example.
-Oh, and 8.8.8.8 is the public google DNS service. No idea why that pops up here out
-of nowhere. But it may as well stay.
+Notably, I use `enp0s8`, as `enp0s3` is the first network adapter
+which I left as NAT for internet access.
+The IP is the increment of the IP address I entered in the VirtualBox settings.
+`Network` could be anything, so I left its suffix as `0`.
+`Gateway` and `netmask` are just the VirtualBox settings.
+`Dns-nameservers` is whatever the hell it is,
+but I changed the one IP address to match the `gateway` as in the example.
+Oh, and `8.8.8.8` is the public google DNS service.
+No idea why that pops up here out of nowhere. But it may as well stay.
 
     sudo systemctl restart networking
 
-Surprise! It doesn't work! Networking.service not found!
+Surprise! It doesn't work! `Networking.service not found`!
 That's great news. I'll just restart the VM and pretend I didn't see that.
 
     ip add
 
-Doesn't work. Well, 'ip add' works. But the IP address is nowhere to be found.
-I'm guessing something to do with the networking.service not being found.
+Doesn't work. Well, `ip add` works. But the IP address is nowhere to be found.
+I'm guessing something to do with the `networking.service` not being found.
 
-And before you even ask, no, changing the owner back to 'root' does nothing.
+And before you even ask, no, changing the owner back to `root` does nothing.
 
 Turns out the service has changed its name in newer Ubuntu versions [#because_of_course](#because_of_course).
 
@@ -1632,56 +1646,62 @@ The first command reveals the name I had to use in the second one.
 Of course, that does nothing. The IP address is still nowhere to be found.
 
 The next day I am greeted with a question. Is my network home or public?
-That's the usual windows crap. It is quite a random timing.
+That's the usual windows crap. The timing is quite peculiar, though.
 Could this be a portent of something else? Who knows.
 
-First and foremost I try setting the 'host-only' connection as the first one
-and 'NAT' as the second one. It doesn't work - same as before.
+First and foremost I try setting the `host-only` connection as the first one
+and NAT as the second one. It doesn't work - same as before.
 
 My biggest suspicion about the whole process so far has been
-the lack of existence of the 'interfaces' file to begin with.
+the lack of existence of the `interfaces` file to begin with.
 [Something](https://askubuntu.com/questions/1276847/looking-for-etc-network-interfaces-is-missing)
-has changed when Ubuntu updated to version 20 or something.
-And no, moving the file to 'netplan' directory doesn't work.
+has changed when Ubuntu updated to version 20.
+And no, moving the file to `netplan` directory doesn't work.
 
 The answer seems to be [#ask_the_manager](#ask_the_manager). By running the command
 
     nm-connection-editor
     
-we get a 'Network connections' window with both connections.
+we get a `Network connections` window with both connections.
 
-They are numbered according to the VirtualBox settings, so I edit the appropriate
-one's settings. In the settings there is a 'IPv4 Settings', which allows me to choose
-'Manual' method for IP address. Then I add the IP settings that I had previously
-configured in the 'interfaces' file here. Notably, I didn't have to add a network mask.
+They are numbered according to the VirtualBox settings.
+I pick the one that's currently `host-only` and edit its settings.
+In the settings there is a `IPv4 Settings` tab,
+which allows me to choose `Manual` method for IP address.
+I add the IP that I had previously configured in the `interfaces` file here.
+Notably, I didn't have to add a network mask.
 
-*Editor's note: I did have to add it in future attempts, so no idea why it was missing
-this time. Maybe I was just blinded by rage. Who knows?*
+*Editor's note: I did have to add it in future attempts,
+so no idea why it was missing this time.
+Maybe I was just blinded by rage. Who knows?*
 
-After I save the settings, the network automatically 'connects', whatever that means.
+After I save the settings, the network automatically connects, whatever that means.
 You can see it in the top right network icon, actually.
-I close the settings windows and now 'ip add' correctly prints the IP address.
+I close the settings windows and now `ip add` correctly prints the IP address.
 
-However, if I ping from the host machine, it's still unreachable. Same the other way around.
-I guess firewall is next?
+However, if I ping from the host machine, it's still unreachable.
+Same the other way around. I guess firewall is next?
 
 ### [Fire](https://www.youtube.com/watch?v=r32LcBqiv7I) in the hole
 
 It asked me about my network being public or private again! Jesus! Get a clue!
 
-[#its_servers_fault](#its_servers_fault) gives some insight on how to setup the firewall.
-The issue is that it thinks only VM to host connections would have the firewall problem
-in the first place. But I obviously have issues with it both ways.
+[#its_servers_fault](#its_servers_fault) gives some insight on
+how to setup the firewall.
+The issue is that it thinks only VM to host connections
+would have the firewall problem in the first place.
+But I obviously have issues with it both ways.
 
-Well, I setup the exception exactly as explained, putting in the IP addresses that I used
-instead of the example ones. It doesn't achieve anything.
+Well, I setup the exception exactly as explained,
+putting in the IP addresses that I used instead of the example ones.
+It doesn't achieve anything.
 
     ipconfig /all
 
 I decide to investigate if everything is OK on windows side, and it sure seems so.
 Except that my DHCP lease had been acquired mere 20 mins ago and is to expire in 10.
 This might explain the random questions about the network type.
-Clearly DHCP was not co-operating as usual, so I perform my usual 'reset' procedure:
+Clearly DHCP was not co-operating as usual, so I perform my usual "reset" procedure:
 
     netsh winsock reset catalog
     netsh int ipv4 reset reset.log
@@ -1690,27 +1710,30 @@ Clearly DHCP was not co-operating as usual, so I perform my usual 'reset' proced
     
     ipconfig /flushdns
 
-I check ipconfig again... to see it has gone completely mad. VirtualBox confirms this.
-The IP mask changed to 255.255.0.0 and the IP address is completely random.
+I check `ipconfig` again... to see it has gone completely mad.
+VirtualBox confirms this.
+The IP mask changed to `255.255.0.0` and the IP address is completely random.
 Yet it is statically set in VirtualBox. WTF? DHCP still disabled btw.
 I guess I'll reset it to original values and run the VM again.
 
     ping 192.168.1.1
     ping 192.168.1.2
 
-OK... so... it works now. Pings go both ways. No idea which part, if any, of this actually
-fixed this LOL.
+OK... so... it works now. Pings go both ways.
+No idea which part, if any, of this actually fixed this LOL.
 
-With that in mind we have our new 'IP' address, so we better update Kerberos and LDAP
-to actually use it.
+With that in mind we have our new 'IP' address,
+so we better update Kerberos and LDAP to actually use it.
 
     URI     ldap://192.168.1.2 ldap://192.168.1.2:389
 
-Changing '/etc/ldap/ldap.conf' is easy enough. Finding where the place where Kerberos
-put my 'localhost' inputs is a bit harder. I think it would probably work anyways, but
-using localhost just doesn't sit right with me. Anyway, this [page](https://social.technet.microsoft.com/Forums/ie/en-US/26823611-786b-4ec8-bdaf-1f565dd7d68a/how-do-i-change-the-realm-name-used-during-kerberos-authentication?forum=winserver8gen)
-here tells me there might be a 'krb5.conf' file out there somewhere. And it is.
-'/etc/krb5.conf' to be precise.
+Changing `/etc/ldap/ldap.conf` is easy enough.
+Finding where the place where Kerberos put my `localhost` inputs is a bit harder.
+I think it would probably work anyways,
+but using `localhost` just doesn't sit right with me.
+Anyway, this [page](https://social.technet.microsoft.com/Forums/ie/en-US/26823611-786b-4ec8-bdaf-1f565dd7d68a/how-do-i-change-the-realm-name-used-during-kerberos-authentication?forum=winserver8gen)
+here tells me there might be a `krb5.conf` file out there somewhere. And it is.
+`/etc/krb5.conf` to be precise.
 
     [realms]
             GOODLIKE.EU = {
@@ -1725,8 +1748,35 @@ Let's check if it still works.
     
 Looks like we can proceed.
 
-Of course, changing the 'goodlike.conf' file in this project still achieves nothing.
+Of course, changing the `goodlike.conf` file in this project still achieves nothing.
 But hey, it's progress!
+
+#### VM network in summary
+
+1. Shut down your VM if it's on.
+2. Go to `Settings -> Network`.
+3. Create the adapters. NAT adapter (usually on by default) connects to internet.
+`Host-only` adapter connects the VM and the host.
+4. In `Tools`, select the `Network` tab. You can do this by clicking on the icon
+that's next to the pin.
+5. For the `Host-only` adapter, disable DHCP.
+6. In `Adapter` tab, `Configure adapter manually`.
+7. Set the address for your host, e.g. `192.168.1.1`.
+8. Set the network mask, e.g. `255.255.255.0`.
+9. Still on the host machine, disable firewall for your network. [#its_servers_fault](#its_servers_fault)
+has some hints how to do it.
+10. Turn on your VM.
+11. Enter command `nm-connection-editor` (no need for `sudo`).
+12. Select the connection which corresponds to `host-only` adapter.
+They are ordered the same way you set them up in the VM settings.
+13. Select `IPv4 Settings` tab.
+14. Select `Manual` method.
+15. Add an IP address, e.g. `192.168.1.2`. Also add the same network mask as before.
+16. Set the gateway for the address to your host IP from before.
+17. Save the settings & close the editor.
+18. If the network still doesn't work, restart the VM.
+19. Once restarted, `ping` should work in both directions.
+20. If it stops working, verify that settings were not reset by some process.
 
 ### Test your [slap](https://www.youtube.com/watch?v=juaunbIGCcw)
 
@@ -1882,7 +1932,7 @@ It looks like an account... with 'shadow' prefix to everything. Given how 'posix
 seems like a "real" thing, not "made up", I guess this is also a thing? Whatever.
 
 My point is, what the hell are we doing here? How on earth am I supposed to set this up?
-So I need to have an account on the linux VM? And then use the information from there?
+So I need to have an account on the Linux VM? And then use the information from there?
 Or am I supposed to use the LDAP system as my account management system, and then set this up?
 Which comes first? Chicken? Egg? Ham? Cranberry juice? Fuck it. I'll just use my existing
 account and see what happens. What's the worst that could happen, amirite?
@@ -1984,8 +2034,8 @@ this guide is considered.
 Doesn't work. Command 'yum' not found. But not so fast!
 By sheer coincidence during the last few days I stumbled upon [this video](https://odysee.com/@SomeOrdinaryGamers:a/please-stop-using-windows...:f)
 which gives a bit of an explanation. As we've seen before, there are different
-distributions (a weird word for 'types' or 'kinds') of linux. But it wasn't enough
-for them to make the linuxes different, they also made the installation programs
+distributions (a weird word for 'types' or 'kinds') of Linux. But it wasn't enough
+for them to make the Linuxes different, they also made the installation programs
 different. Gotta style on those other tribes somehow, you know.
 
 In other words, as long as I replace 'yum' with the equivalent of whatever the hell
@@ -2294,7 +2344,7 @@ that does not, in fact, keep sudo going. So the command that works is this:
 
     sudo zcat /usr/share/doc/krb5-kdc-ldap/kerberos.openldap.ldif.gz | sudo ldapadd -Q -Y EXTERNAL -H ldapi:///
 
-It both makes sense, and makes me wonder how come all linux developers
+It both makes sense, and makes me wonder how come all Linux developers
 have not been simultaneously assassinated yet.
 
 Next we're gonna add an index to something. See? It is a database.
@@ -3809,7 +3859,7 @@ Ugh, not very good, but I suppose if you know in advance that the prefix will be
 So, I guess we're done here? Liberty authentication with LDAP complete?
 I mean, Kerberos got lost somewhere along the way, but that's a plus in my book.
 
-### ~~Authentication~~ Hell in summary
+#### ~~Authentication~~ Hell in summary
 
 1. Follow instructions from [#dummy_slap](#dummy_slap) to install LDAP.
 Notably, make sure that `URI` in `/etc/ldap/ldap.conf` uses a real IP address,
@@ -3834,9 +3884,11 @@ does, specifically.
 
 ## Summary of summaries
 
+These are links to summaries throughout the entire document, in order:
+
 * [Liberty in summary](#liberty-in-summary)
 * [VM in summary](#vm-in-summary)
 * [Shared folder in summary](#shared-folder-in-summary)
-* [HDD addendum](#hdd-addendum)
+* [VM network in summary](#vm-network-in-summary)
 * [Liberty authentication in summary](#liberty-authentication-in-summary)
 * [Hell in summary](#authentication-hell-in-summary)
