@@ -1284,55 +1284,66 @@ I'd like to flush it out now rather than getting distracted for a week again.
 
 The first non-IBM page I encounter is [#open_your_heart](#open_your_heart).
 It seems to relate specifically to some sort of *open* implementation of liberty.
-It can't be all that different, because it seems to use the familiar format in configuration.
+It can't be all that different,
+because it seems to use the familiar format in configuration.
 That being said, there's no knowing if this will work or not with what I'm doing.
 It does give some hints, like features being able to use Kerberos credentials.
 In their example, a database connection is configured that way (I think).
 
-That's not quite what I need, but we can try to investigate all possible features we could
-add to server.xml. Maybe one of them will be so obviously related to authentication, we will
-be able to use Kerberos with it. Plus, I can compare this to existing working configuration
-in other projects.
+That's not quite what I need, but we can try to investigate
+all possible features we could add to `server.xml`.
+Maybe one of them will be so obviously related to authentication,
+we will be able to use Kerberos with it.
+Plus, I can compare this to existing working configuration in other projects.
 
 IBM seems to have a list, but that's it. It's literally a list: [#ibm_no_redemption](#ibm_no_redemption).
 It fails to elucidate anyone to anything about any of the features. Great.
 
 Clicking on random features I notice that they link to config elements, such as [kerberos](https://www.ibm.com/docs/en/was-liberty/base?topic=configuration-kerberos).
-I guess this means that configuration for kerberos once will work for everything.
-I'll note that this config is usually attached to SPNEGO in working examples that I do have,
-so adding this element won't be the end of it by far, but it's a good start :D
+I guess this means that configuration for Kerberos once will work for everything.
+I'll note that this config is usually attached to SPNEGO in working examples
+that I do have, so adding this element won't be the end of it by far,
+but it's a good start :D
 
-We could try adding this element, even if it would be ignored due to lack of a specific
-feature which uses it, but we need a .conf file first. From my examples it seems like
-a client version of the .conf file we saw back when setting up a server. But of course,
-none of the properties are explained. So I won't be able to confirm or verify if I got it
-right or not. Not unless we find a feature that uses Kerberos first.
+We could try adding this element,
+even if it would be ignored due to lack of a specific feature which uses it,
+but we need a `.conf` file first.
+From my examples it seems like a client version of the `.conf` file
+we saw back when setting up a server.
+But of course, none of the properties are explained.
+So I won't be able to confirm or verify if I got it right or not.
+Not unless we find a feature that uses Kerberos first.
 
-From working examples, 'appSecurity-2.0' seems like it could work. Let's go with that.
+From working examples, `appSecurity-2.0` seems like it could work.
+Let's go with that.
 
-But not so fast! Ubuntu is not quite ready to give up yet. The keytab file was created
-by root, so I have no rights to it, because of course. I guess I have to take ownership of it
-somehow first.
+But not so fast! Ubuntu is not quite ready to give up yet.
+The `keytab` file was created by `root`, so I have no rights to it,
+because of course. I guess I have to take ownership of it somehow first.
 
     sudo chown {user} goodlike.keytab
 
 Looks like [#im_the_captain_now](#im_the_captain_now).
 
-My shared folder now comes in handy. I can move the file through it. Fun fact: the link
-on explorer now just works, so I don't have to go all the way around through 'other locations'.
+My shared folder now comes in handy. I can move the file through it.
+Fun fact: the link on explorer now just works,
+so I don't have to go all the way around through `other locations`.
 
-So, I run the application, it installs the mother of all features first, creates a keystone,
-LTPA.keys and an SSL certificate. All under 'defaultServer/resources/security/'. Nothing about
-Kerberos though. And clicking the link for my application does not ask me for a password.
+So, I run the application, it installs the mother of all features first,
+creates a keystone, `LTPA.keys` and an `SSL certificate`.
+All under `defaultServer/resources/security/`. Nothing about Kerberos though.
+And clicking the link for my application does not ask me for a password.
 Well, that was a bit much to expect, I suppose.
 
 In a twist of fate, [#ibm_security](#ibm_security) actually does contain some info.
 I need to setup a user registry of some kind.
 I assume in my examples the LDAP takes care of that, and we don't have nothin' here.
 
-I can't seem to find any resources online that would help. The impression I get is that
-far from being anywhere near done, we need to setup a bunch of framework shenanigans.
-It might be time to shelve Kerberos progress for now and proceed onto Active Directory/LDAP.
+I can't seem to find any resources online that would help.
+The impression I get is that far from being anywhere near done,
+we need to setup a bunch of framework shenanigans.
+It might be time to shelve Kerberos progress for now
+and proceed onto Active Directory/LDAP.
 
 ### Enter the slap
 
@@ -2765,7 +2776,7 @@ Oh boy, oh dear. Not regex! This was already fucked beyond fuckery,
 why did you have to add regex on top of it?
 Why do I feel like it'll have a syntax problem again?
 Also, I see the 'ou=People' part in it, but what about bob?
-He's still deep in kerberos somewhere. Why you gotta do bob so dirty?
+He's still deep in Kerberos somewhere. Why you gotta do bob so dirty?
 I'm taking a VM snapshot before running this, ugh.
 
 Seems to somehow have worked this time. It really is the final showdown.
