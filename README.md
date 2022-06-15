@@ -3872,7 +3872,7 @@ Well, that's odd. Maybe I'm looking at old documentation.
 How about [#slap_26](#slap_26) which is the latest? Literally the same. OK.
 What the hell's going on here?
 
-I use the search from the website, which internally uses the disgraced DuckDuckGo
+I use the search from the website, which internally uses the disgraced `DuckDuckGo`
 search engine. We arrive at [this page](https://www.openldap.org/doc/admin26/slapdconfig.html),
 although I did have to set the version to `26` manually again.
 Apparently you can't trust the search engines to give you the latest one,
@@ -3880,7 +3880,7 @@ go figure.
 
 So we finally have something like a directory, namely `/usr/local/etc/openldap`.
 I'm gonna put the file there and then... uh... I guess hope it works.
-Yet another case where I have no way to verify something work without
+Yet another case where I have no way to verify something works without
 proceeding forward, which could have drastic results.
 I suppose a snapshot is in order.
 
@@ -3902,7 +3902,7 @@ didn't create `/usr/local/etc/openldap/schema/`, let alone a schema in it.
 Because I thought it would already be there. Which would make sense.
 But it's not and it does not. Thanks, latest docs! You're so useful.
 
-Looks like `inetorgperson.schema` does exist though, back in the `/etc/ldap/schema/`,
+Looks like `inetorgperson.schema` does exist back in the `/etc/ldap/schema/`,
 which is also near `ldap.conf` and `slapd.d`, home of the notorious `cn=config`.
 Well, whatever, I'll just point to that instead then.
 
@@ -3990,8 +3990,8 @@ Not good. What about `cn=Bob,ou=people,dc=goodlike,dc=eu`? Success!
 It actually logs in with that bizarre name! It is also not case-sensitive.
 
 It does bring the question of how would you go about doing this the right way.
-I mean, we've clearly setup it to use something like 'uid', but then we went
-and used `cn=Bob` instead :/
+I mean, we've clearly setup it to use something like `uid=`, but then we went
+and used `cn=` instead :/
 
 How about the `uid=testuser,ou=people,dc=goodlike,dc=eu`?
 
