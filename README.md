@@ -1376,7 +1376,7 @@ This is some serious [#mandela_effect](#mandela_effect) bullshit.
 Fuck it! We will trust this random person on the internet and put AD aside.
 Let's focus on setting up LDAP. Whatever that looks like.
 
-According to [#slapped](#slapped) I need to start off by installing `OpenLDAP`.
+According to [#slapped](#slapped) I need to start off by installing OpenLDAP.
 That's the key to LDAP in Linux. They even provide links for more details
 if things go south. Let's get started!
 
@@ -1406,7 +1406,7 @@ but it downloads very fast anyways. It's kinda small, actually.
 I continue following the advice from [#slapped_8](#slapped_8).
 I extract the archive, then start reviewing the text files. The license seems OK.
 But I still don't understand a lot of the things mentioned there.
-Maybe I need a quick `openLDAP for dummies` first.
+Maybe I need a quick `openldap for dummies` first.
 
 The search leads me to [#dummy_slap](#dummy_slap) which does have `apt` commands.
 Well, why didn't you say so in the first place? Let's follow this instead.
@@ -1803,7 +1803,7 @@ Like, what are `baseDN` & `bindDN`? Whose password is bound?
 There are different LDAP types?
 The last one seems to be just fine as `Microsoft Active Directory`.
 I base this entirely on this [example](https://github.com/Azure-Samples/open-liberty-on-aro/blob/master/3-integration/aad-ldap/src/main/liberty/config/server.xml),
-as it's for openLDAP.
+as it's for OpenLDAP.
 
 There's a Spring guide on [#not_getting_started](#not_getting_started).
 Unfortunately it's a guide for where you already know everything about LDAP,
@@ -2941,12 +2941,12 @@ So weird. Well, whatever, as long as it works!
 Now that things are working, it's time to end this mess once and for all.
 Back to [#fusion](#fusion)!
 
-I skip creating 'alice' because I don't want to create users somewhere else.
+I skip creating `alice` because I don't want to create users somewhere else.
 Seriously, I'd probably need to add more rights, and while its no longer
-mission impossible, it's still a pain in the ass.
+"mission impossible", it's still a pain in the ass.
 
-I do want to use Kerberos to secure stuff with clients, so I guess I need to follow
-the next steps.
+I do want to use Kerberos to secure stuff with clients,
+so I guess I need to follow the next steps.
 
     sudo kadmin.local
     > addprinc -randkey ldap/192.168.1.5
@@ -2960,9 +2960,9 @@ I'd make that the default though...
     sudo chmod 0640 /etc/krb5.ldap.keytab
 
 I don't expect to be editing this file manually, so this is fine by me.
-I wish I knew what 'chmod 0640' does though...
+I wish I knew what `chmod 0640` does though...
 
-Next I edit another file owned by root...
+Next I edit another file owned by `root`...
 
     sudo chown mumkashi /etc/default/slapd
     
@@ -2972,7 +2972,8 @@ Next I edit another file owned by root...
     sudo chown root /etc/default/slapd
     sudo systemctl restart slapd
 
-So far so good. Next up is another modification to the LDAP database, so let's slow down...
+So far so good. Next up is another modification to the LDAP database,
+so let's slow down...
 
     sudo ldapmodify -H ldapi:/// -Y EXTERNAL << EOF
     dn: cn=config
@@ -2985,18 +2986,18 @@ So far so good. Next up is another modification to the LDAP database, so let's s
 Oh boy, oh dear. Not regex! This was already fucked beyond fuckery,
 why did you have to add regex on top of it?
 Why do I feel like it'll have a syntax problem again?
-Also, I see the 'ou=People' part in it, but what about bob?
-He's still deep in Kerberos somewhere. Why you gotta do bob so dirty?
+Also, I see the `ou=People` part in it, but what about `bob`?
+He's still deep in Kerberos somewhere. Why you gotta do `bob` so dirty?
 I'm taking a VM snapshot before running this, ugh.
 
-Seems to somehow have worked this time. It really is the final showdown.
+Seems to have worked this time somehow. It really is the final showdown.
 
     kinit bob
     klist
     ldapwhoami -Q -Y GSSAPI -H ldapi:///
     
-Looks like bob came through after all, a ticket was successfully created.
-BUT! ldapwhoami still doesn't work.
+Looks like `bob` came through after all, a ticket was successfully created.
+BUT! `ldapwhoami` still doesn't work.
 
     ldap_sasl_interactive_bind: Local error (-2)
             additional info: SASL(-1): generic failure: GSSAPI error: Unspecified GS
@@ -3017,11 +3018,11 @@ reference LOL. I mean, who would expect the name of the computer to pop up here?
      were supplied, or the credentials were unavailable or inaccessible (Permission 
     denied)
 
-Look who's back, it's error 80. Never a good sign.
+Look who's back, it's `error 80`. Never a good sign.
 At least we seem to be on the right track.
 
-So credentials not available, huh? Either they failed to be added by 'kadmin.local',
-or the file in not accessible due to rights issues. Or I need to restart slapd.
+So credentials not available, huh? Either they failed to be added by `kadmin.local`,
+or the file in not accessible due to rights issues. Or I need to restart `slapd`.
 Let's try some of these things!
 
     sudo systemctl restart slapd
@@ -3041,57 +3042,57 @@ A different error, but the same issue...
     sudo chown mumkashi:openldap /etc/krb5.ldap.keytab
     
 I check the file manually and find no issues.
-It contains entries with both the IP and 'mumkashi-virtualbox'.
+It contains entries with both the IP and `mumkashi-virtualbox`.
     
     ldapwhoami -Q -Y GSSAPI -H ldapi:///
     sudo ldapwhoami -Q -Y GSSAPI -H ldapi:///
     sudo chown root:openldap /etc/krb5.ldap.keytab
     
-Same errors as before without sudo and with sudo respectively.
+Same errors as before without `sudo` and with `sudo` respectively.
 
-It looks like 'sudo' is not the problem here. There's some kind of [#temporary_instanity](#temporary_instanity)
+It looks like `sudo` is not the problem here. There's some kind of [#temporary_instanity](#temporary_instanity)
 going on, because this command returns no tickets:
 
     sudo klist
     
-But just 'klist' does. If I do
+But just `klist` does. If I do
 
     sudo kinit bob
     
-~~Now I see one ticket with 'sudo klist' and two tickets with 'klist'.~~
+~~Now I see one ticket with `sudo klist` and two tickets with `klist`.~~
 ~~Never mind, I can see both with both, I was confused I guess.~~
 Never mind, they are totally different pairs of tickets, what the fuck.
 
-Furthermore, now 'ldapwhoami' gives the same error regardless
-of 'sudo' usage (Permission denied).
+Furthermore, now `ldapwhoami` gives the same error regardless
+of `sudo` usage (Permission denied).
 
 [#motherfucking_elrond](#motherfucking_elrond) was there, 3000 years ago...
 solving the same damn problem. Doesn't look like he had much luck.
-The cache files he's talking about can be found in '/tmp' directory.
-You can see the specific ones used by entering 'klist' or 'sudo klist'.
-I try to change permissions to let openldap read them, but to no avail.
+The cache files he's talking about can be found in `/tmp` directory.
+You can see the specific ones used by entering `klist` or `sudo klist`.
+I try to change permissions to let OpenLDAP read them, but to no avail.
 
 It's becoming clear that I need to dig deeper.
-Using something like '-d 63' on the commands was just not cutting it.
-I need something like the logs of the LDAP itself.
+Using something like `-d 63` on the commands was just not cutting it.
+I need something like the logs of the OpenLDAP itself.
 
 There's some hints on [this page](https://support.microfocus.com/kb/doc.php?id=7006929).
-It says logs should be in this file '/var/log/messages'.
+It says logs should be in this file `/var/log/messages`.
 Of course, it doesn't exist. But there are some random log files in the directory.
-I open one out of curiosity, namely 'syslog' and find this:
+I open one out of curiosity, namely `syslog` and find this:
 
     Jun  1 16:46:24 mumkashi-VirtualBox kernel: [15296,445433] audit: type=1400
     audit(1654091184.503:107): apparmor="DENIED" operation="open" profile="/usr/
     sbin/slapd" name="/etc/krb5.ldap.keytab" pid=2236 comm="slapd"
     requested_mask="r" denied_mask="r" fsuid=128 ouid=0
     
-Motherfucker... this entire time it couldn't even open the bloody keytab file.
-At least that's what I'm getting here. Looking up 'slapd cant open keytab file'
+Motherfucker... this entire time it couldn't even open the bloody `keytab` file.
+At least that's what I'm getting here. Looking up `slapd cant open keytab file`
 on google we find [#common_errors](#common_errors), specifically
 
     C.2.4. GSSAPI: gss_acquire_cred: Miscellaneous failure; Permission denied;
 
-Well, well, well. Looks familiar. GSSAPI, check. Permission denied, check.
+Well, well, well. Looks familiar. `GSSAPI`, check. `Permission denied`, check.
 If only the command would tell me the file which it couldn't open, this would've
 been solved lickety-split. But no, I had to **RANDOMLY** stumble upon the fact
 by looking at a **RANDOM** log file I only found **RANDOMLY**.
@@ -3102,13 +3103,15 @@ we got in [#fusion](#fusion):
     chown ldap:ldap /etc/openldap/ldap.keytab
     chmod 600 /etc/openldap/ldap.keytab
 
-I've looked it up, and chmod can be deciphered by treating every number as
-a set of 3 flags. 6 = 4 + 2 = write + read. There are 3 numbers because files
-have 3 boxes to select permissions in, I guess: owner, group and others.
+I've looked it up, and `chmod` can be deciphered by treating every number as
+a set of 3 flags. `6 = 4 + 2 = write + read`. There are 3 numbers because files
+have 3 boxes to select permissions in, I guess: `owner`, `group` and `others`.
 
-But that's not important. What's important is that the owner/group used here is 'ldap',
-not 'openldap' like in the guide. And this is coming from 'openldap.org',
-so it can't be that they messed up. Well, it totally can, I have come to expect this.
+But that's not important.
+What's important is that the `owner/group` used here is `ldap`,
+not `openldap` like in the guide.
+And this is coming from `openldap.org`, so it can't be that they messed up.
+Well, it totally can, I have come to expect this.
 But I'm willing to give one last shot at good faith here.
 
     sudo chown root:ldap /etc/krb5.ldap.keytab
@@ -3123,14 +3126,14 @@ Blegh, of course it doesn't work.
     sudo chown slapd /etc/krb5.ldap.keytab
     > chown: invalid user 'slapd'
 
-A long shot, but the log did contain 'slapd' as something specific.
+A long shot, but the log did contain `slapd` as something specific.
 Hmm... I have an idea.
 
     sudo chmod 666 /etc/krb5.ldap.keytab
     sudo systemctl restart slapd
 
-Still doesn't work. Even **THE DEVIL** cannot make this file readable by slapd.
-Either that, or 'others' doesn't mean 'others' for some reason.
+Still doesn't work. Even **THE DEVIL** cannot make this file readable by `slapd`.
+Either that, or `others` doesn't mean "others" for some reason.
 
 Enough fucking around. We need to find out what user was ultimately used, I guess.
 It's time to discover [#the_dirty_truth](#the_dirty_truth)...
@@ -3140,16 +3143,16 @@ It's time to discover [#the_dirty_truth](#the_dirty_truth)...
     id -nu 128
     > openldap
 
-And from messing around with permissions, the log part 'fsuid=128' seems to indicate
+And from messing around with permissions, the log part `fsuid=128` seems to indicate
 which user id was used.
 
 So... let me get this straight... you can... own the file... have the file belong
 to your group... have the file be readable by you, the group AND everyone else...
 **AND STILL NOT BE ABLE TO OPEN THE FILE???** WHAT THE ACTUAL FUCK???
 
-This can't be the case of "maybe it's trying to access the wrong file", because
-the logs also contain owner id: 'ouid=0', which changed to 'ouid=128' when I changed
-the owner from 'root' to 'openldap'.
+This can't be the case of "maybe it's trying to access the wrong file",
+because the logs also contain owner id: `ouid=0`,
+which changed to `ouid=128` when I changed the owner from `root` to `openldap`.
 
     sudo chmod 777 /etc/krb5.ldap.keytab
     
@@ -3158,38 +3161,42 @@ Still nothing.
     sudo chmod 777 /
     sudo chmod 777 /etc/
     
-[#read_you_fools](#read_you_fools)! READ THE FILE DAMN IT! WHY WON'T YOU READ THE FILE???
+[#read_you_fools](#read_you_fools)! READ THE FILE DAMN IT!
+WHY WON'T YOU READ THE FILE???
 
 How? How is this even possible? It also can't be file weirdness, because I was able
 to open the file with a bloody text editor when I set it as owned by me.
-It's owned by 'openldap' now, but I guess it just can't do it. It won't open.
+It's owned by `openldap` now, but I guess it just can't do it. It won't open.
 It's bolted shut. I've seen better displays of foliage.
 I DON'T EVEN KNOW IF THAT IS THE RIGHT QUOTE AND I DON'T CARE ANYMORE!
 
 [#oh_my_fucking_god](#oh_my_fucking_god)! This entire time it was something else.
-I randomly google'd random parts of the system message 'apparmor="DENIED" operation="open"'
-and I discovered that some random program that I never setup in any way shape or form
-that I could remember was randomly blocking access to my random files for no fucking
-reason. And without informing me in any way, shape or form. What the fuck, Ubuntu?
-I only exposed almost everything with 'chmod 777' while trying to fix this.
+I randomly google'd random parts of the system message
+`apparmor="DENIED" operation="open"` and I discovered that some random program
+that I never setup in any way shape or form was randomly blocking access
+to my random files for no fucking reason.
+And without informing me in any way, shape or form. What the fuck, Ubuntu?
+I only exposed almost everything with `chmod 777` while trying to fix this.
 Such security, much carnage prevented.
 
-Like, seriously? Where was this "apparmor" when I was trying to edit the files
+Like, seriously? Where was this `apparmor` when I was trying to edit the files
 using a text editor with my normal user account? Not important no more, eh?
 But a program reading a file owned by its user - can't have that!
 Computor might explode after all!
 
-I /spit on this garbage.
+I `/spit` on this garbage.
 
     sudo apt install apparmor-utils
     sudo aa-disable slapd
     ldapwhoami -Q -Y GSSAPI -H ldapi:///
     > dn:uid=bob,cn=gssapi,cn=auth
 
-I feel just about as betrayed and fucked as when I beat random 'Dark Souls 3' bosses
-finally after slamming my head against them. And if you somehow like 'Dark Souls 3'
-just pretend I said 'Elden Ring', never played that but everyone that dislikes it
-uses the same exact arguments I used for 'Dark Souls 3', so it should still make sense.
+I feel just about as betrayed and fucked as when I finally beat some of
+`Dark Souls 3` bosses after slamming my head against them.
+And if you somehow like `Dark Souls 3` just pretend I said `Elden Ring`,
+never played that, but everyone that dislikes it
+uses the same exact arguments I used for `Dark Souls 3`,
+so it should still make sense.
 
 ### No place like home
 
