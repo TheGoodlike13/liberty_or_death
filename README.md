@@ -4061,7 +4061,7 @@ for SPNEGO as well, I will seriously evaluate the continuation of this toy proje
 
 I preface this chapter like this partly because I get the feeling that SPNEGO
 could be another mountain full of hydras with mountains of heads,
-based on a cursory glance in what's required to get it going.
+based on a cursory glance at what's required to get it going.
 
 I hope I'm wrong, but if not, you know I'll give it a full paragraph
 of mean words as a send off, so there's that to look forward to at least.
