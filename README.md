@@ -3,7 +3,7 @@
 ### The following document is rated R18 for violence and nudity.
 ### Please refer to [Summary of summaries](#summary-of-summaries) for a (relatively) SFW version.
 
-# Trying to setup SSO for a liberty application (from zero)
+# Trying to setup SSO for a Liberty application (from zero)
 
 ### [1. Setting up a liberty server that works](#setting-up-a-liberty-server-that-works)
 #### [1.1. Dear diary,](#dear-diary)
@@ -34,6 +34,7 @@
 #### [2.17. Back to the roots](#back-to-the-roots)
 ##### [2.17.1. Hell in summary](#authentication-hell-in-summary)
 ### [3. (SPN)EGO death](#spnego-death)
+#### [3.1. It's over 4000!](#its-over-4000)
 ### [4. Summary of summaries](#summary-of-summaries)
 
 Links to various resources referred to (try [web archive](https://archive.org/) if down, should work for most):
@@ -4037,6 +4038,34 @@ Don't forget to set the correct IP, port, domain, etc. `baseDN` should be the do
 Note: this is a bare-bones setup for demonstration/education purposes only.
 
 ## (SPN)EGO death
+
+### It's over 4000!
+
+The title of this chapter refers to the amount of lines in this document.
+I did not expect it would take this much to get anything like a working example
+going... truly a story of twists and turns.
+The biggest turn would possibly be an abandonment of this project.
+I honestly have considered this many times, with increasing seriousness
+as time moved forward.
+
+Partly, of course, because nobody should be working on a single thing for this long.
+Not even in a practical sense, but a duty sense. There's other things waiting
+while I am fucking around here with this veritable mess of dysfunctional systems.
+
+With that in mind, I will have a much more stringent criteria
+for what is reasonable to proceed with. I've genuinely achieved enough knowledge
+where I could configure LDAP and Kerberos in a Liberty application
+with some confidence. Therefore, if at any point forward I deem that this is true
+for SPNEGO as well, I will seriously evaluate the continuation of this toy project.
+
+I preface this chapter like this partly because I get the feeling that SPNEGO
+could be another mountain full of hydras with mountains of heads,
+based on a cursory glance in what's required to get it going.
+
+I hope I'm wrong, but if not, you know I'll give it a full paragraph
+of mean words as a send off, so there's that to look forward to at least.
+
+Anyway, off we go!
 
 ## Summary of summaries
 
