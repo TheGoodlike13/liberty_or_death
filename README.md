@@ -3201,18 +3201,18 @@ so it should still make sense.
 ### No place like home
 
 At this stage we finally have something working on our VM.
-Perhaps it's possible to connect this mess to the application at last?
+Perhaps it's possible to connect this mess to the Liberty application at last?
 While LDAP & Kerberos specific things are still rather cryptic,
 [#open_security](#open_security) seems to be a nice introduction to just adding
 security to your application. It deals with both authentication and authorization,
-but I'd say we don't really care about the second part. SSO is all about the auth,
-after all.
+but I'd say we don't really care about the second part.
+SSO is all about the auth, after all.
 
 I download the source and try to run the finished product, as instructed.
 
     mvn liberty:run
 
-But it doesn't work. 'mvn' doesn't exist. So I run it via IntelliJ Idea instead.
+But it doesn't work. `mvn` doesn't exist. So I run it via `IntelliJ Idea` instead.
 
 But it doesn't work. It launches successfully, sure, but when I click on the link
 from console
@@ -3240,20 +3240,20 @@ encounters it specifically when dealing with some guide, but no resolution
 can be found there.
 
 How about some insanity then? You see, I had renamed the project a bit.
-You can see in the link above that I added '-finish' suffix in pom.xml:
+You can see in the link above that I added the `-finish` suffix in `pom.xml`:
 
     <artifactId>guide-security-intro-finish</artifactId>
 
 This is very logical. After all, the guide has two versions of the project.
-One that's 'just started' (it's clearly not JUST started), one that's 'finished'.
+One that's "just started" (it's clearly not JUST started), one that's "finished".
 If I import them both to IntelliJ idea, they end up under the same name.
-And I need to run the 'mvn' commands through there, so it would be very confusing
+And I need to run the `mvn` commands through there, so it would be very confusing
 and error prone to keep it this way. What could we do to avoid issues?
-I know! I'll add '-start' and '-finish' suffixes to their names!
+I know! I'll add `-start` and `-finish` suffixes to their names!
 That way I can differentiate between them without issue!
 
 Except it doesn't work, as you've seen above.
-As soon as I removed the suffix '-finish', the link in console became
+As soon as I removed the suffix '`-finish`, the link in console became
 
     http://localhost:9080/
     
@@ -3271,16 +3271,16 @@ Anyway, now that it works, I'm going to systematically remove everything
 I possibly can until it stops working. This way I'll know precisely which parts
 I need to add to my project.
 
-The first thing I remove is the 'ServletSecurity' annotation and 'SecurityContext'.
+The first thing I remove is the `ServletSecurity` annotation and `SecurityContext`.
 No issues as expected.
 
-I remove default httpEndpoint config as it seems to be useless.
-I do this on the pom.xml too.
+I remove default `httpEndpoint` config as it seems to be useless.
+I do this on the `pom.xml` too.
 
-I can't seem to move the URL from '/home' to '/' as that bricks.
-It doesn't work even if I remove 'index.html'.
-It also doesn't work if I replace 'index.html' with a servlet with redirect.
-But after doing a hard refresh (CTRL+F5) on '/', I no longer get the generic page.
+I can't seem to move the URL from `/home` to `/` as that bricks.
+It doesn't work even if I remove `index.html`.
+It also doesn't work if I replace `index.html` with a servlet with redirect.
+But after doing a hard refresh (`CTRL+F5`) on `/`, I no longer get the generic page.
 So that's nice.
 
 I accidentally run the application twice which makes it brick.
@@ -3294,54 +3294,56 @@ No, really, it's stuck on this:
 And even restarting the PC doesn't help. Maybe if I delete the build folder?
 Yep, good enough.
 
-I try to remove references on @LoginToContinue annotation. Doesn't work.
-It does have default values, but they do not have '.html' suffix.
+I try to remove references on `@LoginToContinue` annotation. Doesn't work.
+It does have default values, but they do not have `.html` suffix.
 If I rename the files to those values, they end up printed as text, not HTML.
 So the form doesn't work.
 
-I inline userRegistry.xml into server.xml. No problem.
+I inline `userRegistry.xml` into `server.xml`. No problem.
 
-The in-lined XML is wrapped with a 'server' tag which seems duplicate.
+The in-lined XML is wrapped with a `server` tag which seems duplicate.
 Removing it works fine.
 
-I try to move the html files to 'config' folder. Doesn't work.
+I try to move the html files to `config` folder. Doesn't work.
 This means they have to be in their specific folder. Not good.
 I checked [#gradle_plugin_deeper](#gradle_plugin_deeper) and couldn't find
 any references to a web folder there. Maybe it's somewhere in the project?
 
-I delete the NoCacheFilter. I muck around with pages, they don't seem to be cached.
+I delete the `NoCacheFilter`. I muck around with pages, they don't seem to be cached.
 
-*Editor's note: Some pages (namely index.html) were cached.
-Better not delete this!*
+*Editor's note: Some pages (namely index.html) were cached. Better not delete this!*
+*Editor's note 2: Some pages are cached with or without it. I give up*
 
 Replacing the redirect with this code
 
     response.getWriter().println("Well, would you look at that.");
     
 Just prints the code. Even if I clear cookies. Hmm.
-Same thing happens if I redirect into a simple '.html' page. How odd.
-This only works when using '.jsf' redirect! How unnecessarily specific!
+Same thing happens if I redirect into a simple `.html` page. How odd.
+This only works when using `.jsf` redirect! How unnecessarily specific!
 
-If I remove the security configuration from 'web.xml', it no longer asks
+If I remove the security configuration from `web.xml`, it no longer asks
 for login either. How annoying.
 
-First I remove just the user definition and related files, leaving just admin.
+First I remove just the user definition and related files, leaving just `admin`.
 Seems fine so far.
 
-It is possible to remove the 'security-role' for 'admin', but that seems a bit much.
-The reference to it in the 'auth-constraint' becomes red and it definitely cannot
-be removed itself. Although it works as long as its in 'auth-constraint' anyway.
+It is possible to remove the `security-role` for `admin`, but that seems a bit much.
+The reference to it in the `auth-constraint` becomes red and it definitely cannot
+be removed itself. Although it works as long as its in `auth-constraint` anyway.
 
-'welcome-file-list' seems unnecessary.
+`welcome-file-list` seems unnecessary.
 
-'servlet' is needed, or all pages break, including home.
-'servlet-mapping' is needed, or you won't be able to redirect to '.jsf' files.
+`servlet` is needed, or all pages break, including home.
+`servlet-mapping` is needed, or you won't be able to redirect to `.jsf` files.
 
-'display-name' is not needed.
+`display-name` is not needed.
 
-'error-page' for HTTP403 is only needed if you care about authorization. I don't.
+`error-page` for `HTTP 403` is only needed if you care about authorization. I don't.
 
-All the extra users and groups in 'server.xml' are not needed.
+*Editor's note: Because authorization cannot be escaped, you may wanna keep it.*
+
+All the extra users and groups in `server.xml` are not needed.
 
 Groups themselves are not needed. You can do this:
 
@@ -3351,62 +3353,62 @@ Groups themselves are not needed. You can do this:
       </security-role>
     </application-bnd>
 
-The application tag doesn't need anything but location and context root.
-We know about location from before, and context root is necessary to avoid
-the 'Context Root Not Found' error.
+The `application` tag doesn't need anything but `location` and `context root`.
+We know about `location` from before, and `context root` is necessary to avoid
+the `Context Root Not Found` error.
 
-Descriptions, ids and realm on the registry are not needed.
+`Descriptions`, `ids` and `realm` on the `registry` are not needed.
 
-Microprofile dependency from 'pom.xml' seems optional.
+`Microprofile` dependency from `pom.xml` seems optional.
 
-UserBean and Utils class seem to be not needed either.
+`UserBean` and `Utils` class seem to be not needed either.
 
-Finally a breakthrough on the 'faces' front.
-You can remove 'faces' feature entirely, including the '.xhtml' file,
-replacing it with a simple '.html' file.
+Finally a breakthrough on the `faces` front.
+You can remove `faces` feature entirely, including the `.xhtml` file,
+replacing it with a simple `.html` file.
 All you need to do is replace the redirect in the servlet,
-and then in security configuration replace reference to '.jsf'
-with '/home', which is our servlet. That works.
+and then in security configuration replace reference to `.jsf`
+with `/home`, which is our servlet. That works.
 
-With this we can also remove 'servlet' and 'servlet-mapping' from 'web.xml'.
-It seems they were 'faces' related.
+With this we can also remove `servlet` and `servlet-mapping` from `web.xml`.
+It seems they were `faces` related.
 
 That seems to be the limit, so let's summarize what we DO need.
 
 #### Liberty authentication in summary
 
-In pom.xml:
+In `pom.xml`:
 
-1. 'jakarta.jakartaee-api' dependency (provided/compileOnly).
+1. `jakarta.jakartaee-api` dependency (provided/compileOnly).
 
-In server.xml:
+In `server.xml`:
 
-1. 'app-security' and 'servlet' features.
-2. Some kind of user registry, e.g. 'basicRegistry' for username and password pairs.
-3. Context root attribute for 'application'. This should point to '/'.
-4. 'application-bnd' sub-element for 'application' which defines a role for users.
+1. `app-security` and `servlet` features.
+2. Some kind of user registry, e.g. `basicRegistry` for username and password pairs.
+3. `Context root` attribute for `application`. This should point to `/`.
+4. `application-bnd` sub-element for `application` which defines a role for users.
 
-In web directory:
+In `web` directory:
 
-1. 'index.html' which will map onto the context root. All it will do it redirect
-to your servlet via '\<body onload="window.location.assign('/home')"/>' ('home'
-here refers to servlet location).
-2. Three HTML pages: login form, success (optional) and failure.
-3. In 'WEB-INF/web.xml' which defines 'security-role'and 'security-constraint'.
-The role must match the one in 'server.xml'.
-It must also be used to constrain '/home' (wherever your servlet is).
+1. `index.html` which will map onto the `context root`.
+All it will do it redirect to your servlet via
+`\<body onload="window.location.assign('home')"/>`
+(`home` here refers to servlet location).
+2. Three HTML pages: `login` form, `success` (optional) and `failure`.
+3. `WEB-INF/web.xml` which defines `security-role` and `security-constraint`.
+The role must match the one in `server.xml`.
+It must also be used to constrain `home` (wherever your servlet is).
 
 In source:
 
-1. Servlet with mapping from the redirect in 'index.html'.
-2. Annotated with @FormAuthenticationMechanismDefinition, which is configured with
-@LoginToContinue, which is configured with login & error pages from web directory.
-3. On GET, redirect to success page. Or do whatever.
-Success page with logout is convenient though.
+1. Servlet with mapping from the redirect in `index.html`.
+2. Annotated with `@FormAuthenticationMechanismDefinition`,
+which is configured with `@LoginToContinue`,
+which is configured with `login` & `error` pages from the `web` directory.
+3. On `GET`, redirect to `success` page. Or do whatever.
+`Success` page with logout is convenient though.
 
-This is a very basic setup for demonstration purposes, and probably unfit for prod.
-But that's not the point. The point is to try to get it to work.
-So it can be understood :D
+Note: this is a bare-bones setup for demonstration/education purposes only.
 
 #### Auth in this project
 
@@ -4032,9 +4034,7 @@ Example user from [#ray_of_hope](#ray_of_hope): `uid=testuser,ou=people,o=ibm,c=
 Don't forget to set the correct IP, port, domain, etc. `baseDN` should be the domain.
 `bindDN` and `bindPassword` should be admin username and password.
 
-Finally, none of this should be considered reasonable for production whatsoever.
-But it can serve as a working example to try and understand what the configuration
-does, specifically.
+Note: this is a bare-bones setup for demonstration/education purposes only.
 
 ## (SPN)EGO death
 
