@@ -3412,16 +3412,16 @@ Note: this is a bare-bones setup for demonstration/education purposes only.
 
 #### Auth in this project
 
-With faces gone, the primary issue is finding the 'web' folder configuration.
-I suppose I'm also not sure why we can't have '/' secured,
+With `faces` gone, the primary issue is finding the `web` folder configuration.
+I suppose I'm also not sure why we can't have `/` secured,
 but if it doesn't work, it doesn't work.
 
-I also guess we could use the default: 'src/main/webapp',
+I also guess we could use the default: `src/main/webapp`,
 but that would break my project structure.
-Plus, if we can configure away 'config' directory,
-surely we can also do the same for web?
+Plus, if we can configure away `config` directory,
+surely we can also do the same for `web`?
 
-Let's try dumping it all into '/config' first. That would be nice if it worked.
+Let's try dumping it all into `config` first. That would be nice if it worked.
 
 We run into a different error first, though:
 
@@ -3432,7 +3432,7 @@ We run into a different error first, though:
 Odd, since this never happened with the other project...
 maybe something weird is cached.
 
-Nope, I get the same error when I delete the '.build' directory.
+Nope, I get the same error when I delete the `.build` directory.
 
 I try to add
 
@@ -3440,14 +3440,14 @@ I try to add
     
 but this doesn't seem to be the issue.
 
-I comment away 'implementation 'javax.servlet:javax.servlet-api:3.1.0'
-as 'jakarta.jakartaee-api' provides those implementations already.
-I do need to fix the imports in 'TestServlet'.
+I comment away `implementation 'javax.servlet:javax.servlet-api:3.1.0'`
+as `jakarta.jakartaee-api` provides those implementations already.
+I do need to fix the imports in `TestServlet`.
 However, this does not fix the issue.
 
-It's clear there's some [#compatibility_issue](#compatibility_issue),
+It's clear that there's some [#compatibility_issue](#compatibility_issue),
 but it's not clear how it has come about.
-'builtinAuthentication-1.0' isn't something I've configured, after all.
+`builtinAuthentication-1.0` isn't something I've configured, after all.
 I decide to revert to older versions that don't conflict:
 
     <featureManager>
@@ -3455,11 +3455,11 @@ I decide to revert to older versions that don't conflict:
         <feature>servlet-3.1</feature>
     </featureManager>
 
-Finally the application runs. However, when I click the localhost I get
-redirected to... '/home'... even though my 'TestServlet' is in '/test'...
+Finally the application runs. However, when I click the `localhost` I get
+redirected to... `/home`... even though my `TestServlet` is in `/test`...
 
 I try to double check on my other application only to find it has ALSO bricked???
-Whether I remove 'index.html' or not, it redirects to '/home'?
+Whether I remove `index.html` or not, it redirects to `/home`?
 And gives the same error?
 
     Error 404: java.io.FileNotFoundException: SRVE0190E: File not found: /home 
@@ -3468,40 +3468,40 @@ This is so weird I'm gonna assume something went wrong when closing a server
 and we have some zombie server eating my requests or something.
 I'm gonna restart PC and see what happens.
 
-Alright, now it makes sense. The stupid page which used to redirect to '/home'
+Alright, now it makes sense. The stupid page which used to redirect to `/home`
 was cached by the browser. How utterly annoying. Such things should be off
-by default... ~~I return the NoCacheFilter class back and this seems to fix it.~~
-And no matter what I do, it still caches the stupid localhost from another
-application... I give up. I don't care. I'll just make it redirect to '/test'
+by default... ~~I return the `NoCacheFilter` class back and this seems to fix it.~~
+And no matter what I do, it still caches the stupid `localhost` from another
+application... I give up. I don't care. I'll just make it redirect to `/test`
 in both cases. That'll fix it. Except this time even though I **REMOVED** the
 no-caching filter... it didn't cache it...
 
-Moving everything to '/config/webapp' doesn't help the app to find things.
-I am concerned, however, because I also couldn't find '/test' directory either.
-It used to be mapped, but when we changed everything to 'jakarta.jakartaee-api',
-it seems to be lost.
+Moving everything to `/config/webapp` doesn't help the app find things.
+Another concerning thing is that `/test` is no longer accessible.
+It used to be mapped, but when we changed everything to `jakarta.jakartaee-api`,
+it seems to have been lost.
 
-After moving everything to '/src/main/webapp' in a last ditch effort,
+After moving everything to `/src/main/webapp` in a last ditch effort,
 things go even more wild somehow. Instead of giving me the form,
-the page demands login... even in '/'. I refuse, which leaves the page blank.
-If I navigate to '/test' myself, then finally login using the browser form...
-it still gives me error. Although I can manually navigate to 'success.html'
-I suppose. That might be a good reason to put a limit on it instead of '/home'.
+the page demands login... even in `/`. I refuse, which leaves the page blank.
+If I navigate to `/test` myself, then finally login using the browser form...
+it still gives me error. Although I can manually navigate to `success.html`
+I suppose. That might be a good reason to put a limit on it instead of `/home`.
 This default behavior is making me go nuts.
 
 Except while this works in the example app, it doesn't work for this one,
 even if I clear cookies. Maybe I need to clear cookies AND cache?
-Nope, still no protection. What if I reset it to '/test' and restart?
+Nope, still no protection. What if I reset it to `/test` and restart?
 Nope. The browser has just gone nuts from this application. It only works
 like before in private window, and then (I assume) it prevents ANY page from
 being accessed without password. For no reason.
 
-At least there are no caching problems with webapp...
+At least there are no caching problems with `webapp`...
 
 So I re-install the WHOLE GRADLE and finally the features with updated versions
 work. Except they work the same as old versions, which is completely different
-from the example. What the fuck? I even try multiple jakarta versions, and we still
-get an error on the TestServlet.
+from the example. What the fuck? I even try multiple `jakarta` versions,
+and we still get an error on the path mapped in the `TestServlet`.
 
 So I come back the other day and try to break the [#gradle_example_app](#gradle_example_app),
 but I am unsuccessful. What happens instead is that rather than the example app
@@ -3515,9 +3515,9 @@ That's right folks! I have **NO IDEA** why this works. Only that it does.
 Somehow. I guess you should start with the example app, get it working,
 then start making changes. That's the only sane way to make sense of this.
 
-As a final touch, I realize that the '.html' files are contained in '.war'.
+As a final touch, I realize that the `.html` files are contained in `.war`.
 So changing their location is done via [war task](https://docs.gradle.org/6.9.2/dsl/org.gradle.api.plugins.WarPluginConvention.html)
-and not liberty. Thankfully this works easily.
+and not `liberty`. Thankfully this works easily.
 
 ### Not putting it all together
 
