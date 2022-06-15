@@ -2723,8 +2723,9 @@ and I have no idea if its because of `3` & `4` or some other reason >.<
 ### The Fiddler purges
 
 I'm still somewhat daunted by the prospect of redo-ing the whole VM installation.
-It's not that I'm lazy or anything. I just like to do things when I understand precisely
-what it is that I am doing. When something is nebulous or unclear, I lose motivation,
+It's not that I'm lazy or anything.
+I just like to do things when I understand precisely what it is that I am doing.
+When something is nebulous or unclear, I lose motivation,
 because I don't even know what I will achieve in the process.
 
 So I say, let's make those modules I installed [#burn_in_hell](#burn_in_hell).
@@ -2735,9 +2736,10 @@ I'll remove them all, then do a "fresh" installation. Take that!
     sudo apt install slapd ldap-utils
     sudo dpkg-reconfigure slapd
 
-I enter the same things as before, except simplify my domain to 'goodlike.eu'.
+I enter the same things as before, except simplify my domain to `goodlike.eu`.
 Then I proceed to use the [#fusion](#fusion) page again, in order.
-Surprisingly, this time the password for the admin that I enter when setting up LDAP works!
+Surprisingly, this time the password for the admin
+that I enter when setting up LDAP works!
 And I even managed to add the index that previously refused to be added!
 Is this finally the break we've been waiting for? No. Something else doesn't work.
 
@@ -2747,36 +2749,39 @@ The command to modify rights now complains with an entirely different error:
             additional info: <olcAccess> handler exited with 1
 
 There seems to be some evidence that this is just a [syntax error](https://serverfault.com/questions/1004980/how-to-wrap-long-lines-for-olcaccess),
-but no messing around with the command works. What about putting it into an .ldif file?
-Same error. This time even changing things to {3} and {4} doesn't help, it's just completely
-bricked.
+but no messing around with the command works.
+What about putting it into an `.ldif` file? Same error.
+This time even changing things to `{3}` and `{4}` doesn't help,
+it's just completely bricked.
 
-Something to consider: I kept the file I had previously used to attempt to give rights,
-and it also gives the same error. This at least rules out input problems, as it didn't give
-this kind of error before.
+Something to consider: I kept the file I had previously used to attempt
+to give rights, and it also gives the same error.
+This at least rules out input problems, as it didn't give this kind of error before.
 
-I attempt to use the Fiddler's surprise to enter these values of olcAccess manually,
-but it doesn't work. LDAP just thinks there's an error with the resulting config file.
-It's not that surprising. The values we want to add a very long, and they were carefully
-cut back when this file worked. I have no idea how, though, as I didn't keep those around.
-I thought, foolishly, well, it worked, it couldn't possibly break like this. Ha. HA!
-HAHAHAHAHAHHAHAHAHAHHAHAHHAHAHAHHAAHAHAHAH!
+I use the Fiddler's surprise to enter these values of `olcAccess` manually,
+but it doesn't work. LDAP thinks there's an error with the resulting config file.
+It's not that surprising. The values we want to add a very long,
+and they were carefully cut back when this file worked.
+I have no idea how, though, as I didn't keep those around.
+I thought, foolishly, well, it worked, it couldn't possibly break like this.
+Ha. HA! HAHAHAHAHAHHAHAHAHAHHAHAHHAHAHAHHAAHAHAHAH!
 
 Anyway, I give up and install a whole new VM instance, download updates for it,
 then repeat the steps (except the index one) from this chapter and it now works.
 Because of course. Must've been the wind that broke it.
 
-I re-configure the network once again using 'nm-connection-editor',
+I re-configure the network once again using `nm-connection-editor`,
 then re-configure the network on VirtualBox side as it has gone mad again,
 restart, network works. Hurray. I'm getting good at this. I wish I didn't have to.
 
-I continue following [#fusion](#fusion) instructions all the way up to adding 'bob',
-where we had to stop due to insufficient privileges. And what do you know? It doesn't work.
-Same exact error of insufficient privileges. Because of course.
-At least we know now that originally we had not broken anything with our installation-on-top.
-Until we started fiddling, at least.
+I continue following [#fusion](#fusion) instructions all the way up to adding `bob`,
+where we had to stop due to insufficient privileges. And what do you know?
+It doesn't work. Same exact error of insufficient privileges. Because of course.
+At least we know now that originally we had not broken anything
+with our installation-on-top. Until we started fiddling, at least.
 
-I begin by adding rights to 'dn.subtree="dc=goodlike,dc=eu"' to olcAccess under {2}.
+I begin by adding rights to
+`dn.subtree="dc=goodlike,dc=eu"` to `olcAccess` under `{2}`.
 This time I've added them as an addition for sure.
 But this only continues to brick everything, as I get this error:
 
@@ -2784,23 +2789,28 @@ But this only continues to brick everything, as I get this error:
     ou=Services,dc=goodlike,dc=eu': Invalid credentials while initializing kadmin.lo
     cal interface
     
-At this point I review this entire document to see if I had missed anything, and indeed,
-I had not configured '/etc/ldap/ldap.conf' yet. But fixing it and restarting achieve nothing.
+At this point I review this entire document to see if I had missed anything,
+and indeed, I had not configured `/etc/ldap/ldap.conf` yet.
+But fixing it and restarting achieve nothing.
 
-I'm going to try to add the password to 'uid=kadmin' again, I guess? If this fails
-I guess I'm gonna re-install another VM instance and just add rights to "dc=goodlike,dc=eu"
-subtree from the beginning. This will put a nail in the coffin of whether that's the issue
-or not.
+I'm going to try to add the password to `uid=kadmin` again, I guess?
+If this fails I guess I'm gonna re-install another VM instance
+and just add rights to `dc=goodlike,dc=eu` subtree from the beginning.
+This will put a nail in the coffin of whether that's the issue or not.
 
-I re-installed the VM and tried various configurations with varying degree of failure.
-It never works. I'm giving up on this. By this, however, I mean the 'kdc' and 'kadmin'
-optional setup. We're gonna go straight to root.
+I re-installed the VM and tried various configurations
+with varying degree of failure. It never works. I'm giving up on this.
+By this, however, I mean the `kdc` and `kadmin` optional setup.
+We're gonna go straight to `root`.
 
-Oh my fucking God. How on earth does anyone still continue to use this dilapidated garbage?
-There aren't enough magnum bullets in the world to shoot the next person who suggests using
-this absolutely trash tier nonsensical fucked-in-the-ass system with.
+Oh my fucking God.
+How on earth does anyone still continue to use this dilapidated garbage?
+There aren't enough magnum bullets in the world to shoot the next person
+who suggests using this absolutely trash tier nonsensical fucked-in-the-ass
+system with.
 
-So, I try, I really do, and I put in the thing, with the root permissions, into the command:
+So, I try, I really do, and I put in the thing,
+with the `root` permissions, into the command:
 
     sudo ldapmodify -Q -Y EXTERNAL -H ldapi:/// <<EOF
     dn: olcDatabase={1}mdb,cn=config
@@ -2817,23 +2827,28 @@ So, I try, I really do, and I put in the thing, with the root permissions, into 
       by * none
     EOF
 
-And don't you worry, sonny, I did create the 'ou=kerberos' and 'ou=Services' beforehand,
-so that can't be it.
+And don't you worry, sonny, I did create the `ou=kerberos`
+and `ou=Services` beforehand, so that can't be it.
 
-It doesn't work if I split the commands, it doesn't work if I type them manually or copy,
-other commands which modify olcAccess, like the old ones with 'kdc' and 'kadmin' do work,
-which means I've fucked the configuration for the bazillionth time and will need a full
-re-install of the VM AGAIN just to be sure that whatever breaks in the future is not induced
-by this abject failure, it doesn't work if I google it because the stupid fucking error
-that I get is "oh, I don't know, I'm retarded (80)" and the error is some sort of weird
-catch-all bullshit that is usually associated with putting in one space instead of two spaces
-(that's a treat!) but even despite that being absolutely insane, that's not even the issue!
+It doesn't work if I split the commands, it doesn't work
+if I type them manually or copy. Other commands which modify `olcAccess`,
+like the old ones with `kdc` and `kadmin` do work, which means
+I've fucked the configuration for the bazillionth time and will need a full
+re-install of the VM AGAIN just to be sure that whatever breaks in the future
+is not induced by this abject failure.
+
+It doesn't work if I google it because the stupid fucking error that I get is
+`oh, I don't know, I'm retarded (80)` and the error is some sort of weird
+catch-all bullshit that is usually associated with putting in one space
+instead of two spaces (that's a treat!) but even despite
+that being absolutely insane, that's not even the issue!
 No amount of fucking spaces work!
 
 Fuck it! Why don't I try deleting the spaces so that there's fewer of them?
-Of course it doesn't work. Why would it work? Nothing works. It's just bricked and broken
-and shit and garbage and every other possible mean word in existence that ever has, is
-or will be uttered simultaneously.
+Of course it doesn't work. Why would it work? Nothing works.
+It's just bricked and broken and shit and garbage
+and every other possible mean word in existence that ever has,
+is or will be uttered simultaneously.
 
 ### It's time to back up a little
 
