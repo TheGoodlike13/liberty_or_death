@@ -833,8 +833,9 @@ Could be.
 At work, I've been distracted by other matters and the fact we're moving office.
 Just to a nearby building, but it's still something to consider and take time with.
 
-But life finds a way. For my personal reasons, I needed to connect a shared
-folder to the VM. Mostly to try something in linux.
+But life finds a way. For my personal reasons,
+I needed to connect a shared folder to the VM.
+Mostly to try something in linux.
 
 You can probably guess how this goes. Yes, more pages to the web archive.
 
@@ -843,22 +844,23 @@ Emphasis on try, as I am mostly skimming through it. This does not bode well.
 For example, I immediately skip the part where they tell me to install
 the guest additions CD. Who needs that, amirite?
 
-Well, unsurprisingly, nothing works. I added the folder I wanted to share
-to shared folders, and it is not shared. But, there's a problem even greater.
+Well, unsurprisingly, nothing works.
+I added the folder I wanted to share to shared folders, and it is not shared.
+But, there's a problem even greater.
 You see, far from being shared, I don't even know if it's shared or not.
 Because the guide at [#sharing_is_caring](#sharing_is_caring) fails to inform
 in any way, shape or form what the successful result of their process would
 look like.
 
 One might say, perhaps in their hubris they believe that their guide is so
-flawless as to be impossible to not follow through successfully, after which
-the fact of the matter of shared folder would be apparent.
+flawless as to be impossible to not follow through successfully,
+after which the fact of the matter of a shared folder would be apparent.
 
 One might also say, that is bullshit. You see, after I noticed this obvious
 issue (not without going through every other folder in the VM first, sadly),
 I consulted two [youtube](https://www.youtube.com/watch?v=KPtcGHDdcTk)
-[videos](https://www.youtube.com/watch?v=9-teQnZ8LEY), second in particular
-displaying how a successful shared folder should look like.
+[videos](https://www.youtube.com/watch?v=9-teQnZ8LEY),
+second in particular displaying how a successful shared folder should look like.
 Now, I can't archive these (as far as I know), but the gist of it is,
 you need to insert the guest additions CD and then **install** these additions.
 
@@ -874,13 +876,13 @@ The second video... doesn't do that, because presumably they already did.
 Or their version of VirtualBox is different and does not come with this
 crippling limitation.
 
-Well, maybe I can take a guess. How about 'VBoxLinuxAdditions.run'?
+Well, maybe I can take a guess. How about `VBoxLinuxAdditions.run`?
 Sounds about right. It succeeds. I restart. I don't have a shared folder. Yay.
 
 [#i_cant_believe_youve_done_this](#i_cant_believe_youve_done_this) is another
-resource which mentions that I should expect the shared folder under /media.
-It's not under /media. But the question is about fixing it, so I guess if I
-follow the instructions, I should be good to go!
+resource which mentions that I should expect the shared folder under `/media`.
+It's not under `/media`. But the question is about fixing it,
+so I guess if I follow the instructions, I should be good to go!
 
 First, I need to install the additions. Already done that. Next step.
 
@@ -888,7 +890,10 @@ Second, I need to run the command
 
     sudo adduser {username} vboxsf
 
-I run this command. It doesn't work. "The group 'vboxsf' does not exist."
+I run this command. It doesn't work.
+
+    The group 'vboxsf' does not exist.
+    
 Maybe I didn't install the additions after all :(
 
 Upon further inspection, the answer contains a link to [#who_needs_gui_anyway](#who_needs_gui_anyway)
@@ -896,40 +901,42 @@ which reveals a secret additional step of running
 
     sudo apt-get install -y dkms build-essential linux-headers-generic linux-headers-$(uname -r)
 
-which supposedly will install the pre-requisites for running the actual .run file.
-Either I'm being hard trolled right now, or some dummy really fucked up by
-**not** adding that command to the run file. Or this is just stupid for some
-other stupid reason.
+which supposedly installs the pre-requisites for running the actual `.run` file.
+Either I'm being hard trolled right now, or some dummy really fucked up
+by **not** adding that command to the run file.
+Or this is just stupid for some other stupid reason.
 
-I run the command. It doesn't work. "Bad substitution". Fine then. I'll just
+I run the command. It doesn't work. `Bad substitution`. Fine then. I'll just
 type out the outcome of what I assume to be another command myself.
 
     uname -r
     > 5.15.0-33-generic
     sudo apt-get install -y dkms build-essential linux-headers-generic linux-headers-5.15.0-33-generic
 
-Finally the command succeeds, I proceed to run the .run file.
+Finally the command succeeds, I proceed to run the `.run` file.
 
     sudo /media/{your username}/{Virtual Box CD name}/VBoxLinuxAdditions.run
 
-I had to run it with 'sudo', because it required admin privileges. Maybe that's why it failed
-to achieve anything before. I think I would've noticed that, but at this point the only
-thing preventing my rage from manifesting is the typing of the very sentence you are reading
-right now, so maybe that has something to do with it. Maybe.
+I had to run it with `sudo`, because it required admin privileges.
+Maybe that's why it failed to achieve anything before.
+I think I would've noticed that, but at this point the only thing
+preventing my rage from manifesting is
+the typing of the very sentence you are reading right now,
+so maybe that has something to do with it. Maybe.
 
 Looks like it is successful. It does tell me that I might need to run
-'/sbin/rcvboxadd quicksetup all' to build some kind of modules for kernels.
+`/sbin/rcvboxadd quicksetup all` to build some kind of modules for kernels.
 No idea what's that about. I'll run it if things don't work.
 
-Oh, a new problem. Low Disk Space! On filesystem root! Whatever. You're a VM.
-Deal with it.
+Oh, a new problem. Low Disk Space! On filesystem root!
+Whatever. You're a VM. Deal with it.
 
 I restart Ubuntu. It restarts in the wrong resolution. That's a good sign :D
-And still no shared folder on desktop. How about /media?
+And still no shared folder on desktop. How about `/media`?
 
-Before I even get there, the file explorer shows me "sf_shared", which is my
+Before I even get there, the file explorer shows me `sf_shared`, which is my
 shared folder. But I can't access it because I don't have rights.
-Wait. I remember something like that... wasn't there 'vboxsf' group?
+Wait. I remember something like that... wasn't there `vboxsf` group?
 Let's try that.
 
     sudo adduser {username} vboxsf
@@ -937,60 +944,65 @@ Let's try that.
 I added myself to the group! Yes! Finally! I can see the fo... it doesn't work.
 Still does not give me access. Well, shit.
 
-In frustration, I click the 'other locations' button where I can also see the
-shared folder. But this time when I try to enter it, I am greeted with a password
-prompt. So I enter the password and press enter... and nothing happens.
-So I enter the password and manually click the button which is not 'cancel'
+In frustration, I click the `other locations` button where I can also see the
+shared folder. But this time when I try to enter it,
+I am greeted with a password prompt.
+So I enter the password and press enter... and nothing happens.
+So I enter the password and manually click the button which is not `cancel`
 with my mouse... and it works! I can see inside the folder! Ye gods!
 
 #### Shared folder in summary
 
  1. Run your VM, let it load.
- 2. Select Devices -> Insert guest additions CD image...
- 3. Even though it has '...', it will not open a menu, it will just insert the drive.
- 4. Run console command 'sudo apt-get install -y dkms build-essential linux-headers-generic linux-headers-$(uname -r)'.
- 5. If it fails, replace the $(uname -r) part with output from running 'uname -r' manually.
- 6. Run 'sudo /media/{your username}/{Virtual Box CD name}/VBoxLinuxAdditions.run'.
+ 2. Select `Devices -> Insert guest additions CD image...`
+ 3. Even though it has `...`, it will not open a menu, just insert the drive.
+ 4. Run console command `sudo apt-get install -y dkms build-essential linux-headers-generic linux-headers-$(uname -r)`.
+ 5. If it fails, replace the `$(uname -r)` part with output
+ from running `uname -r` manually.
+ 6. Run `sudo /media/{your username}/{Virtual Box CD name}/VBoxLinuxAdditions.run`.
  7. Shut down your VM.
- 8. In Settings -> Shared Folders, add a folder you want to share.
+ 8. In `Settings -> Shared Folders`, add a folder you want to share.
  9. Make sure it's auto-mounted.
 10. Run your VM.
-11. Run 'sudo adduser {your username} vboxsf'.
-12. In file explorer, if direct link doesn't work, go to 'Other locations'.
+11. Run `sudo adduser {your username} vboxsf`.
+12. In file explorer, if direct link doesn't work, go to `Other locations`.
 13. Click on your shared folder and enjoy. May need to enter password.
 
 #### HDD addendum
 
 Because of the above, the HDD started running out of space.
 Foolishly I pushed it to the absolute limit and the OS did NOT like that :D
-It bricked, and upon restart would give me '/dev/sda3: recovering journal' error.
+It bricked, and upon restart would give me `/dev/sda3: recovering journal` error.
 This was not ideal, so I set out to increase the HDD size.
 
 First on the list is [#thats_kinda_small](#thats_kinda_small).
-Thankfully the Virtual Media Manager allows me to adjust the HDD size under properties.
-Problem solved!
+Thankfully the Virtual Media Manager allows me to adjust
+the HDD size under properties. Problem solved!
 
-Except it doesn't work. Because while the HDD is bigger, the partition which is used
-by the OS is not. So nothing has changed.
+Except it doesn't work. Because while the HDD is bigger,
+the partition which is used by the OS is not. So nothing has changed.
 
 Thankfully the process for increasing the partition is pretty straightforward.
 I'm ready to [#join_the_partitions](#join_the_partitions) together.
 
-I insert the Ubuntu .iso file into the VM. This causes it to be used instead of the
-installation. I choose to try Ubuntu instead of installing it. That boots me right up.
+I insert the Ubuntu `.iso` file into the VM.
+This causes it to be used instead of the installation.
+I choose to try Ubuntu instead of installing it. That boots me right up.
 
-I search for and launch GParted. It gives me some error about 'sda3' not using all
-the space that it could. I agree to fix the issue which does nothing, as far as I can tell.
+I search for and launch `GParted`.
+It gives me some error about `sda3` not using all the space that it could.
+I agree to fix the issue which does nothing, as far as I can tell.
 
-I right click on '/dev/sda3', which now I can see is the primary partition for
-non-system files. 'sda1' and 'sda2' are reserved for that shit.
-I choose the option to 'Resize/Move'. This presents me with a very neat UI element
+Now I can see that `/dev/sda3` is the primary partition for non-system files.
+`sda1` and `sda2` are reserved for system shit. I right-click it.
+I choose the option to `Resize/Move`. This presents me with a very neat UI element
 which I can use to drag or adjust the size of the partition. I maximize it.
 
 For some reason 1MB is still not allocated, even if I repeat the process. Oh well.
-I apply the operation, which had remained pending. I am warned about possible data loss.
+I apply the operation, which had remained pending.
+I am warned about possible data loss.
 I proceed forward recklessly. Success? Let's find out.
-I shut off the VM and restart. At some point the .iso was ejected automatically.
+I shut off the VM and restart. At some point the `.iso` was ejected automatically.
 
 It works! And it even booted in the correct resolution again! Hurray!
 
