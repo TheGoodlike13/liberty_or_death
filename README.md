@@ -956,7 +956,7 @@ with my mouse... and it works! I can see inside the folder! Ye gods!
  1. Run your VM, let it load.
  2. Select `Devices -> Insert guest additions CD image...`
  3. Even though it has `...`, it will not open a menu, just insert the drive.
- 4. Run console command `sudo apt-get install -y dkms build-essential linux-headers-generic linux-headers-$(uname -r)`.
+ 4. Run console command `sudo apt install -y dkms build-essential linux-headers-generic linux-headers-$(uname -r)`.
  5. If it fails, replace the `$(uname -r)` part with output
  from running `uname -r` manually.
  6. Run `sudo /media/{your username}/{Virtual Box CD name}/VBoxLinuxAdditions.run`.
@@ -1348,22 +1348,23 @@ and proceed onto Active Directory/LDAP.
 ### Enter the slap
 
 The network on my PC continues to deteriorate. Long loading times.
-Multiple DHCP problems. Just a random network death. But!
-I did get a message from my network provider that they will be doing some maintenance!
+Multiple DHCP problems. Just a random network death.
+But! I did get a message from my network provider
+that they will be doing some maintenance!
 So who knows. Maybe there's still some hope.
 Remind me to reset my hardware come tomorrow morning.
 
 [#holy_trinity](#holy_trinity) tells us all about Active Directory.
 The first thing that immediately pops out is the extreme focus on Windows.
 That's strange. After all, when I was installing Ubuntu it offered to install
-something or other called "Active Directory". If it was something exclusively
+something or other called `Active Directory`. If it was something exclusively
 related to Windows, surely that would not be possible. Surely the installation
 would just offer me some other equally bizarrely named linux alternative.
 Is this a case for the Mobius chair to explain how there are actually two
-active directories all along?
+Active Directories all along?
 
 At least we can see the familiar faces like LDAP and Kerberos mentioned here.
-Although I'm not very happy when it says "Microsoft's version of Kerberos".
+Although I'm not very happy when it says `Microsoft's version of Kerberos`.
 I'd be pretty mad if my linux setup was all a wild goose chase.
 
 At first I thought my problem was that I was reading wikipedia.
@@ -1374,20 +1375,23 @@ This is some serious [#mandela_effect](#mandela_effect) bullshit.
 Fuck it! We will trust this random person on the internet and put AD aside.
 Let's focus on setting up LDAP. Whatever that looks like.
 
-According to [#slapped](#slapped) I need to start off by installing OpenLDAP.
+According to [#slapped](#slapped) I need to start off by installing `OpenLDAP`.
 That's the key to LDAP in linux. They even provide links for more details
 if things go south. Let's get started!
 
-I just gotta do that 'sudo apt install openldap' and... it doesn't work.
-Admittedly, that is not a command that I've been tasked to run, so I can't
-exactly blame them. On the other hand, if the command that I should have to run
-is so specific, it baffles me why it was not provided explicitly...
+I just gotta do that `sudo apt install openldap` and... it doesn't work.
+Admittedly, that is not a command that I've been tasked to run,
+so I can't exactly blame them. On the other hand,
+if the command that I should have to run is so specific,
+it baffles me why it was not provided explicitly...
 
-So, 'openldap' package does not exist. I guess it's time to consult the
+So, `openldap` package does not exist. I guess it's time to consult the
 [#slapped_8](#slapped_8).
 
-"If you intend to run OpenLDAP Software seriously,
-you should review all of this document before attempting to install the software."
+    If you intend to run OpenLDAP Software seriously,
+    you should review all of this document
+    before attempting to install the software.
+    
 Why so serious? I'll just ignore that.
 
 Immediately we're sent to [#not_so_apt](#not_so_apt) to download things.
@@ -1395,22 +1399,24 @@ Normally, I'd love this shit, but I'm trying to get this done on a linux VM here
 What happened to all the slick one liner programs that just magically install shit?
 Wasn't that part of the appeal? I feel like my illusion has been shattered.
 
-In my stupor, I click on the first download link which is in USA, but it downloads
-very fast anyways. It's kinda small, actually.
+In my stupor, I click on the first download link which is in USA,
+but it downloads very fast anyways. It's kinda small, actually.
 
 I continue following the advice from [#slapped_8](#slapped_8).
-I extract the archive, then start reviewing the text files.
-The license seems OK. But I still don't understand a lot of the things mentioned
-there. Maybe I need a quick "openLDAP for dummies" first.
+I extract the archive, then start reviewing the text files. The license seems OK.
+But I still don't understand a lot of the things mentioned there.
+Maybe I need a quick `openLDAP for dummies` first.
 
-This search leads me to [#dummy_slap](#dummy_slap) which does contain apt commands.
+The search leads me to [#dummy_slap](#dummy_slap) which does have `apt` commands.
 Well, why didn't you say so in the first place? Let's follow this instead.
 
-I think it's the first guide that I don't have many problems with as it actually
-tries to go through things step-by-step instead of making massive leaps of logic.
-The only complaint I could give is lack of a general explanation what am I looking
-at, ideally at every step. Still, a massive improvement over, uh, literally everything.
-Especially IBM. Like, is there some sort of admin mafia, who, if you make a good guide,
+I think it's the first guide that I don't have many problems with
+as it actually tries to go through things step-by-step
+instead of making massive leaps of logic.
+The only complaint I could give is lack of a general explanation
+what am I looking at, ideally at every step.
+Still, a massive improvement over, uh, literally everything. Especially IBM.
+Like, is there some sort of admin mafia, who, if you make a good guide,
 roll up to your front porch at night and dump some dead hard drives on your lawn?
 
     sudo apt update
@@ -1422,23 +1428,23 @@ Let's do that and proceed.
     sudo apt-get install slapd ldap-utils -y
 
 This asks me to enter the password twice, and we continue to use the same password.
-And no, it's not 'password'.
+And no, it's not `password`.
 
     sudo systemctl status slapd.service
     
 Prints a bunch of gibberish. It also locks me from the terminal.
-I had to escape using the CTRL+C trick.
+I had to escape using the `CTRL+C` trick.
 In any case, it seems that this gibberish means things work.
-I test the same command by appending 'z' to the end
+I test the same command by appending `z` to the end
 
     sudo systemctl status slapd.servicez
     
-which prints rightfully that no such servicez could be found.
+which prints rightfully that no such `servicez could be found`.
 
     sudo dpkg-reconfigure slapd
     
-I choose 'goodlike.eu.local' for my domain name. Yikes.
-For the organization I went with 'goodlike_incorporated'. Big yikes.
+I choose `goodlike.eu.local` for my domain name. Yikes.
+For the organization I went with `goodlike_incorporated`. Big yikes.
 Then all proceeded as expected, but I never got to choose a database backend.
 I would just follow the instructions anyway, so that's fine by me.
 
@@ -1455,13 +1461,15 @@ This does indeed report an active status.
     
 This opens what passes for a text editor in linux. Eew. No thanks.
 I'll just find the file in a directory and edit it with notepad equivalent.
-At least I can escape by using CTRL+X.
+At least I can escape by using `CTRL+X`.
 
 Uh oh. The file refuses to be saved because I don't have permissions. Lovely.
-Don't you just love when you can't do basic things like editing text files on your computer?
-And, of course, if you use some arcane and decrepit way of editing via console
-it will definitely work. Just add 'sudo' and it'll work. Why can't it "just work"
-normally then? Rubbish. I'm deleting this VM as soon as I am done.
+Don't you just love when you can't do basic things
+like editing text files on your computer?
+And, of course, if you use some arcane and decrepit way of editing
+via console it will definitely work. Just add `sudo` and it'll work.
+Why can't it "just work" normally then? Rubbish.
+I'm deleting this VM as soon as I am done.
 
     sudo chown {user} /etc/ldap/ldap.conf
 
@@ -1470,8 +1478,9 @@ I change the ownership of the file and then edit it again from scratch.
     BASE    dc=goodlike,dc=eu,dc=local
     URI     ldap://goodlike.eu.local ldap://goodlike.eu.local:389
 
-I'll note that both the default file and the example use port '666' to illustrate.
-But the instructions tells me to use port '389'. We'll stick to instructions, I guess.
+I'll note that both the default file and the example use port `666` to illustrate.
+But the instructions tells me to use port `389`.
+We'll stick to instructions, I guess.
 
 And finally, the last step
  
@@ -1483,16 +1492,18 @@ And finally, the last step
 
 Doesn't seem like that was the problem.
 
-The problem is that the LDAP server cannot be contacted. Which, I suppose, makes sense.
+The problem is that the LDAP server cannot be contacted.
+Which, I suppose, makes sense.
 I've been entering all kinds of URLs that don't exist anywhere.
-Maybe I should try using exact IP address or localhost in config.
+Maybe I should try using exact IP address or `localhost` in config.
 
     URI     ldap://localhost ldap://localhost:389
 
-Good news! Localhost works! So we have successfully identified the problem.
-I suppose instead of using localhost it would be prudent for me to find the IP
-address so I can connect to this thing from outside the VM. I assume that localhost
-will not, in-fact work for connecting to the VM from outside. But maybe it would.
+Good news! `Localhost` works! So we have successfully identified the problem.
+I suppose instead of using `localhost` it would be prudent for me to find
+the IP address so I can connect to this thing from outside the VM.
+I assume that `localhost` will not, in-fact work for connecting
+to the VM from outside. But maybe it would.
 There might be additional problems down the line, but let's hope not.
 
     sudo apt install net-tools
@@ -1500,14 +1511,14 @@ There might be additional problems down the line, but let's hope not.
     
     URI     ldap://10.0.2.15 ldap://10.0.2.15:389
 
-Using the IP address from 'ifconfig -a' also works! Hurray!
+Using the IP address from `ifconfig -a` also works! Hurray!
 
 This does bring up a prudent question. Can I even connect to the VM from my PC?
 
     ping 10.0.2.15
 
-Uh oh. Ping definitely doesn't work, although it might be [fixable](https://stackoverflow.com/questions/18278409/cant-ping-a-local-vm-from-the-host).
-Then again, ping might be too "outside network" specific, for all I know.
+Uh oh. `Ping` definitely doesn't work, although it might be [fixable](https://stackoverflow.com/questions/18278409/cant-ping-a-local-vm-from-the-host).
+Then again, `ping` might be too "outside network" specific, for all I know.
 Then there's also stuff like firewalls to consider... ugh...
 This hydra sure feels like it'll never run out of heads.
 
@@ -1996,7 +2007,7 @@ which would allow them to exist.
 After a short break to snack and slack, I decided to search for the file manually.
 This did not function as an activity. The 'olcDatabase' just can't be found.
 This is where [#a_real_man](#a_real_man) comes in. I couldn't install 'slapd-config'
-using 'apt-get' either, but the folder the page references exists already, so maybe
+using 'apt' either, but the folder the page references exists already, so maybe
 I already did it somehow. Let's hope that's the case.
 
 '/etc/ldap/slapd.d/cn=config/' actually exists too, and it even contains 'olcDatabase'
