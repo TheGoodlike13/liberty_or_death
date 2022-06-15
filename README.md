@@ -4044,7 +4044,8 @@ Note: this is a bare-bones setup for demonstration/education purposes only.
 The title of this chapter refers to the amount of lines in this document.
 I did not expect it would take this much to get anything like a working example
 going... truly a story of twists and turns.
-The biggest turn would possibly be an abandonment of this project.
+
+The biggest possible turn would be an abandonment of this project.
 I honestly have considered this many times, with increasing seriousness
 as time moved forward.
 
