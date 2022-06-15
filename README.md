@@ -1010,192 +1010,234 @@ It works! And it even booted in the correct resolution again! Hurray!
 
 Early morning start today, trying to get something done for a change. *yaaaaaawn*
 
-If I recall correctly, last time we installed Kerberos server by pressing random buttons.
-More or less. Well, let's continue with [#ubuntu_kerberos](#ubuntu_kerberos).
+If I recall correctly, last time we installed Kerberos server
+by pressing random buttons. More or less.
+Well, let's continue with [#ubuntu_kerberos](#ubuntu_kerberos).
 
-Next step appears to be the new realm setup. I thought we had a default realm already.
+Next step appears to be the new realm setup.
+I thought we had a default realm already.
 Well, whatever. I enter the command and it outputs cryptic gibberish to me.
 
-"It's much more important that your password is secure than that you remember it.
-But if you forget it, you can no longer use the database or something."
-That's some hardcore mixed messaging. Thankfully, we don't actually need our password
-to be secure, since, you know, we're only setting up a toy here. I'll make it the same
-as the 'sudo' password for simplicity.
+    It's much more important that your password is secure than that you remember it.
 
-"It is important that you NOT FORGET this password." Yeah, yeah. Whatever you say,
-Mr. President. I enter the password, twice. More cryptic gibberish.
+But if you forget it, you can no longer use the database or something.    
+That's some hardcore mixed messaging.
+Thankfully, we don't actually need our password to be secure,
+since, you know, we're only setting up a toy here.
+I'll make it the same as the `sudo` password for simplicity.
 
-"You may want to create an administrative principal using the addprinc subcommand
-of the kadmin.local program. Then, this principal can be added to /etc/krb56kdc/kadm5.acl ..."
-You know, I vaguely recall being asked to read the fucking manual last time, maybe
-I should spend some time on that. One last note before I go: it asks me to setup DNS
-information. Yeah, right, I'll definitely do that with all those domains I don't have.
+    It is important that you NOT FORGET this password.
+    
+Yeah, yeah. Whatever you say, Mr. President.
+I enter the password, twice. More cryptic gibberish.
 
-Well, I find the README file and... it doesn't work. It opens in some weird program
-which just says that "resource is missing" or something. I forcibly open it with
-a text editor. That works.
+    You may want to create an administrative principal using
+    the addprinc subcommand of the kadmin.local program.
+    Then, this principal can be added to /etc/krb56kdc/kadm5.acl ...
 
-The first few paragraphs harp on about master and slave servers, so they are completely
-irrelevant. There will be only one server. One.
+You know, I vaguely recall being asked to read the fucking manual last time,
+maybe I should spend some time on that. One last note before I go:
+it asks me to setup DNS information.
+Yeah, right, I'll definitely do that with all those domains I don't have.
 
-For some inexplicable reason the README explains how to make your server less secure.
+Well, I find the README file and... it doesn't work.
+It opens in some weird program which just says that `resource is missing`.
+I forcibly open it with a text editor. That works.
+
+The first few paragraphs harp on about master and slave servers,
+so they are completely irrelevant. There will be only one server. One.
+
+For some inexplicable reason the README explains
+how to make your server **less** secure.
 Because people have always suffered from that particular level of lessened security.
-Bold move, but your problem is, this is planet Earth. No, seriously, how about explaining
-more what the hell are you talking about???
+Bold move, but your problem is, this is planet Earth.
+No, seriously, how about explaining more what the hell are you talking about???
 
 My overall impression of the README is, this guy has no idea how to write a README.
-Compared to my prowess, as displayed by this gigantic never ending wall of text, this
-person has years of training to yet undergo. Pathetic.
+Compared to my prowess, as displayed by this gigantic never ending wall of text,
+this person has years of training to yet undergo. Pathetic.
 
-All I've learned is that there's some config files that I might wanna "adjust appropriately".
-Well, let's take a look at them.
+All I've learned is that there's some config files
+that I might wanna `adjust appropriately`. Well, let's take a look at them.
 
 The folder and even the file are protected by password (similar to shared folder).
 I don't get the obsession with asking me to enter the password twice, though.
-I don't mean, once for folder, then another time for the file, although that's a bit
-of a bitch too. No, I mean, I literally have to enter it twice to enter the folder.
-Come on. Give me a break. I'm so glad my password is weak, or else I'd be stuck entering
-it for half a year here.
+I don't mean, once for folder, then another time for the file,
+although that's a bit of a bitch too.
+No, I mean, I literally have to enter it twice to enter the folder.
+Come on. Give me a break. I'm so glad my password is weak,
+or else I'd be stuck entering it for half a year here.
 
-The config itself looks normal. By that I mean I cannot see any immediate shenanigans
-that would make me cringe, and the rest of it looks like any other random config file
-for random application you don't understand. I suppose a few of these properties are
-somewhat parsable. But if I had to figure out what the hell any of them do, I'd start
-by  commenting them out and see what breaks.
+The config itself looks normal.
+By that I mean I cannot see any immediate shenanigans that would make me cringe,
+and the rest of it looks like any other random config file for random application
+you don't understand. I suppose a few of these properties are somewhat parsable.
+But if I had to figure out what the hell any of them do,
+I'd start by commenting them out and see what breaks.
 And I don't even know how to check if something is broken yet.
 So I think I'll leave it alone for now.
 
-Notably, I can't see any 'localhost' in here. That does not bode well :D
+Notably, I can't see any `localhost` in here. That does not bode well :D
 
-Next up, I edit the kadm5.acl file as described in [#ubuntu_kerberos](#ubuntu_kerberos).
-That's just removing one '#', so pretty easy. I guess this is the list of usernames,
-which they insist calling principals for some reason, which have admin access. Whatever
-that gives them. I'll keep it in mind. Goodlike/admin sounds pretty good :D
+Next up, I edit the `kadm5.acl` file as described in [#ubuntu_kerberos](#ubuntu_kerberos).
+That's just removing one `#`, so pretty easy.
+I guess this is the list of usernames,
+which they insist calling principals for some reason, which have admin access.
+Whatever that gives them. I'll keep it in mind.
+`Goodlike/admin` sounds pretty good :D
 
-And of course, the next step is the setup for Kerberos client. I'm gonna go ahead and
-try to setup it on the **same** machine as the server. What could possibly go wrong? :D
+And of course, the next step is the setup for Kerberos client.
+I'm gonna go ahead and try to setup it on the **same** machine as the server.
+What could possibly go wrong? :D
+
+    sudo apt install krb5-user
 
 Uh oh. It says it is set to manually installed. What? I didn't get no prompts.
-Now the prompts I'm supposed to expect are the same as the server ones. Maybe at the time
-I was actually installing the client besides the server? That would be funny.
-Let's pretend that's what happened.
+Now the prompts I'm supposed to expect are the same as the server ones.
+Maybe at the time I was actually installing the client besides the server?
+That would be funny. Let's pretend that's what happened.
 
-With that step skipped, we go back to the server. Time to add a ~~username~~ principal!
-There's just a small tiny issue. 'addprinc' is not found. Great.
+With that step skipped, we go back to the server.
+Time to add a ~~username~~ principal!
+There's just a small tiny issue. `addprinc` is not found. Great.
 
-Well, well, well, looks like my issue was that I was following the guide in good faith.
-Should've gone with [#bad_faith](#bad_faith) instead. Apparently some commands have to
-be executed under 'kadmin' command. Glad I've been informed of this. By someone else!@!
+Well, well, well, looks like my issue was that I was following the guide
+in good faith. Should've gone with [#bad_faith](#bad_faith) instead.
+Apparently some commands have to be executed under `kadmin` command.
+Glad I've been informed of this. By someone else!@!
 
     kadmin.local -q "addprinc {username}"
 
-Ah, except the 'kadmin.local' command doesn't work. It authenticated me as my {user}/admin,
-you know, the one I used as username when installing the Ubuntu itself. But then that
-user gets denied access to the DB2 database. So what is happening? Do I already have
-a {user}/admin principal? Or do I not have it, and that's why I'm denied permission?
+Ah, except the `kadmin.local` command doesn't work.
+It authenticated me as my `{user}/admin`, you know,
+the one I used as username when installing the Ubuntu itself.
+But then that user gets denied access to the DB2 database.
+So what is happening? Do I already have a `{user}/admin` principal?
+Or do I not have it, and that's why I'm denied permission?
 
-I try all other commands listed with similar results. I think my user is not a principal
-at all. Which begs the question, why is it even trying to pretend it is instead of,
-dunno, giving me an error about it. Whatever. I'm so tired of this shit I take a nap.
+I try all other commands listed with similar results.
+I think my user is not a principal at all.
+Which begs the question, why is it even trying to pretend it is instead of,
+dunno, giving me an error about it.
+Whatever. I'm so tired of this shit I take a nap.
 
 I find another [page](https://stackoverflow.com/questions/60273441/kerberos-service-started-with-error-cannot-open-db2-database-on-ubuntu-18)
-with some commands, but they don't seem to be related. I don't need a new realm,
-I already got one. I just can't do anything with it. Restarting the service doesn't
-do anything.
+with some commands, but they don't seem to be related.
+I don't need a new realm, I already got one.
+I just can't do anything with it. Restarting the service doesn't do anything.
 
-In an act of sheer madness I prefix sudo with all the commands and we finally get somewhere.
+In an act of sheer madness I prefix `sudo` with all the commands
+and we finally get somewhere.
 
     sudo kadmin -q "list_principles"
     sudo kadmin.local -q "list_principles"
 
-'sudo kadmin' doesn't work because it can't find root/admin (wait who the hell is root?)
-'sudo kadmin.local' just works. Because of course it does. The command I tried was
-the most inconsequential one (as far as I thought) - 'list_principles'. But instead I'm
-greeter with a list of 4 principals. None of which were my user or root. So how on earth
-is this working???
+`sudo kadmin` doesn't work because it can't find `root/admin`
+(wait who the hell is `root`?)
+`sudo kadmin.local` just works. Because of course it does.
+The command I tried was the most inconsequential one (as far as I thought):
+`list_principles`. But instead I'm greeted with a list of 4 principals.
+None of which were my user or `root`. So how on earth is this working???
 
     sudo kadmin -p kadmin/kadmin -q "list_principles"
 
-Alright, so one of the principals is 'kadmin/admin'. So I try to use 'kadmin/admin' with
-'sudo kadmin', but now it doesn't find the principal.
+Alright, so one of the principals is `kadmin/admin`.
+So I try to use `kadmin/admin` with `sudo kadmin`,
+but now it doesn't find the principal.
 
     sudo kadmin.local -p kadmin/kadmin -q "list_principles"
 
-If I pass this into 'sudo kadmin.local' instead, and misspell it, it still works.
-I don't get it. So anything and everything works if I use .local regardless of principal.
-Nothing works without .local regardless of principal. Also I hate them for using that
-word because I keep misspelling it as 'princip**le**'.
+If I pass this into `sudo kadmin.local` instead, and misspell it, it still works.
+I don't get it.
 
-I read about it in [#localization](#localization), but it doesn't give much explanation.
-It seems like 'kadmin' is intended for modification of the database file, which I assume
-contains information about principals. 'kadmin.local' is some sort bypass for that which
-just allows you to do whatever you want. As long as you run it with 'sudo' and that works.
+So anything and everything works if I use `.local` regardless of principal.
+Nothing works without `.local` regardless of principal. Also,
+I hate them for using that word because I keep misspelling it as 'princip**le**'.
+
+I read [#localization](#localization), but it doesn't give much explanation.
+It seems like `kadmin` is intended for modification of the database file,
+which I assume contains information about principals.
+`kadmin.local` is a bypass for that which allows you to do whatever you want.
+As long as you run it with `sudo`.
 
 Fine. Let's not get ahead of ourselves. We figured out how to make it work.
 Let's return to [#ubuntu_kerberos](#ubuntu_kerberos) and proceed onwards.
 
     sudo kadmin.local -q "addprinc goodlike"
 
-So I use 'kadmin.local' to hack straight into the database and add the 'goodlike' principal.
-But wait. I have to set the password? What? Why would the person on the server set the
-password for the user? How does that make any sense? I mean, luckily, I'm both the server
-and the client, so it works, but how is this supposed to work normally? Is the practice
-something like "generate random password and give it to the user so they can change it later"?
-I would assume you'd automate that away if that was the case... Well, whatever. Let's go.
+So I use `kadmin.local` to hack straight into the database
+and add the `goodlike` principal. But wait. I have to set the password?
+What? Why would the person on the server set the password for the user?
+How does that make any sense? I mean, luckily, I'm both the server and the client,
+so it works, but how is this supposed to work normally?
+Is the practice something like "generate random password
+and give it to the user so they can change it later"?
+I would assume you'd automate that away if that was the case...
+Well, whatever. Let's go.
 
-For the sake of security (lol) I use the same password as for everything else in this project.
-Principal. Created! Cool, can I, uh, do anything with it? Probably nothing in 'kadmin'.
-Let's continue.
+For the sake of security (lol) I use the same password
+as for everything else in this project.
+Principal. Created! Cool, can I, uh, do anything with it?
+Probably nothing in `kadmin`. Let's continue.
 
     sudo kinit goodlike
 
-That almost sounds like a spell to banish the Necronomicon. I almost missed
-sudo again, because, like I said, this guide was written by geniuses who think replacing
-'sudo' with '#' in their notes is a good idea. Anyway, I enter the password and nothing happens,
-which I think means something happened, and it just didn't tell me. Well, one way to find out.
+That almost sounds like a spell to banish the Necronomicon.
+I almost missed `sudo` again, because, like I said,
+this guide was written by geniuses who think `#` is a good stand-in for `sudo`.
+Anyway, I enter the password and nothing happens,
+which I think means something happened,
+and it just didn't tell me. Well, only one way to find out.
 
     sudo klist
 
-It actually lists my ticket, nice. I'll note that if you inspect the guide extremely
-carefully, there's blocks of text that actually technically tell you how to do everything in
-detail. And by detail I mean you can't tell that's what they do at a glance, which makes them
-pretty bad. And they **still** replace 'sudo' with '#' in those. Only by collecting the
-puzzle pieces from everywhere else do I now understand that's their purpose. Still, now
-that we made it so far, surely we can blitz through the rest of it, right? Right?
+It actually lists my ticket, nice.I'll note that if you inspect the guide
+extremely carefully, there's blocks of text that actually technically tell you
+how to do everything in detail. And by detail I mean
+you can't tell that's what they do at a glance, which makes them pretty bad.
+And they **still** replace `sudo` with `#` in those.
+Only by collecting the puzzle pieces from everywhere
+do I now understand that's their purpose.
+Still, now that we made it so far,
+surely we can blitz through the rest of it, right? Right?
 
     sudo kadmin.local -q "getprinc goodlike"
     
 Works. Looking good.
 
-The next section seems to deal with keytab creation. This piques interest, as keytab seemed to be
-a key configuration in whatever the hell those other projects did to make this shit work.
-It's a file that's supposed to be under 'kerberos' folder in the config. So encountering it here
-makes sense.
+The next section seems to deal with `keytab` creation.
+This piques interest, as `keytab` seemed to be a key configuration
+in whatever the hell those other projects did to make this shit work.
+It's a file that's supposed to be under `kerberos` folder in the config.
+So encountering it here makes sense.
 
-It seems that it's a sort of a database containing username-password pairs in whatever weird
-format Kerberos does things in. Or something. So given this knowledge, let's try to guess.
-If I create this file and put it into a system that knows what Kerberos is, it will automatically
-take these pairs and forward them to Kerberos for authentication, maybe? Something? Wishful
-thinking probably. But let's try to make one and see what we can make from one.
+It seems that it's a sort of a database containing username-password pairs
+in whatever weird format Kerberos does things in. Or something.
+So given this knowledge, let's try to guess.
+If I create this file and put it into a system that knows what Kerberos is,
+it will automatically take these pairs and forward them to Kerberos
+for authentication, maybe? Something? Wishful thinking probably.
+But let's try to make one and see what we can make from one.
 
-One more note that disturbs me though: changing keytab file when passwords change. That doesn't
-seem very configuration-like. Oh well. Maybe if you do something you don't have to change it.
-Whatever.
+One thing disturbs me though: changing `keytab` file when passwords change.
+That doesn't seem very configuration-like. Oh well.
+Maybe if you do something you don't have to change it. Whatever.
 
     sudo ktutil
 
 This robs the terminal of its control, somehow.
-Anyway, I almost forget 'sudo' *again*. Thanks guide.
+Also, I almost forget `sudo` *again*. Thanks guide.
 
     add_entry -password -p goodlike@GOODLIKE.EU -k 1 -e aes256-cts-hmac-sha1-96
     add_entry -password -p goodlike@GOODLIKE.EU -k 1 -e aes128-cts-hmac-sha1-96
 
-They might seem like they're exactly the same, but actually one of them is 'aes256' and the other
-is 'aes128'. They seem to relate to the keys printed by 'getprinc goodlike' earlier. Some kind
-of encrypted shenanigans.
+They might seem like they're exactly the same,
+but actually one of them is `aes256` and the other is `aes128`.
+They seem to relate to the keys printed by `getprinc goodlike` earlier.
+Some kind of encrypted shenanigans.
 
-I think it's safe to say that 'ktutil' is a builder. We called #addEntry twice and now we need
-to call #build. Like this:
+I think it's safe to say that `ktutil` is a builder.
+We called `#addEntry` twice and now we need to call `#build`, like this:
 
     wkt goodlike.keytab
 
@@ -1203,9 +1245,9 @@ This builds the file in working directory, I guess. Then we enter
 
     q
 
-to escape ktutil's grasp.
+to escape `ktutil`'s grasp.
 
-Hey, guess what! I forgot 'sudo' on the next command again!
+Hey, guess what! I forgot `sudo` on the next command again!
 
     sudo klist -kte goodlike.keytab
 
@@ -1217,27 +1259,30 @@ Works, although prints nothing.
 
     sudo klist
     
-Shows information. What the guide people didn't expect is that I would run it *before*
-'sudo kinit' as well as *after*. Thus being able to see the difference and determining that
-calling 'sudo kinit' also refreshes the ticket. Using the keytab file instead meant I didn't
-have to use the password. Which makes perfect sense. So if somebody is calling 'sudo kinit' logic,
-but like a client, they can use the keytab file instead of a password. I wonder if we can hook
-this damn file to Liberty somehow, that'd be amazing.
+Shows information. What the guide people didn't expect is
+that I would run it *before* `sudo kinit` as well as *after*,
+thus being able to see the difference and determining
+that calling `sudo kinit` also refreshes the ticket.
+Using the `keytab` file instead meant I didn't have to use the password.
+Which makes perfect sense. So if somebody is calling `sudo kinit` logic,
+but like a client, they can use the `keytab` file instead of a password.
+I wonder if we can hook this damn file to Liberty somehow, that'd be amazing.
 
 Things have started to calm down, so I reviewed some of the process so far.
-Turns out that I had misspelled 'kadmin/admin' as 'kadmin/kadmin' (can you blame me)
-when running the 'sudo kadmin' program too. This explains why it didn't work.
+Turns out that I had misspelled `kadmin/admin` as `kadmin/kadmin` (can you blame me)
+when running the `sudo kadmin` program too. This explains why it didn't work.
 It doesn't explain how it's supposed to work, because I tried the **ONLY** password
 I used in **EVERY** circumstance and it still was wrong. Fuck it.
-I'll just hack away with 'sudo kadmin.local' like a pleb.
+I'll just hack away with `sudo kadmin.local` like a pleb.
 If I even need to do anything else anymore.
 
-Now, before we return to [#spnego_sad](#spnego_sad) or any similar resource, let's try to just
-hook normal authentication through Kerberos. That seems like a logical idea.
-Particularly with our track record, if something doesn't work, I'd like to flush it out now
-rather than getting distracted for a week again.
+Now, before we return to [#spnego_sad](#spnego_sad) or any similar resource,
+let's try to just hook normal authentication through Kerberos.
+That seems like a logical idea.
+Particularly with our track record, if something doesn't work,
+I'd like to flush it out now rather than getting distracted for a week again.
 
-First non-IBM page I encounter is [#open_your_heart](#open_your_heart).
+The first non-IBM page I encounter is [#open_your_heart](#open_your_heart).
 It seems to relate specifically to some sort of *open* implementation of liberty.
 It can't be all that different, because it seems to use the familiar format in configuration.
 That being said, there's no knowing if this will work or not with what I'm doing.
