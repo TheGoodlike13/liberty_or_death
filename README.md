@@ -2094,50 +2094,60 @@ And we've had some things installed using `apt`, so surely that should work.
  
 Except it doesn't, because it can't find any of the packages. Great.
 
-We've actually run into this exact issue before, so I consult the archives (by the
-archives I mean this README). Yes, right, [#dummy_slap](#dummy_slap) told me to install
-using 'apt-get'... but it used completely different package names ('slapd' for example).
-Using the ones from the 'yum' command just doesn't work. They just don't exist. They're
-gone. They're not present. Their presence cannot be detected. Looking for them is a waste
-of time. The configuration of particles in this universe fails to include the pattern
+We've actually run into this exact issue before, so I consult the archives
+(by the archives I mean this README).
+Yes, right, [#dummy_slap](#dummy_slap) told me to install using `apt-get`...
+but it used completely different package names (`slapd` for example).
+Using the ones from the `yum` command just doesn't work. They just don't exist.
+They're gone. They're not present. Their presence cannot be detected.
+Looking for them is a waste of time.
+The configuration of particles in this universe fails to include the pattern
 which would allow them to exist.
 
-After a short break to snack and slack, I decided to search for the file manually.
-This did not function as an activity. The 'olcDatabase' just can't be found.
-This is where [#a_real_man](#a_real_man) comes in. I couldn't install 'slapd-config'
-using 'apt' either, but the folder the page references exists already, so maybe
-I already did it somehow. Let's hope that's the case.
+After a short break to snack & slack, I decided to search for the file manually.
+This did not function as an activity. The `olcDatabase` just can't be found.
+This is where [#a_real_man](#a_real_man) comes in. I couldn't install `slapd-config`
+using `apt` either, but the folder the page references exists already,
+so maybe I already did it somehow. Let's hope that's the case.
 
-'/etc/ldap/slapd.d/cn=config/' actually exists too, and it even contains 'olcDatabase'
-files! Oddly enough, though, there aren't 'olcDatabase{2}' files. There's 'olcDatabase{0}',
-'olcDatabase{1}' and even 'olcDatabase{-1}'. They all have suffixes different than
-what's expected too. So I guess I'll just have to create a new file myself.
+`/etc/ldap/slapd.d/cn=config/` actually exists too,
+and it even contains `olcDatabase` files!
+Oddly enough, though, there aren't `olcDatabase{2}` files.
+There's `olcDatabase{0}`, `olcDatabase{1}` and even `olcDatabase{-1}`.
+They all have suffixes different than what's expected too.
+So I guess I'll just have to create a new file myself.
 
-So I create '/etc/ldap/slapd.d/cn=config/olcDatabase{2}bdb.ldif' and put this line in:
+So I create `/etc/ldap/slapd.d/cn=config/olcDatabase{2}bdb.ldif`
+and put this solitary line in it:
 
     olcRootDN: cn=ramuh,dc=goodlike,dc=eu,dc=local
 
-Ramesh just wasn't doing it for me, so we went full Final Fantasy instead.
+`Ramesh` just wasn't doing it for me, so we went full Final Fantasy instead.
 
     sudo slappasswd
 
 This unexpectedly does not open [this page](https://www.pornhub.com/video?c=4).
-Instead we have to enter the password twice, which then prints us the following hash:
+Instead we have to enter the password twice, which then prints the following hash:
 
     {SSHA}mcGzfWeCOIwPVFHRUvu7lQJGKPZ2mHpv
 
-For the record, the password I've been using is 'uzakashi', which is fairly obvious pair
-keyword to 'mumkashi'. Just thought I'd save you the effort of trying to crack this thing.
-I also assume 'sudo' was not really needed, as this doesn't seem to actually change anything,
-but the instructions included '#' and who am I to disagree. I'm just trying to make sense here.
+For the record, the password I've been using is `uzakashi`,
+which is fairly obvious pair keyword to `mumkashi`.
+Just thought I'd save you the effort of trying to crack this thing.
+I also assume `sudo` was not really needed,
+as this doesn't seem to actually change anything,
+but the instructions included `#` and who am I to disagree.
+I'm just trying to make sense here.
 
-Next I edit '/etc/ldap/slapd.d/cn=config.ldif' and append this line to the end:
+Next I edit `/etc/ldap/slapd.d/cn=config.ldif` and append this line to the end:
 
     olcRootPW: {SSHA}mcGzfWeCOIwPVFHRUvu7lQJGKPZ2mHpv
 
-Next step... let's see... back to the 'bdb.ldif' file. Ugh, why not just fill it out at once?
-Every time I have to go into the '/cn=config/' folder it asks me to enter the damn password
-over and over again. And this is even after I gave the folder to myself via 'chown'! Blasphemy!
+Next step... let's see... back to the `bdb.ldif` file.
+Ugh, why not just fill it out at once?
+Every time I have to go into the `cn=config` folder
+it asks me to enter the damn password over and over again.
+And this is even after I gave the folder to myself via `chown`! Blasphemy!
 Anyway, I add the following line, which seems to be the last change for now:
 
     olcSuffix: dc=goodlike,dc=eu,dc=local
@@ -2146,37 +2156,44 @@ And what's this? Next we must run
  
     sudo slaptest -u
 
-Have we finally reached the part where the title of the chapter makes sense? My God...
+Have we finally reached the part where the title of the chapter makes sense?
+My God...
 
-Anyway, it doesn't work. Checksum error. Then the explanation of the error has nothing to do
-with any checksum as far as I can tell. Great start.
+Anyway, it doesn't work. Checksum error.
+The explanation has nothing to do with any checksum as far as I can tell.
+Great start.
 
-Oh! Well, I've figured out the 'checksum' error. In '/etc/ldap/slapd.d/cn=config.ldif',
+Oh! Well, I've figured out the `checksum` error.
+In `/etc/ldap/slapd.d/cn=config.ldif`,
 the first few lines are dedicated to something of a warning message:
 
     # AUTO-GENERATED FILE - DO NOT EDIT!! Use ldapmodify.
 
-Followed by what I assume is the checksum of the file itself stored in itself. But wait.
-Wouldn't storing the checksum inside the file... change the file? I'm not even gonna try
-to figure this one out. Maybe they take checksum of everything AFTER these lines. Whatever.
-This definitely isn't enough to distract me from the fact I was just following a guide
-that told me to do something I shouldn't. AGAIN.
+Followed by what I assume is the checksum of the file itself stored in itself.
+But wait. Wouldn't storing the checksum inside the file... change the file?
+I'm not even gonna try to figure this one out.
+Maybe they take checksum of everything AFTER these lines. Whatever.
+This definitely isn't enough to distract me from the fact
+I was just following a guide that told me to do something I shouldn't. AGAIN.
 
     sudo ldapmodify
 
-I return the file to its original form and attempt to use the confounding 'ldapmodify'
-command. It asks me to enter the password. I enter the password. I get invalid credentials error.
-You know, the same error for which we embarked on this journey for in the first place.
+I return the file to its original form
+and attempt to use the confounding `ldapmodify` command.
+It asks me to enter the password. I enter the password.
+I get invalid credentials error.
+You know, the same error we embarked on this journey for in the first place.
 
 Riddle me this, Batman.
 1. I want to add an LDAP account.
-2. But I can't, because I don't have an administrative account to use 'ldapadd'.
-3. In order to create such an account I need to modify 'cn=config.ldif' file.
+2. But I can't, because I don't have an administrative account to use `ldapadd`.
+3. In order to create such an account I need to modify `cn=config.ldif` file.
 4. But I can't just manually modify the file, because that breaks the CRC32 checksum.
-5. I have to use 'ldapmodify'.
+5. I have to use `ldapmodify`.
 6. But I can't, because I don't have an administrative account.
 
-THEN WHAT THE HELL AM I SUPPOSED TO FUCKING DO????? Who made this garbage ass system?
+THEN WHAT THE HELL AM I SUPPOSED TO FUCKING DO?????
+Who made this garbage ass system?
 Why doesn't it come pre-configured with some basic bullshit you could change later?
 What is wrong with these people???
 
