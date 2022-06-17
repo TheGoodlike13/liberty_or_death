@@ -4258,7 +4258,7 @@ All good... except the last part...
 > Unit network-manager.service not found.
 
 Well, shit. No wonder they didn't put it into the guide.
-They probably don't know :D ROLLBACK!
+They probably don't know themselves :D ROLLBACK!
 
 [#resolutionary_fight](#resolutionary_fight) seems to give us what we need.
 A nice list of programs which could possibly mess around with the file.
