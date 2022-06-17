@@ -4109,7 +4109,7 @@ for "compiling", which is entirely possible, based on how much you used an IDE.
 
 There's a reasonable chance you would understand "dependencies",
 at least after a google search.
-But, once again, you may be confused why would you want a system to manage them.
+But, once again, you may be confused why would you want a tool to manage them.
 After all, your IDE already manages dependencies for you!
 Just copy and paste them in, all good!
 
