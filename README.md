@@ -4187,7 +4187,7 @@ Well, at least they're good at making you laugh, gotta give them that one.
 `maven` wasn't funny :D
 
 Now, to be fair, they do seem to have basic installation guides, such as [#awkwardly_dancing_dummy_coder](#awkwardly_dancing_dummy_coder).
-That's not good enough. You still have no know what it is you're doing
+That's not good enough. You still have to know what it is you're doing
 to fully grasp the instructions, especially in a way that is adjustable.
 Consider everything in [Part 2](#the-journey-to-authentication-hell)
 as an example of what happens when you keep it to just that:
