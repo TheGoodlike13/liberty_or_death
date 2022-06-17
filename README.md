@@ -36,7 +36,7 @@
 ### [3. (SPN)EGO death](#spnego-death)
 #### [3.1. It's over 4000!](#its-over-4000)
 #### [3.2. Get ready to dance](#get-ready-to-dance)
-### [4. Summary of summaries](#summary-of-summaries)
+### [4. Summary in summary](#summary-in-summary)
 
 Links to various resources referred to (try [web archive](https://archive.org/) if down, should work for most):
 
@@ -4171,7 +4171,15 @@ Hey, maybe this link will help? [#dance_nicely](#dance_nicely)
 Well, at least they're good at making you laugh, gotta give them that one.
 `maven` wasn't funny :D
 
-## Summary of summaries
+Now, to be fair, they do seem to have basic installation guides.
+That's not good enough. You still have no know what it is you're doing
+to fully grasp the instructions, especially in a way that is adjustable.
+Consider everything in [Part 2](#the-journey-to-authentication-hell)
+as an example of what happens when you keep it to just that:
+sure, you can get things done. Eventually.
+You might just end up loosing all your hair from stress first, though.
+
+## Summary in summary
 
 These are links to summaries throughout the entire document, in order:
 
