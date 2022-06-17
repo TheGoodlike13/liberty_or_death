@@ -4163,8 +4163,8 @@ And that's being generous to their intelligence!
 
 Hey, maybe this link will help? [#dance_nicely](#dance_nicely)
 
-    Samba strives to be a welcoming community, for users, developers
-    and all who seek to use or improve Samba.
+> Samba strives to be a welcoming community, for users, developers
+> and all who seek to use or improve Samba.
  
 [HAHAHAHAHAHA!](https://www.youtube.com/watch?v=qLKhxjfG03A)
 
@@ -4178,6 +4178,45 @@ Consider everything in [Part 2](#the-journey-to-authentication-hell)
 as an example of what happens when you keep it to just that:
 sure, you can get things done. Eventually.
 You might just end up loosing all your hair from stress first, though.
+
+Well, it's the best we've got. So I'm gonna make a fresh VM and follow
+the instructions. With some luck we'll get to the end.
+
+> If you are installing Samba in a production environment,
+> it is recommended to run two or more DCs for failover reasons.
+
+No problem. Running Samba NOT in prod. One is good enough.
+
+> This documentation describes how to set up Samba
+> as the first DC to build a new AD forest.
+
+No idea what `AD forest` means, but it's definitely the first DC, so we good.
+
+> Samba as an AD DC only supports:
+> * the integrated LDAP server as AD back end
+> * the Heimdal Kerberos Key Distribution Center (KDC).
+
+Support whatever you like, as long as it works. Fresh VM should have no problems.
+
+> Select a host name for your AD DC.
+    
+Hmm... what would be a typical host name then?
+`PDC` and `BDC` are NOT suggested to be used, but that means someone would use them,
+they would just be a dum dum. So we need something along those lines, but better
+in a way that is not described. Let's go with `JANMASHI`.
+
+> Select a DNS domain for your AD forest.
+> The name will also be used as the AD Kerberos realm.
+
+OK, we've already used a realm for Kerberos, so we'll stick with `GOODLIKE.EU`.
+
+> Use a static IP address on the DC.
+    
+Uh. How? Instructions please? Do you mean to use a static IP on the machine
+where it is installed? If that's the case, we should be OK, as it is static.
+
+> Disable tools, such as `resolvconf`, that automatically update
+> your `/etc/resolv.conf` DNS resolver configuration file. 
 
 ## Summary in summary
 
