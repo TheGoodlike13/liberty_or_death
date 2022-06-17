@@ -119,7 +119,7 @@ Links to various resources referred to (try [web archive](https://archive.org/) 
 ##### [#slap_26](https://www.openldap.org/doc/admin26/schema.html)
 ##### [#brazilian_dance](https://wiki.samba.org/index.php/Main_Page)
 ##### [#dance_nicely](https://wiki.samba.org/index.php/How_to_do_Samba:_Nicely)
-##### [#actively_dancing_dummy_coder](https://wiki.samba.org/index.php/Setting_up_Samba_as_an_Active_Directory_Domain_Controller)
+##### [#awkwardly_dancing_dummy_coder](https://wiki.samba.org/index.php/Setting_up_Samba_as_an_Active_Directory_Domain_Controller)
 ##### [#resolutionary_fight](https://www.ctrl.blog/entry/resolvconf-tutorial.html)
 
 ## Setting up a liberty server that works
@@ -4185,7 +4185,7 @@ Hey, maybe this link will help? [#dance_nicely](#dance_nicely)
 Well, at least they're good at making you laugh, gotta give them that one.
 `maven` wasn't funny :D
 
-Now, to be fair, they do seem to have basic installation guides, such as [#actively_dancing_dummy_coder](#actively_dancing_dummy_coder).
+Now, to be fair, they do seem to have basic installation guides, such as [#awkwardly_dancing_dummy_coder](#awkwardly_dancing_dummy_coder).
 That's not good enough. You still have no know what it is you're doing
 to fully grasp the instructions, especially in a way that is adjustable.
 Consider everything in [Part 2](#the-journey-to-authentication-hell)
@@ -4291,7 +4291,7 @@ I suppose that's a sign that we're good to go.
 > a `/etc/resolv.conf` file with manual configuration
 
 I'm gonna table that for later, as Samba may have something to say about it.
-Back to [#actively_dancing_dummy_coder](#actively_dancing_dummy_coder)!
+Back to [#awkwardly_dancing_dummy_coder](#awkwardly_dancing_dummy_coder)!
 
 > Verify that no Samba processes are running
 
@@ -4331,6 +4331,8 @@ Yet somehow, they always align. By mere coincidence. I hate that.
 
 Also, the `mumkashi-VirtualBox` thing was already there, so I kept it.
 Finally, `192.168.1.7` is the fresh VM IP address.
+
+
 
 ## Summary in summary
 
