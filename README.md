@@ -4143,7 +4143,7 @@ the tool and learn more by asking questions like, "could it also do this?"
 
 Now take my definition, and compare it to what you can find at the [maven page](https://maven.apache.org/).
 Imagine a new developer trying to understand what `maven` is,
-but they don't *know* anything about what is in my definition.
+but they *don't* know anything about what is in my definition.
 I know how I'd feel, because I did. I'd feel sick to my stomach.
 I'd feel like this is some useless junk that nobody needs.
 Just full of marketing speak and unknowable acronyms that make no sense.
