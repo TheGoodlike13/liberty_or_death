@@ -4332,7 +4332,19 @@ Yet somehow, they always align. By mere coincidence. I hate that.
 Also, the `mumkashi-VirtualBox` thing was already there, so I kept it.
 Finally, `192.168.1.7` is the fresh VM IP address.
 
+> If you previously ran a Samba installation on this host
 
+Skip. No Samba here. NOT ALLOWED! I mean, totally allowed. Just not here now.
+
+> Remove an existing `/etc/krb5.conf` file
+
+I think this is meant as an extra step. It's hard to tell, because the steps
+use the same type of style to indicate, well, sub-steps.
+Just use auto-numbering next time!
+
+    sudo rm /etc/krb5.conf
+    
+No such file. As expected from a fresh VM.
 
 ## Summary in summary
 
