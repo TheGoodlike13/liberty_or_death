@@ -4171,7 +4171,7 @@ That's all I need! That's all I want! It doesn't even have to be super elaborate
 Just a definition like my definition for `maven` is all that would suffice!
 The typical use case scenario! How does it look? How does it work?
 What are typical pieces of equipment and installation and why? That's it.
-Is it really so much to ask? It that really harder than providing an entire
+Is it really so much to ask? Is that really harder than providing an entire
 documentation wiki page with explicit details? I just don't get it.
 It's almost like they *don't want* new people to come in and use their shit.
 And that's being generous to their intelligence!
