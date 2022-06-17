@@ -119,6 +119,8 @@ Links to various resources referred to (try [web archive](https://archive.org/) 
 ##### [#slap_26](https://www.openldap.org/doc/admin26/schema.html)
 ##### [#brazilian_dance](https://wiki.samba.org/index.php/Main_Page)
 ##### [#dance_nicely](https://wiki.samba.org/index.php/How_to_do_Samba:_Nicely)
+##### [#actively_dancing_dummy_coder](https://wiki.samba.org/index.php/Setting_up_Samba_as_an_Active_Directory_Domain_Controller)
+##### [#resolutionary_fight](https://www.ctrl.blog/entry/resolvconf-tutorial.html)
 
 ## Setting up a liberty server that works
 
@@ -4183,7 +4185,7 @@ Hey, maybe this link will help? [#dance_nicely](#dance_nicely)
 Well, at least they're good at making you laugh, gotta give them that one.
 `maven` wasn't funny :D
 
-Now, to be fair, they do seem to have basic installation guides.
+Now, to be fair, they do seem to have basic installation guides, such as [#actively_dancing_dummy_coder](#actively_dancing_dummy_coder).
 That's not good enough. You still have no know what it is you're doing
 to fully grasp the instructions, especially in a way that is adjustable.
 Consider everything in [Part 2](#the-journey-to-authentication-hell)
@@ -4229,6 +4231,106 @@ where it is installed? If that's the case, we should be OK, as it is static.
 
 > Disable tools, such as `resolvconf`, that automatically update
 > your `/etc/resolv.conf` DNS resolver configuration file. 
+
+There we go again. "Such as". Great. I realize that it might be difficult to
+list out all possible applications that could affect a particular file,
+but it can't be THAT hard to at least try? Not to mention, they don't
+instruct you how to disable `resolvconf` either. Or how to know it's on at all.
+
+[This page](https://stackoverflow.com/questions/50763604/disable-resolvconf-permanently)
+has instructions of various kinds, but they relate to Ubuntu 16,
+which, as we know from our previous adventure, uses a different networking model.
+For example, the file in the question no longer exists.
+I suppose the file in the *answer* still exists, so let's try that.
+
+    sudo systemctl disable systemd-resolved.service
+    sudo service systemd-resolved stop
+    sudo chown mumkashi /etc/NetworkManager/NetworkManager.conf
+    
+    dns=default
+    
+    sudo systemctl restart network-manager
+    
+All good... except the last part...
+
+> Failed to restart network-manager.service:
+> Unit network-manager.service not found.
+
+Well, shit. No wonder they didn't put it into the guide.
+They probably don't know :D ROLLBACK!
+
+[#resolutionary_fight](#resolutionary_fight) seems to give us what we need.
+A nice list of programs which could possibly mess around with the file.
+As well as some instructions how to deal with it.
+
+    head /etc/resolv.conf
+    ls -l /etc/resolv.conf
+    
+The only thing that stands out is `systemd-resolved`.
+Looks like we were on the right track last time, just fell a little short.
+
+    sudo systemctl disable systemd-resolved.service
+    sudo rm /etc/resolv.conf
+    
+Technically we weren't told to delete the file by the Samba docs.
+But those are the instructions here. For all I know, it won't work unless
+I delete it. So I do.
+
+> You may also need to follow the instructions in the section on `NetworkManager`
+
+Kay.
+
+    sudo echo -e "[main]\ndns=none" > sudo /etc/NetworkManager/conf.d/no-dns.conf
+    sudo systemctl restart NetworkManager.service
+    sudo rm /etc/resolv.conf
+
+These steps work, except the last one because the file had not been created.
+I suppose that's a sign that we're good to go.
+
+> Refer to the last section of this article for instructions on recreating
+> a `/etc/resolv.conf` file with manual configuration
+
+I'm gonna table that for later, as Samba may have something to say about it.
+Back to [#actively_dancing_dummy_coder](#actively_dancing_dummy_coder)!
+
+> Verify that no Samba processes are running
+
+    ps ax | egrep "samba|smbd|nmbd|winbindd"
+
+>     2349 pts/0    S+    0:00 grep -E --color=auto samba|smbd|nmbd|windbindd
+
+Uh... does that mean there's something running? Or not? Is this some kind of header?
+Or did the process finder find itself in the process list?
+
+I mean, I'm pretty sure we didn't install anything yet,
+so the likelihood of Samba already running here is basically 0%.
+We're gonna go with that - but again, no way for me to confirm this.
+
+> Verify that the `/etc/hosts` file on the DC correctly resolves
+> the fully-qualified domain name (FQDN) and short host name
+> to the LAN IP address of the DC
+
+The example is a bit cryptic:
+
+    127.0.0.1     localhost
+    10.99.0.1     DC1.samdom.example.com     DC1
+    
+Well, the `localhost` part makes sense. I even know about the `hosts` file
+in general, it's like a, dunno, pre-configured cache for IP lookup.
+
+So we want the IP of this machine to be looked up as the address we give to it.
+That makes sense. But what is the address? I guess we're supposed to use
+the domain we picked? Soooo... `DC1.goodlike.eu`? Let's go with that:
+
+    127.0.0.1       localhost
+    127.0.1.1       mumkashi-VirtualBox
+    192.168.1.7     DC1.goodlike.eu     DC1
+
+I'm confused about the spacing requirements, as they seem to differ everywhere.
+Yet somehow, they always align. By mere coincidence. I hate that.
+
+Also, the `mumkashi-VirtualBox` thing was already there, so I kept it.
+Finally, `192.168.1.7` is the fresh VM IP address.
 
 ## Summary in summary
 
