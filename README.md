@@ -121,6 +121,7 @@ Links to various resources referred to (try [web archive](https://archive.org/) 
 ##### [#dance_nicely](https://wiki.samba.org/index.php/How_to_do_Samba:_Nicely)
 ##### [#awkwardly_dancing_dummy_coder](https://wiki.samba.org/index.php/Setting_up_Samba_as_an_Active_Directory_Domain_Controller)
 ##### [#resolutionary_fight](https://www.ctrl.blog/entry/resolvconf-tutorial.html)
+##### [#unofficial_moves](https://wiki.samba.org/index.php/Distribution-specific_Package_Installation)
 
 ## Setting up a liberty server that works
 
@@ -4345,6 +4346,71 @@ Just use auto-numbering next time!
     sudo rm /etc/krb5.conf
     
 No such file. As expected from a fresh VM.
+
+> Installing Samba
+
+This part of the guide just has a bunch of links to elsewhere. Great!
+
+> Operating System Requirements
+>
+>> Package Dependencies Required to Build Samba
+>>
+>> File System Support
+>
+> Build Samba from Source
+>
+> Distribution-specific Package Installation
+
+Hmm.. so we could build it from source, which would require to also pre-install
+a bunch of dependencies depending on the operating system.
+
+Or I could just use the Package Installation that they don't officially support.
+
+You know which one we're picking.
+
+[#unofficial_moves](#unofficial_moves) offers the following command for Ubuntu:
+
+    sudo apt install -y acl attr samba samba-dsdb-modules samba-vfs-modules winbind libpam-winbind libnss-winbind libpam-krb5 krb5-config krb5-user
+
+I added my personal flavor of "just `apt`", `-y` and "always `sudo`".
+
+> Unable to fetch some archives, maybe run `apt-get update`
+> or try with `--fix-missing`?
+
+Thanks `apt`, you're a real pal unlike all those other programs.
+But I actually have a good idea what's wrong. I mean, it should be obvious.
+We deleted the DNS resolution file. So nothing gets resolved now. Hurray.
+
+Let's put a manual one back in with `8.8.8.8`, which I remind you, is google DNS.
+
+As always, we can't create a file, so we need to destroy our computer's security
+first.
+
+    sudo chmod 777 /etc
+    
+Not taking any chances here.
+
+    nameserver 8.8.8.8
+    
+I save that into `/etc/resolv.conf` and `apt` command starts working.
+
+Kerberos setup wizard pops up, so I enter `GOODLIKE.EU` and `192.168.1.7` twice.
+Then it completes. But not so fast!
+
+> Note1: For a DC you do not need `libpam-winbind libnss-winbind libpam-krb5`,
+> unless you require AD users to login
+>
+> Note2: For a DC, you will also need to install `dnsutils`
+>
+> Note3: For a DC, you will also need `ntp` or `chrony`
+
+Let's go ahead and add the extra things:
+
+    sudo apt install -y dnsutils ntp
+    
+I chose `ntp` because it's first. And shorter. YEAH!
+
+OK. With all those commands done, surely we have installed Samba and can proceed?
 
 ## Summary in summary
 
