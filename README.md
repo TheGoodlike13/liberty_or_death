@@ -251,8 +251,8 @@ But that's just a guess. Don't take my word for it.
 
 But what's this? 
 
-    The class eu.goodlike.TestServlet has a @WebServlet annotation
-    but does not implement the javax.servlet.http.HttpServlet interface.
+> The class `eu.goodlike.TestServlet` has a `@WebServlet` annotation
+> but does not implement the `javax.servlet.http.HttpServlet` interface.
 
 Looks like I should've done more copy paste. Again. Be right back.
 
@@ -555,7 +555,7 @@ But there's torrent links, that could work!
 But then... it doesn't! Well, technically, it did open just like the normal Ubuntu.
 But it also gave me a message!
 
-    This kernel requires an x86-64 CPU, but only detected an i686 CPU.
+> This kernel requires an x86-64 CPU, but only detected an i686 CPU.
     
 So it's unable to boot and tells me to use the correct kernel.
 Which is what I thought I did. But apparently, I have i686 CPU.
@@ -897,7 +897,7 @@ Second, I need to run the command
 
 I run this command. It doesn't work.
 
-    The group 'vboxsf' does not exist.
+> The group `'vboxsf'` does not exist.
     
 Maybe I didn't install the additions after all :(
 
@@ -915,7 +915,9 @@ I run the command. It doesn't work. `Bad substitution`. Fine then. I'll just
 type out the outcome of what I assume to be another command myself.
 
     uname -r
-    > 5.15.0-33-generic
+    
+> 5.15.0-33-generic
+
     sudo apt-get install -y dkms build-essential linux-headers-generic linux-headers-5.15.0-33-generic
 
 Finally the command succeeds, I proceed to run the `.run` file.
@@ -1023,7 +1025,7 @@ Next step appears to be the new realm setup.
 I thought we had a default realm already.
 Well, whatever. I enter the command and it outputs cryptic gibberish to me.
 
-    It's much more important that your password is secure than that you remember it.
+> It's much more important that your password is secure than that you remember it.
 
 But if you forget it, you can no longer use the database or something.    
 That's some hardcore mixed messaging.
@@ -1031,14 +1033,14 @@ Thankfully, we don't actually need our password to be secure,
 since, you know, we're only setting up a toy here.
 I'll make it the same as the `sudo` password for simplicity.
 
-    It is important that you NOT FORGET this password.
+> It is important that you NOT FORGET this password.
     
 Yeah, yeah. Whatever you say, Mr. President.
 I enter the password, twice. More cryptic gibberish.
 
-    You may want to create an administrative principal using
-    the addprinc subcommand of the kadmin.local program.
-    Then, this principal can be added to /etc/krb56kdc/kadm5.acl ...
+> You may want to create an administrative principal using
+> the `addprinc` subcommand of the `kadmin.local` program.
+> Then, this principal can be added to `/etc/krb56kdc/kadm5.acl` ...
 
 You know, I vaguely recall being asked to read the fucking manual last time,
 maybe I should spend some time on that. One last note before I go:
@@ -1393,9 +1395,9 @@ it baffles me why it was not provided explicitly...
 So, `openldap` package does not exist. I guess it's time to consult the
 [#slapped_8](#slapped_8).
 
-    If you intend to run OpenLDAP Software seriously,
-    you should review all of this document
-    before attempting to install the software.
+> If you intend to run OpenLDAP Software seriously,
+> you should review all of this document
+> before attempting to install the software.
     
 Why so serious? I'll just ignore that.
 
@@ -1786,10 +1788,10 @@ They are ordered the same way you set them up in the VM settings.
 
 During my lunch break, an e-mail arrived, oddly addressed to nobody.
 
-    I have detected security problems with your computer.
-    Please tell me when you're at the office
-    so I can come to your computer and fix this.
-    I will only take 5 minutes.
+> I have detected security problems with your computer.
+> Please tell me when you're at the office
+> so I can come to your computer and fix this.
+> I will only take 5 minutes.
 
 Oh yeah? You think you got me fooled?
 I see right through your Indian scammer ways! Reported for phishing.
@@ -2028,7 +2030,7 @@ This asks me for an LDAP password. No idea which password is that supposed to be
 but luckily I used the same password FOR EVERYTHING just in case this would happen,
 so we should be fine. Except we're not fine because it gives an error.
 
-    ldap_bind: Invalid credentials (49)
+> ldap_bind: Invalid credentials (49)
 
 Bruh, the first google search is [#reading_a_book_he_says](#reading_a_book_he_says).
 Do we really need a book for this? Jesus Christ...
@@ -2048,7 +2050,7 @@ And, as it stands, I can't, because it doesn't fucking work :D
 New week, new [#aneurysm_overload](#aneurysm_overload).
 The last answer in particular is just *beyond* horrifying.
 
-    It may be the configured password, but not the loaded one!
+> It may be the configured password, but not the loaded one!
 
 That is not a sentence that should exist in this universe as a result of any system.
 
@@ -2133,7 +2135,7 @@ and put this solitary line in it:
 This unexpectedly does not open [this page](https://www.pornhub.com/video?c=4).
 Instead we have to enter the password twice, which then prints the following hash:
 
-    {SSHA}mcGzfWeCOIwPVFHRUvu7lQJGKPZ2mHpv
+> {SSHA}mcGzfWeCOIwPVFHRUvu7lQJGKPZ2mHpv
 
 For the record, the password I've been using is `uzakashi`,
 which is fairly obvious pair keyword to `mumkashi`.
@@ -2227,7 +2229,7 @@ that are not at all covered by this `CRC32` magic trick.
 
 That's 1 out of 3 errors taken care of! NEXT!
 
-    <olcRootPW> can only be set when rootdn is under suffix
+> `<olcRootPW>` can only be set when `rootdn` is under suffix
 
 It would help if you could tell us, you know,
 what do you think these `rootdn` and `suffix` values are,
@@ -2251,7 +2253,7 @@ That's just insane enough to work.
 
 HAHAHAHAHAHAHAHAHAHAHAHAHAHA! No seriously. The Fiddler's riddle no.2:
 
-    suffix <cn=config> not allowed in frontend database
+> suffix `<cn=config>` not allowed in frontend database
 
 1. I want to add an admin account to `cn=config.ldif`.
 2. If I use a suffix that is not `cn=config`, it's a bad suffix.
@@ -2282,7 +2284,7 @@ The file probably also needs a lot more values. Probably.
 So I return the `cn=config` file back to normal (I even kept the original CRC, heh).
 Surely things should work? No, of course not. 
 
-    entry -1 has no dn
+> entry `-1` has no dn
 
 What?
 
@@ -2349,7 +2351,7 @@ It even says `adding new entry`!
 
 Unfortunately, it also says
  
-    ldap_add: No such object (32)
+> ldap_add: No such object (32)
     
 but at least the error now is different and we can try to move on :D
 
@@ -2433,7 +2435,7 @@ Normally, schema refers to something like, dunno, table column definitions.
 So perhaps this contains proprietary `objectClass` definitions?
 Doesn't matter much because we get this error:
 
-    Insufficient access (50)
+> Insufficient access (50)
 
 Given that we're trying to use the same broken mechanism
 some other comment suggested before, this is hardly surprising.
@@ -2467,7 +2469,7 @@ seems to work. I keep entering more things as explained by the guide:
 Seems promising, because we're using something that actually should exist,
 namely, `olcDatabase={1}mdb`. But it doesn't work. We get an error
  
-    wrong attributeType at line 3, entry "olcDatabase={1}mdb,cn=config"
+> wrong `attributeType` at line `3`, entry `"olcDatabase={1}mdb,cn=config"`
 
 I find this kind of odd, because `olcDatabase={1}mdb,cn=config` is in line 1.
 And I'm not sure what part is wrong in line 3 then.
@@ -2680,7 +2682,7 @@ Next up we try to add Bob as a user:
 
 But this fails. Apparently the rights that were given are simply insufficient.
 
-    add_principal: Principal add failed: Insufficient access while creating "bob@GOODLIKE.EU"
+> add_principal: Principal add failed: Insufficient access while creating `"bob@GOODLIKE.EU"`
 
 As always, there is just not enough information on what on earth is wrong.
 Normally, this wouldn't be an issue, as you could just, you know, look at things,
@@ -2749,8 +2751,8 @@ Is this finally the break we've been waiting for? No. Something else doesn't wor
 
 The command to modify rights now complains with an entirely different error:
 
-    ldap_modify: Other (e.g. implementation specific) error (80)
-            additional info: <olcAccess> handler exited with 1
+>     ldap_modify: Other (e.g. implementation specific) error (80)
+>             additional info: <olcAccess> handler exited with 1
 
 There seems to be some evidence that this is just a [syntax error](https://serverfault.com/questions/1004980/how-to-wrap-long-lines-for-olcaccess),
 but no messing around with the command works.
@@ -2789,9 +2791,9 @@ I begin by adding rights to
 This time I've added them as an addition for sure.
 But this only continues to brick everything, as I get this error:
 
-    kadmin.local: Cannot bind to LDAP server 'ldapi:///' as 'uid=kadmin,ou=kerberos,
-    ou=Services,dc=goodlike,dc=eu': Invalid credentials while initializing kadmin.lo
-    cal interface
+>     kadmin.local: Cannot bind to LDAP server 'ldapi:///' as 'uid=kadmin,ou=kerberos,
+>     ou=Services,dc=goodlike,dc=eu': Invalid credentials while initializing kadmin.lo
+>     cal interface
     
 At this point I review this entire document to see if I had missed anything,
 and indeed, I had not configured `/etc/ldap/ldap.conf` yet.
@@ -3003,10 +3005,10 @@ Seems to have worked this time somehow. It really is the final showdown.
 Looks like `bob` came through after all, a ticket was successfully created.
 BUT! `ldapwhoami` still doesn't work.
 
-    ldap_sasl_interactive_bind: Local error (-2)
-            additional info: SASL(-1): generic failure: GSSAPI error: Unspecified GS
-    S failure.  Minor code may provide more information (Server ldap/mumkashi-virtua
-    lbox@GOODLIKE.EU not found in Kerberos database)
+>     ldap_sasl_interactive_bind: Local error (-2)
+>             additional info: SASL(-1): generic failure: GSSAPI error: Unspecified GS
+>     S failure.  Minor code may provide more information (Server ldap/mumkashi-virtua
+>     lbox@GOODLIKE.EU not found in Kerberos database)
 
 Screw the code, it sure looks like when I was adding the principal I used the wrong
 reference LOL. I mean, who would expect the name of the computer to pop up here?
@@ -3017,10 +3019,10 @@ reference LOL. I mean, who would expect the name of the computer to pop up here?
     > q
     ldapwhoami -Q -Y GSSAPI -H ldapi:///
 
-    ldap_sasl_interactive_bind: Other (e.g., implementation specific) error (80)
-            additional info: SASL(-1): generic failure: GSSAPI error: No credentials
-     were supplied, or the credentials were unavailable or inaccessible (Permission 
-    denied)
+>     ldap_sasl_interactive_bind: Other (e.g., implementation specific) error (80)
+>             additional info: SASL(-1): generic failure: GSSAPI error: No credentials
+>      were supplied, or the credentials were unavailable or inaccessible (Permission 
+>     denied)
 
 Look who's back, it's `error 80`. Never a good sign.
 At least we seem to be on the right track.
@@ -3036,10 +3038,10 @@ Same error.
 
     sudo ldapwhoami -Q -Y GSSAPI -H ldapi:///
 
-    ldap_sasl_interactive_bind: Other (e.g., implementation specific) error (80)
-            additional info: SASL(-1): generic failure: GSSAPI error: No credentials
-     were supplied, or the credentials were unavailable or inaccessible (No Kerberos
-    credentials available (default cache: FILE:/tmp/krb5cc_0)
+>     ldap_sasl_interactive_bind: Other (e.g., implementation specific) error (80)
+>             additional info: SASL(-1): generic failure: GSSAPI error: No credentials
+>      were supplied, or the credentials were unavailable or inaccessible (No Kerberos
+>     credentials available (default cache: FILE:/tmp/krb5cc_0)
 
 A different error, but the same issue...
 
@@ -3094,7 +3096,7 @@ Motherfucker... this entire time it couldn't even open the bloody `keytab` file.
 At least that's what I'm getting here. Looking up `slapd cant open keytab file`
 on google we find [#common_errors](#common_errors), specifically
 
-    C.2.4. GSSAPI: gss_acquire_cred: Miscellaneous failure; Permission denied;
+> C.2.4. `GSSAPI`: `gss_acquire_cred`: Miscellaneous failure; `Permission denied`;
 
 Well, well, well. Looks familiar. `GSSAPI`, check. `Permission denied`, check.
 If only the command would tell me the file which it couldn't open, this would've
@@ -3119,16 +3121,22 @@ Well, it totally can, I have come to expect this.
 But I'm willing to give one last shot at good faith here.
 
     sudo chown root:ldap /etc/krb5.ldap.keytab
-    > chown: invalid group 'root:ldap'
+    
+> chown: invalid group 'root:ldap'
+
     sudo chown ldap:ldap /etc/krb5.ldap.keytab
-    > chown: invalid user 'ldap:ldap'
+    
+> chown: invalid user 'ldap:ldap'
+    
     sudo chown ldap /etc/krb5.ldap.keytab
-    > chown: invalid user 'ldap'
+    
+> chown: invalid user 'ldap'
 
 Blegh, of course it doesn't work.
 
     sudo chown slapd /etc/krb5.ldap.keytab
-    > chown: invalid user 'slapd'
+    
+> chown: invalid user 'slapd'
 
 A long shot, but the log did contain `slapd` as something specific.
 Hmm... I have an idea.
@@ -3143,9 +3151,12 @@ Enough fucking around. We need to find out what user was ultimately used, I gues
 It's time to discover [#the_dirty_truth](#the_dirty_truth)...
 
     id -u openldap
-    > 128
+    
+> 128
+
     id -nu 128
-    > openldap
+    
+> openldap
 
 And from messing around with permissions, the log part `fsuid=128` seems to indicate
 which user id was used.
@@ -3193,7 +3204,8 @@ I `/spit` on this garbage.
     sudo apt install apparmor-utils
     sudo aa-disable slapd
     ldapwhoami -Q -Y GSSAPI -H ldapi:///
-    > dn:uid=bob,cn=gssapi,cn=auth
+    
+> dn:uid=bob,cn=gssapi,cn=auth
 
 I feel just about as betrayed and fucked as when I finally beat some of
 `Dark Souls 3` bosses after slamming my head against them.
@@ -3225,7 +3237,7 @@ from console
 
 It opens an error page that says:
 
-    Context Root Not Found
+> Context Root Not Found
     
 Hmm... it seems to have redirected me to
 
@@ -3290,10 +3302,10 @@ So that's nice.
 I accidentally run the application twice which makes it brick.
 No, really, it's stuck on this:
 
-    [INFO] CWWKM2010I: Searching for CWWKZ0001I.*guide-security-intro.war in C:\Users\Goodlike\IdeaProjects\guide-security-intro\finish\target\liberty\wlp\usr\servers\defaultServer\logs\messages.log. This search will timeout after 40 seconds.
-    [INFO] CWWKM2011E: Timed out searching for CWWKZ0001I.*guide-security-intro.war in C:\Users\Goodlike\IdeaProjects\guide-security-intro\finish\target\liberty\wlp\usr\servers\defaultServer\logs\messages.log.
-    [INFO] ------------------------------------------------------------------------
-    [INFO] BUILD FAILURE
+>     [INFO] CWWKM2010I: Searching for CWWKZ0001I.*guide-security-intro.war in C:\Users\Goodlike\IdeaProjects\guide-security-intro\finish\target\liberty\wlp\usr\servers\defaultServer\logs\messages.log. This search will timeout after 40 seconds.
+>     [INFO] CWWKM2011E: Timed out searching for CWWKZ0001I.*guide-security-intro.war in C:\Users\Goodlike\IdeaProjects\guide-security-intro\finish\target\liberty\wlp\usr\servers\defaultServer\logs\messages.log.
+>     [INFO] ------------------------------------------------------------------------
+>     [INFO] BUILD FAILURE
 
 And even restarting the PC doesn't help. Maybe if I delete the build folder?
 Yep, good enough.
@@ -3429,9 +3441,9 @@ Let's try dumping it all into `config` first. That would be nice if it worked.
 
 We run into a different error first, though:
 
-    [ERROR   ] CWWKF0044E: The appSecurity-4.0 and com.ibm.websphere.appserver.builtinAuthentication-1.0 features cannot be loaded at the same time. The appSecurity-4.0 feature of Jakarta EE 9 is incompatible with the com.ibm.websphere.appserver.builtinAuthentication-1
-    .0 feature of Java EE 6. The appSecurity-4.0 and appSecurity-4.0 configured features include an incompatible combination of features. Your configuration is not supported. Update the configuration to use features that support either the Jakarta EE or Java EE program
-    ming models, but not both.
+>     [ERROR   ] CWWKF0044E: The appSecurity-4.0 and com.ibm.websphere.appserver.builtinAuthentication-1.0 features cannot be loaded at the same time. The appSecurity-4.0 feature of Jakarta EE 9 is incompatible with the com.ibm.websphere.appserver.builtinAuthentication-1
+>     .0 feature of Java EE 6. The appSecurity-4.0 and appSecurity-4.0 configured features include an incompatible combination of features. Your configuration is not supported. Update the configuration to use features that support either the Jakarta EE or Java EE program
+>     ming models, but not both.
 
 Odd, since this never happened with the other project...
 maybe something weird is cached.
@@ -3466,7 +3478,7 @@ I try to double check on my other application only to find it has ALSO bricked??
 Whether I remove `index.html` or not, it redirects to `/home`?
 And gives the same error?
 
-    Error 404: java.io.FileNotFoundException: SRVE0190E: File not found: /home 
+> Error 404: java.io.FileNotFoundException: SRVE0190E: File not found: /home 
     
 This is so weird I'm gonna assume something went wrong when closing a server
 and we have some zombie server eating my requests or something.
@@ -3550,10 +3562,10 @@ Passwords are just fine as far as I'm concerned!
 Interestingly enough, this is even logical! Whether we use `bobobo` or `bob`,
 both go through LDAP and give the following error now:
 
-    [ERROR   ] com.ibm.wsspi.security.wim.exception.WIMSystemException: 
-               CWIML4520E: The LDAP operation could not be completed. 
-               The LDAP naming exception javax.naming.InvalidNameException: [LDAP: error code 34 - invalid DN]; 
-               resolved object com.sun.jndi.ldap.LdapCtx@15daaab4 occurred during processing.
+>     [ERROR   ] com.ibm.wsspi.security.wim.exception.WIMSystemException: 
+>                CWIML4520E: The LDAP operation could not be completed. 
+>                The LDAP naming exception javax.naming.InvalidNameException: [LDAP: error code 34 - invalid DN]; 
+>                resolved object com.sun.jndi.ldap.LdapCtx@15daaab4 occurred during processing.
 
 What if I use a more Kerberos-like name, e.g. `bob@GOODLIKE.EU`? Same error.
 
@@ -3563,9 +3575,9 @@ What if I just dump the entire bloody Kerberos name?
 
 Progress! We get a completely different error:
 
-    [ERROR   ] com.ibm.wsspi.security.wim.exception.PasswordCheckFailedException: 
-               CWIML4537E: The login operation could not be completed. 
-               The specified principal name krbPrincipalName=bob@GOODLIKE.EU,cn=GOODLIKE.EU,cn=kerberos,ou=Services,dc=goodlike,dc=eu is not found in the back-end repository.
+>     [ERROR   ] com.ibm.wsspi.security.wim.exception.PasswordCheckFailedException: 
+>                CWIML4537E: The login operation could not be completed. 
+>                The specified principal name krbPrincipalName=bob@GOODLIKE.EU,cn=GOODLIKE.EU,cn=kerberos,ou=Services,dc=goodlike,dc=eu is not found in the back-end repository.
 
 This is interesting, because if I run the command
 
@@ -3596,10 +3608,10 @@ and copy `/tmp/krb5cc_1000` to the project with this configuration:
 
 This leads to a completely different error:
 
-    Caused by: javax.security.auth.login.LoginException: 
-    CWIML4507E: Kerberos login failed with the ldap/mumkashi-virtualbox@GOODLIKE.EU Kerberos principal 
-    and the C:\Code Projects\liberty_or_death\.build\wlp\usr\servers\defaultServer\krb5cc_1000.cc Kerberos credential cache (ccache). 
-    javax.security.auth.login.LoginException: Unable to obtain password from user
+>     Caused by: javax.security.auth.login.LoginException: 
+>     CWIML4507E: Kerberos login failed with the ldap/mumkashi-virtualbox@GOODLIKE.EU Kerberos principal 
+>     and the C:\Code Projects\liberty_or_death\.build\wlp\usr\servers\defaultServer\krb5cc_1000.cc Kerberos credential cache (ccache). 
+>     javax.security.auth.login.LoginException: Unable to obtain password from user
 
 It would help if someone carefully explained what the hell is going on here.
 Like, is it gonna store the credentials in the cache? Or is it looking for them?
@@ -3621,11 +3633,11 @@ They were used by `slapd` to perform `kinit` and `klist`, I assume,
 so they should have the credentials for `ldap/mumkashi`.
 And true enough the error changes:
 
-    Caused by: com.ibm.wsspi.security.wim.exception.WIMSystemException:
-    CWIML4520E: The LDAP operation could not be completed. 
-    The LDAP naming exception javax.naming.AuthenticationException: 
-    [LDAP: error code 49 - SASL(-13): authentication failure: GSSAPI Failure: gss_accept_sec_context]; 
-    resolved object com.sun.jndi.ldap.LdapCtx@79786e90 occurred during processing.
+>     Caused by: com.ibm.wsspi.security.wim.exception.WIMSystemException:
+>     CWIML4520E: The LDAP operation could not be completed. 
+>     The LDAP naming exception javax.naming.AuthenticationException: 
+>     [LDAP: error code 49 - SASL(-13): authentication failure: GSSAPI Failure: gss_accept_sec_context]; 
+>     resolved object com.sun.jndi.ldap.LdapCtx@79786e90 occurred during processing.
 
 Definitely feels like we're on the right track.
 I'll mention that this error only occurs when using `bob` or `bob@GOODLIKE.EU`
@@ -3646,11 +3658,11 @@ as it is getting annoyingly large:
 Then I close the console as I cannot escape `sudo su` mode by any known means.
 I try to login again and find this error:
 
-    Jun  7 14:15:37 mumkashi-VirtualBox slapd[959]: 
-    SASL [conn=1039] Failure: GSSAPI Error: Unspecified GSS failure.  
-    Minor code may provide more information 
-    (Request ticket server ldap/192.168.1.5@GOODLIKE.EU found in keytab 
-    but does not match server principal ldap/mumkashi-virtualbox@)
+>     Jun  7 14:15:37 mumkashi-VirtualBox slapd[959]: 
+>     SASL [conn=1039] Failure: GSSAPI Error: Unspecified GSS failure.  
+>     Minor code may provide more information 
+>     (Request ticket server ldap/192.168.1.5@GOODLIKE.EU found in keytab 
+>     but does not match server principal ldap/mumkashi-virtualbox@)
 
 Interesting that the IP would pop out here. It's still in the `keytab`,
 as I wrote the `mumkashi` principal on top of it.
@@ -3671,8 +3683,8 @@ I'll add it to our config here just so we have matching files.
 
 That being said, we still have an error to deal with:
 
-    javax.naming.InvalidNameException: dn=goodlike,dn=eu: 
-    [LDAP: error code 34 - invalid DN]; remaining name 'dn=goodlike,dn=eu'
+>     javax.naming.InvalidNameException: dn=goodlike,dn=eu: 
+>     [LDAP: error code 34 - invalid DN]; remaining name 'dn=goodlike,dn=eu'
 
 This is easy: I entered `dn` instead of `dc` by accident in `server.xml`.
 I'm impressed that it only NOW caught on to the issue...
@@ -3681,19 +3693,19 @@ it didn't work before.
 
 Alright, we're back to a more familiar error:
 
-    com.ibm.wsspi.security.wim.exception.PasswordCheckFailedException: 
-    CWIML4537E: The login operation could not be completed. 
-    The specified principal name bob is not found in the back-end repository.
+>     com.ibm.wsspi.security.wim.exception.PasswordCheckFailedException: 
+>     CWIML4537E: The login operation could not be completed. 
+>     The specified principal name bob is not found in the back-end repository.
 
 Hmm... what about the other username options?
 
-    com.ibm.wsspi.security.wim.exception.PasswordCheckFailedException: 
-    CWIML4537E: The login operation could not be completed. 
-    The specified principal name bob@GOODLIKE.EU is not found in the back-end repository.
+>     com.ibm.wsspi.security.wim.exception.PasswordCheckFailedException: 
+>     CWIML4537E: The login operation could not be completed. 
+>     The specified principal name bob@GOODLIKE.EU is not found in the back-end repository.
 
-    com.ibm.wsspi.security.wim.exception.PasswordCheckFailedException: 
-    CWIML4537E: The login operation could not be completed. 
-    The specified principal name krbPrincipalName=bob@GOODLIKE.EU,cn=GOODLIKE.EU,cn=kerberos,ou=Services,dc=goodlike,dc=eu is not found in the back-end repository.
+>     com.ibm.wsspi.security.wim.exception.PasswordCheckFailedException: 
+>     CWIML4537E: The login operation could not be completed. 
+>     The specified principal name krbPrincipalName=bob@GOODLIKE.EU,cn=GOODLIKE.EU,cn=kerberos,ou=Services,dc=goodlike,dc=eu is not found in the back-end repository.
 
 Well, shit. It's clearly connecting, but it can't find the ol' `bob`.
 
@@ -3985,10 +3997,10 @@ as to what the correct `user name` would be.
 
 I run the application and try to login using `bob`/`Bob`:
 
-    Caused by: com.ibm.wsspi.security.wim.exception.WIMSystemException:
-    CWIML4520E: The LDAP operation could not be completed.
-    The LDAP naming exception javax.naming.directory.InvalidSearchFilterException: invalid attribute description;
-    remaining name 'dc=goodlike,dc=eu'
+>     Caused by: com.ibm.wsspi.security.wim.exception.WIMSystemException:
+>     CWIML4520E: The LDAP operation could not be completed.
+>     The LDAP naming exception javax.naming.directory.InvalidSearchFilterException: invalid attribute description;
+>     remaining name 'dc=goodlike,dc=eu'
 
 Not good. What about `cn=Bob,ou=people,dc=goodlike,dc=eu`? Success!
 It actually logs in with that bizarre name! It is also not case-sensitive.
@@ -3999,8 +4011,8 @@ and used `cn=` instead :/
 
 How about the `uid=testuser,ou=people,dc=goodlike,dc=eu`?
 
-    com.ibm.wsspi.security.wim.exception.PasswordCheckFailedException:
-    CWIML4541E: The login operation could not be completed as the password is either missing or empty.
+>     com.ibm.wsspi.security.wim.exception.PasswordCheckFailedException:
+>     CWIML4541E: The login operation could not be completed as the password is either missing or empty.
 
 Figures. Let me add a password real quick...
 
