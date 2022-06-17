@@ -4394,7 +4394,7 @@ Not taking any chances here.
     
 I save that into `/etc/resolv.conf` and `apt` command starts working.
 
-Kerberos setup wizard pops up, so I enter `GOODLIKE.EU` and `192.168.1.7` twice.
+Kerberos setup wizard pops up, so I enter `GOODLIKE.EU` and 2x`192.168.1.7`.
 Then it completes. But not so fast!
 
 > Note1: For a DC you do not need `libpam-winbind libnss-winbind libpam-krb5`,
