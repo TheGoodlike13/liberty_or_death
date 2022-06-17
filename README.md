@@ -35,6 +35,7 @@
 ##### [2.17.1. Hell in summary](#authentication-hell-in-summary)
 ### [3. (SPN)EGO death](#spnego-death)
 #### [3.1. It's over 4000!](#its-over-4000)
+#### [3.2. Get ready to dance](#get-ready-to-dance)
 ### [4. Summary of summaries](#summary-of-summaries)
 
 Links to various resources referred to (try [web archive](https://archive.org/) if down, should work for most):
@@ -116,6 +117,8 @@ Links to various resources referred to (try [web archive](https://archive.org/) 
 ##### [#where_is_the_slap](https://serverfault.com/questions/351084/openldap-where-is-my-slapd-conf)
 ##### [#slap_23](https://www.openldap.org/doc/admin23/schema.html)
 ##### [#slap_26](https://www.openldap.org/doc/admin26/schema.html)
+##### [#brazilian_dance](https://wiki.samba.org/index.php/Main_Page)
+##### [#dance_nicely](https://wiki.samba.org/index.php/How_to_do_Samba:_Nicely)
 
 ## Setting up a liberty server that works
 
@@ -4067,6 +4070,106 @@ I hope I'm wrong, but if not, you know I'll give it a full paragraph
 of mean words as a send off, so there's that to look forward to at least.
 
 Anyway, off we go!
+
+### Get ready to dance
+
+Do you know what `maven` is?
+I know we've used it already in the example apps. That's beside the point.
+The real question is "could you explain what it is to someone who has no idea?"
+
+You might think, OK, it's "a build tool", or more specifically,
+"it helps you build your program". Fair enough.
+I think that's the simplest explanation anyone could give.
+Perhaps you'd go as far as "it helps your app manage dependencies!" Very neat.
+Maybe you'd refer to other things, like "it's an evolution of `ant`". Could be.
+
+These are the typical things I'd see about `maven` back when I was but a young
+fledgling software engineer.
+The problem with them is that they make absolutely no sense
+to someone who has no idea what `maven` is already.
+
+A typical fresh programmer knows of "compiling" and "running".
+"Build" is a completely new and strange word, unless you take it as a synonym
+for "compiling", which is entirely possible, based on how much you used an IDE.
+
+There's a reasonable chance you would understand "dependencies",
+at least after a google search.
+But, once again, you may be confused why would you want a system to manage them.
+After all, your IDE already manages dependencies for you!
+Just copy and paste them in, all good!
+
+And, obviously, `ant` would be completely meaningless to you.
+Ants are basically bugs, why would you want those near your code anyway?
+That would make `maven` an even bigger bug, get that shit outta here.
+
+It's been many years, so I can hardly recall to what extent any of the above
+were my thoughts. But it can't have been too far off.
+Because nobody told me what it actually is.
+
+Let's unveil this forbidden knowledge, which, admittedly, you probably already have:
+
+> `maven` is a software client for automatically downloading `.jar` files
+> from a prepared server, usually a public one, referred to as a repository,
+> then putting them all together with your code in a way that works
+> and even running it for you if you so desire.
+
+It is certainly true that `maven` can do much more than that.
+But for a new person, that's gonna be the extent of it. The core functionality.
+
+Yet you won't find anyone who dares give this description, at least not
+without an arduous exploration of every corner of the internet, such as this page.
+
+If I had to focus on key words in the definition,
+I'd say these qualify: `client`, `automatically`, `repository`, `works`.
+It's by building around these concepts that one can actually understand
+what the point of `maven` is: why it exists and why would anyone bother.
+If you start with my definition, you can continue to build upon it as you use
+the tool and learn more by asking questions like, "could it also do this?"
+
+Now take my definition, and compare it to what you can find at the [maven page](https://maven.apache.org/).
+Imagine a new developer trying to understand what `maven` is,
+but they don't *know* anything about what is in my definition.
+I know how I'd feel, because I did. I'd feel sick to my stomach.
+I'd feel like this is some useless junk that nobody needs.
+Just full of marketing speak and unknowable acronyms that make no sense.
+Links to "documentation" that would only make things more incomprehensible
+as the jargon would increase exponentially from there. A real fucking mess.
+
+I wouldn't even be that wrong, given how I ultimately use `gradle` these days.
+But I'd be wrong for all of the wrong reasons. Nay.
+I **WAS** wrong for all the wrong reasons. But those reasons were not my fault.
+Nobody told me what it was, or how it worked, in practice.
+And I would say, going to their "main" page definitely qualifies as asking.
+
+Why am I telling you all of this? Well, our next step requires SPNEGO.
+A cursory look has given me the impression that I would need something
+like an `Active Directory Domain Controller` installed for that to be possible.
+
+Enter [#brazilian_dance](#brazilian_dance). The Linux alternative. Wowee.
+I open the page, knowing nothing about it and try to read it. Guess how I feel?
+Yes, the same sickness as all those years ago when I first opened the `maven` page.
+Because yet again, instead of giving a down to earth explanation,
+we have a bunch of marketing speak, and links to things that make no sense.
+
+I mean, I'd even settle for a link "hey! if you dum and know nothin', click this!"
+That's all I need! That's all I want! It doesn't even have to be super elaborate!
+Just a definition like my definition for `maven` is all that would suffice!
+The typical use case scenario! How does it look? How does it work?
+What are typical pieces of equipment and installation and why? That's it.
+Is it really so much to ask? It that really harder than providing an entire
+documentation wiki page with explicit details? I just don't get it.
+It's almost like they *don't want* new people to come in and use their shit.
+And that's being generous to their intelligence!
+
+Hey, maybe this link will help? [#dance_nicely](#dance_nicely)
+
+    Samba strives to be a welcoming community, for users, developers
+    and all who seek to use or improve Samba.
+ 
+[HAHAHAHAHAHA!](https://www.youtube.com/watch?v=qLKhxjfG03A)
+
+Well, at least they're good at making you laugh, gotta give them that one.
+`maven` wasn't funny :D
 
 ## Summary of summaries
 
