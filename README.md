@@ -4381,7 +4381,7 @@ Thanks `apt`, you're a real pal unlike all those other programs.
 But I actually have a good idea what's wrong. I mean, it should be obvious.
 We deleted the DNS resolution file. So nothing gets resolved now. Hurray.
 
-Let's put a manual one back in with `8.8.8.8`, which I remind you, is google DNS.
+Let's put a manual one back in with `8.8.8.8`, which, I remind you, is google DNS.
 
 As always, we can't create a file, so we need to destroy our computer's security
 first.
