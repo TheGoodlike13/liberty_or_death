@@ -4412,6 +4412,15 @@ I chose `ntp` because it's first. And shorter. YEAH!
 
 OK. With all those commands done, surely we have installed Samba and can proceed?
 
+Actually, there's a quick fix we must apply first.
+You see, I didn't realize it, but the hostname we used in `hosts` was `DC1`.
+That's because I didn't realize that was the hostname.
+That's because nobody told me and the guide isn't specific enough.
+
+Anyway, let's hope we're not too late with changing it:
+
+    192.168.1.7     JANMASHI.goodlike.eu     JANMASHI
+
 ## Summary in summary
 
 These are links to summaries throughout the entire document, in order:
