@@ -4674,6 +4674,46 @@ All works. I can only guess there was an issue with `smbclient` previously
 because we didn't do `kinit`, and the issue with `kinit` was because
 we didn't run `sudo samba` after restart. What a fickle program!
 
+    sudo smbclient //localhost/netlogon -UAdministrator -c 'ls'
+    
+Also works as expected. Impressive! This must be record time for a problem solved.
+
+> Verifying DNS
+
+I mean, we kinda verified it indirectly with previous step.
+But it doesn't hurt to do additional checking, I suppose.
+
+    sudo host -t SRV _ldap._tcp.goodlike.eu
+    
+> _ldap._tcp.goodlike.eu has SRV record 0 100 389 mumkashi.goodlike.eu.
+
+Hmm... that doesn't seem right... I mean, it does confirm the DNS works.
+But why is it `mumkashi.goodlike.eu`? I wanted the hostname of this server
+to be `JANMASHI`, and even put that in the `hosts`.
+
+I have to assume that when it says "hostname" it really means `/etc/hostname`
+and not just random value you enter as a string.
+This doesn't explain how things haven't broken given my apparent ineptitude.
+
+Well, if it ain't broke, I ain't fixing it.
+I know that's the opposite of the sentiment I had at the beginning.
+Call it character development. Or corruption. I don't care.
+
+    sudo host -t SRV _kerberos._udp.goodlike.eu
+    
+No problems.
+
+    sudo host -t A janmashi.goodlike.eu
+    
+> Host janmashi.goodlike.eu not found: 3(NXDOMAIN)
+
+    sudo host -t A mumkashi.goodlike.eu
+    
+> mumkashi.goodlike.eu has address 192.168.1.7
+
+Disgraced `JANMASHI` does not exist.
+I guess Samba is true to the lore of the Chronicles of Mumkashi.
+
 ## Summary in summary
 
 These are links to summaries throughout the entire document, in order:
