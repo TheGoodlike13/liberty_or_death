@@ -122,6 +122,7 @@ Links to various resources referred to (try [web archive](https://archive.org/) 
 ##### [#awkwardly_dancing_dummy_coder](https://wiki.samba.org/index.php/Setting_up_Samba_as_an_Active_Directory_Domain_Controller)
 ##### [#resolutionary_fight](https://www.ctrl.blog/entry/resolvconf-tutorial.html)
 ##### [#unofficial_moves](https://wiki.samba.org/index.php/Distribution-specific_Package_Installation)
+##### [#renaming_service](https://askubuntu.com/questions/9540/how-do-i-change-the-computer-name)
 
 ## Setting up a liberty server that works
 
@@ -4420,6 +4421,128 @@ That's because nobody told me and the guide isn't specific enough.
 Anyway, let's hope we're not too late with changing it:
 
     192.168.1.7     JANMASHI.goodlike.eu     JANMASHI
+
+Next chapter!
+
+> Provisioning a Samba Active Directory
+
+Now, I'm not too sure about it, but what I think they mean is initializing it.
+What's with the obsession of all developers to invent new ways of saying things?
+
+> The AD provisioning requires root permissions to create files and set permissions.
+
+So you're saying I should get ready to `sudo`. OK!
+
+> When provisioning a new AD, it is recommended to enable the NIS extensions ...
+> There are no disadvantages to enabling the NIS extensions, but
+> enabling them in an existing domain requires manually extending the AD schema.
+
+I'd say requiring to do something, particularly something you don't understand,
+is quite a significant disadvantage in of itself.
+
+It seems I have the option to do this by passing a massive command,
+or by doing it interactively. Let's give the interactive one a shot.
+
+    sudo samba-tool domain provision --use-rfc2307 --interactive
+
+I hope I don't regret the `rfc2307` thing!
+
+> Realm:
+
+    GOODLIKE.EU
+    
+> Domain [GOODLIKE]:
+
+This one is a bit more cryptic. The previous chapter has some info though:
+
+> This can be anything...
+> It is recommended to use the first part of the AD DNS domain.
+> Do not use the computers short hostname.
+
+I'm gonna go with the thing in the brackets then:
+
+    GOODLIKE
+    
+> Server Role (dc, member, standalone) [dc]:
+
+    dc
+    
+> DNS backend (SAMBA_INTERNAL, BIND9_FLATFILE, BIND9_DLZ, NONE) [SAMBA_INTERNAL]:
+
+    SAMBA_INTERNAL
+
+> DNS forwarder IP address (write 'none' to disable forwarding) [8.8.8.8]:
+
+    8.8.8.8
+    
+Interestingly, their example seems to use a more LAN-like IP in brackets,
+which is, I suppose, what Samba is suggesting to use.
+But they use `8.8.8.8` in actuality, which is what MY Samba suggested.
+I'm guessing this come from the DNS file we created.
+
+> Administrator password:
+
+No suggestions here, huh? :P
+
+    uzakashi
+    
+> Administrator password does not meet the default quality standards.
+
+Well, shit. There goes the streak of using the same password over and over.
+I guess I'll use their example?
+
+    Passw0rd
+
+> Retype password:
+
+Such complexity, much security.
+
+>     ERROR(<class 'samba.provision.InvalidNetbiosName'>): uncaught exception - 
+>     The name ''MUMKASHI-VIRTUALBOX'' is not a valid NetBIOS name
+
+Cool story, except I haven't entered `MUMKASHI-VIRTUALBOX` anywhere.
+I do know one place where it exists, I suppose: the `hosts` file.
+Let's remove it and hope nothing breaks?
+
+I remove the line and re-enter the interactive command.
+I get a warning first though:
+
+> sudo: unable to resolve host mumkashi-VirtualBox: Name of service not known
+
+Well, that's either a good thing, or a bad thing. Let's enter values and find out.
+
+Same error as before. Alright, so it wasn't the `hosts` file. Time to investigate.
+
+    sudo samba-tool domain provision --use-rfc2307 --interactive --option="interfaces=lo enp0s8" --option="bind interfaces only=yes"
+
+I add a couple of options based on the warnings in the guide. No effect.
+
+[A bug](https://bugs.launchpad.net/ubuntu/+source/samba4/+bug/1048353)
+has been registered with a similar issue.
+In the comments you can even find the familiar `VIRTUALBOX` reference.
+It seems that we might have to rename the computer itself!
+
+[#renaming_service](#renaming_service) helps with that:
+
+    sudo chown mumkashi /etc/hostname
+    
+    > mumkashi
+    
+Let's lose the `VirtualBox` part, that should help, surely.
+I also change the `hosts` file again to include what we removed previously:
+    
+    127.0.1.1       mumkashi
+
+I restart the VM and try the provision again.
+
+>     ERROR(<class 'samba.provision.ProvisioningError'>): Provision failed -
+>     ProvisioningError: guess_names:
+>     'realm =' was not specified in supplied /etc/samba/smb.conf.
+>     Please remove the smb.conf file and let provision generate it
+
+OK, I'm guessing Samba didn't clean up after itself when it failed last time.
+Instead of trying to fix this manually, I'll rollback the VM.
+I'll have to re-change the hostname, but that is not a big deal.
 
 ## Summary in summary
 
