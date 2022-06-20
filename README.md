@@ -4714,6 +4714,34 @@ No problems.
 Disgraced `JANMASHI` does not exist.
 I guess Samba is true to the lore of the Chronicles of Mumkashi.
 
+> Verifying Kerberos
+
+Already done in previous steps.
+
+> Configuring Time Synchronisation
+> 
+> Kerberos requires synchronised time on all domain members.
+
+Hmm, we don't have other members yet, I think, so we can skip this for now.
+But I will put a mental note to return whenever we're setting one up.
+
+> Using the Domain Controller as a File Server
+
+Not recommended, apparently, and I'm not interested anyway.
+It could be a simple way to verify things work, but I'll leave that for later.
+
+Looks like that's all for Samba domain controller!
+Now I guess I have to connect my actual computer to this Samba thing.
+I hope it doesn't fuck my network up even more...
+
+I've stopped updating on the network issues, but they are more or less the same:
+the SSL process prevents me from establishing the connection due to some kind
+of "end of file" error. 
+This happens from time to time with various websites when I access them
+for the first time in a while. After that it's reasonably OK.
+Although some pictures in, uh, let's say,
+certain niche websites fail to load half the time. Not good.
+
 ## Summary in summary
 
 These are links to summaries throughout the entire document, in order:
