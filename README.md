@@ -4544,6 +4544,20 @@ OK, I'm guessing Samba didn't clean up after itself when it failed last time.
 Instead of trying to fix this manually, I'll rollback the VM.
 I'll have to re-change the hostname, but that is not a big deal.
 
+Uh... we get the same exact error when running from a restored VM.
+Well, that's odd. I guess I'll remove the file manually then?
+
+    sudo rm /etc/samba/smb.conf
+
+After I run the command one more time, it finally vomits out the expected output.
+It also includes a bunch of Python references every other line. Hence vomit.
+But I can assume Samba is good to go? It did have some issue half way:
+
+> Unable to determine the DomainSID,
+> can not enforce uniqueness constraint on local domainSIDs
+
+Let's hope its nothing important.
+
 ## Summary in summary
 
 These are links to summaries throughout the entire document, in order:
