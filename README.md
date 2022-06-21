@@ -133,6 +133,7 @@ Links to various resources referred to (try [web archive](https://archive.org/) 
 ##### [#hideous_mess](https://lists.samba.org/archive/samba/2018-July/217280.html)
 ##### [#spnego_open](https://openliberty.io/docs/latest/configuring-spnego-authentication.html)
 ##### [#more_hideous_mess](https://lists.samba.org/archive/samba-technical/2012-December/089225.html)
+##### [#dancing_keytabs](https://wiki.samba.org/index.php/Generating_Keytabs)
 
 ## Setting up a liberty server that works
 
@@ -5035,6 +5036,74 @@ and that's very confusing. I run the command referenced within:
 >              RestrictedKrbHost/GPC
 
 Uh, that's like 4 names. Or is that one name with 4 lines? Who knows...
+
+So, we're a bit in a pickle here. What kind of `account` do we need?
+User? Computer? Something else? We already have a computer account,
+and that's the computer which hosts the app, so that's OK, maybe?
+It also already has SPNs, but are they OK? Or do we need something specific?
+
+I suppose we can just take what we have and try. If it doesn't work,
+we'll go back, muck around to do it the proper way, and then it still
+won't work. That's basically the story of this entire document.
+
+Let's try to make a `keytab`. [#dancing_keytabs](#dancing_keytabs) has info.
+For the heck of it, let's add an spn to some random account, like `mumkashi`.
+Maybe that will give me some insight.
+
+    sudo samba-tool spn add host/mumkashi.goodlike.eu@GOODLIKE.EU mumkashi
+    sudo samba-tool spn list mumkashi
+
+>     User CN=mumkashi,CN=Users,DC=goodlike,DC=eu has the following servicePrincipalNa
+>     me:
+>              host/mumkashi.goodlike.eu@GOODLIKE.EU
+
+Can't help but notice that the SPN is a little different than expected.
+In the `gpc$` case, `@GOODLIKE.EU` part was omitted.
+Perhaps it's more accurate to say it didn't exist at all?
+But should it? Or will it be added automatically?
+Does it even matter? I mean, the Samba wiki explicitly put it there.
+But the auto-generated SPNs do not have it. What gives?
+
+I guess we'll just proceed with the assumption it doesn't matter.
+
+The bottom of the page warns that some encryption keys will not be added.
+For no reason. Thanks, Samba. Well, let's try to follow the commands...
+
+> Log into A DC as root
+
+What does that mean? No, seriously?
+The idea of `login` in this context is completely nebulous.
+I am running the VM with console and using `sudo` commands.
+Does that count as "logged in"? Or does it mean something else?
+
+    sudo kinit administrator
+    sudo net ads enctypes set gpc$
+    sudo net ads enctypes set mumkashi
+    
+In both `net` cases, I get the same error:
+
+> kerberos_kinit_password GOODLIKE@GOODLIKE.EU failed:
+> Client not found in Kerberos database
+> startup failed
+
+Admittedly it asks me for a password for [GOODLIKE\root].
+Is that what they mean by "logging in as root"?
+But I've never set any passwords for `GOODLIKE` or `root` of anything.
+If I have, it's always been `Passw0rd`, as any other password wouldn't
+pass the security requirements (lol).
+
+I suppose if I enter no password, I just get
+
+> startup failed
+
+Is that better? Worse? This could've been avoided if your retarded system
+would just add the keys to the `keytab` like it's asked to...
+
+Seriously, way to go. Create this overly arcane system that instead of helping
+makes every step needlessly complicated with more and more bullshit along the
+way. Know what? I'll just make the keytab file as is and move forward.
+If it doesn't work, it's just another step to the thousand or so that
+may or may not be broken in the final analysis when nothing works. Yay.
 
 ## Summary in summary
 
