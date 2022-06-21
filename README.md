@@ -4940,7 +4940,20 @@ What happens if we try to join the domain now? New error!
 >
 > Access is denied.
 
-I tried a couple times just to eliminate possibility of typos.
+I tried a couple times just to eliminate the possibility of typos.
+
+This is all quite odd, since I have to user both `username` and `password`
+to login. I thought they *had* to match the PC name for this to work,
+but it seems like it's the opposite? Very weird.
+
+I change the computer name to `GPC` and try again. Same error. Grr.
+What's in the logs?
+
+> 06/21/2022 11:48:21:021 NetpMapGetLdapExtendedError:
+> Parsed [0xac] from server extended error string:
+> acl: unable to get access to CN=GPC,CN=Computers,DC=goodlike,DC=eu
+
+Ah, always a pleasure to have some LDAP rights issues. NOT.
 
 ## Summary in summary
 
