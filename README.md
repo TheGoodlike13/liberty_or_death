@@ -37,6 +37,7 @@
 #### [3.1. It's over 4000!](#its-over-4000)
 #### [3.2. Get ready to dance](#get-ready-to-dance)
 #### [3.3. Dancing through the Windows](#dancing-through-the-windows)
+#### [3.4. Breakdown of negotiations](#breakdown-of-negotiations)
 ### [4. Summary in summary](#summary-in-summary)
 
 Links to various resources referred to (try [web archive](https://archive.org/) if down, should work for most):
@@ -130,6 +131,8 @@ Links to various resources referred to (try [web archive](https://archive.org/) 
 ##### [#telnot](https://www.wikihow.com/Activate-Telnet-in-Windows-7)
 ##### [#invitation_to_dance](https://www.thegeekdiary.com/how-to-add-or-delete-a-samba-user-under-linux/)
 ##### [#hideous_mess](https://lists.samba.org/archive/samba/2018-July/217280.html)
+##### [#spnego_open](https://openliberty.io/docs/latest/configuring-spnego-authentication.html)
+##### [#more_hideous_mess](https://lists.samba.org/archive/samba-technical/2012-December/089225.html)
 
 ## Setting up a liberty server that works
 
@@ -4979,6 +4982,59 @@ Can't connect to it, but it's there, technically!
 
 So now that we're in the domain, can we use this bitch to connect via SPNEGO?
 I sure hope so...
+
+### Breakdown of negotiations
+
+The time has come to mess around with SPNEGO itself. Let's try [#spnego_open](#spnego_open).
+
+> To enable SPNEGO, the clocks for the client,
+> Active Directory server, and Open Liberty server
+> must be synchronized within 5 minutes of each other.
+
+They're basically synchronized, it's a host and a VM.
+I hope just the 2 is enough?
+
+> Using SPNEGO directly from the domain controller isn’t supported.
+
+Right, but my usage of SPNEGO will be strictly NOT from the DC.
+The DC lives in the VM. The host has joined the domain, will host the app,
+will use the browser. So nothing that should be a problem?
+
+> On the DC, create a Kerberos service principal name and keytab file.
+
+We can't just use the example, because it's for Windows, not Samba.
+So we'll have to improvise with whatever help we can muster.
+
+[#more_hideous_mess](#more_hideous_mess) has some info on SPN creation.
+There's some bickering about whether you can create one for a PC or not,
+and that's very confusing. I run the command referenced within:
+
+    sudo samba-tool spn list
+    
+>     Usage: samba-tool spn list <user> [options]
+
+    sudo samba-tool spn list administrator
+    
+> User CN=Administrator,CN=Users,DC=goodlike,DC=eu has no servicePrincipalName
+    
+    sudo samba-tool spn list goodlikepc
+
+> User CN=goodlikepc,CN=Users,DC=goodlike,DC=eu has no servicePrincipalName
+
+    sudo samba-tool spn list gpc
+
+> ERROR: User gpc not found
+
+    sudo samba-tool spn list gpc$
+
+>     User CN=GPC,CN=Computers,DC=goodlike,DC=eu has the following servicePrincipalNam
+>     e:
+>              HOST/GPC.goodlike.eu
+>              RestrictedKrbHost/GPC.goodlike.eu
+>              HOST/GPC
+>              RestrictedKrbHost/GPC
+
+Uh, that's like 4 names. Or is that one name with 4 lines? Who knows...
 
 ## Summary in summary
 
