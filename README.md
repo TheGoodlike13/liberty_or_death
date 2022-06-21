@@ -129,6 +129,7 @@ Links to various resources referred to (try [web archive](https://archive.org/) 
 ##### [#windows_domain_stuff](https://docs.microsoft.com/en-us/windows-server/identity/ad-fs/deployment/join-a-computer-to-a-domain)
 ##### [#telnot](https://www.wikihow.com/Activate-Telnet-in-Windows-7)
 ##### [#invitation_to_dance](https://www.thegeekdiary.com/how-to-add-or-delete-a-samba-user-under-linux/)
+##### [#hideous_mess](https://lists.samba.org/archive/samba/2018-July/217280.html)
 
 ## Setting up a liberty server that works
 
@@ -4954,6 +4955,30 @@ What's in the logs?
 > acl: unable to get access to CN=GPC,CN=Computers,DC=goodlike,DC=eu
 
 Ah, always a pleasure to have some LDAP rights issues. NOT.
+
+Still the error acts as a hint to find the [#hideous_mess](#hideous_mess).
+This is one of many e-mails in a chain where the solution was an admin
+account. Remarkably, using `administrator` works this time.
+
+While reading the thread I got the impression the person who was trying
+to help didn't really understand the issue.
+What can I say, you reap what you sow. Should've made that example!
+
+Anyway, I finally join the `GOODLIKE` domain! Yay! Restart the computer...
+I have to log in to it...
+
+That's pretty impressive because:
+1) I have just joined the domain and set no passwords.
+2) The DC is on a VM in the first place, so how would it contact for login?
+
+I was worried that this would happen and brick my actual computer...
+but I just pressed `Enter` and it worked... sigh... so much for my worry!
+
+On the VM I can see `GPC`, my new PC name, in the `Other Locations`.
+Can't connect to it, but it's there, technically!
+
+So now that we're in the domain, can we use this bitch to connect via SPNEGO?
+I sure hope so...
 
 ## Summary in summary
 
