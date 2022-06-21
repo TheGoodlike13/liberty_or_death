@@ -36,6 +36,7 @@
 ### [3. (SPN)EGO death](#spnego-death)
 #### [3.1. It's over 4000!](#its-over-4000)
 #### [3.2. Get ready to dance](#get-ready-to-dance)
+#### [3.3. Dancing through the Windows](#dancing-through-the-windows)
 ### [4. Summary in summary](#summary-in-summary)
 
 Links to various resources referred to (try [web archive](https://archive.org/) if down, should work for most):
@@ -125,6 +126,9 @@ Links to various resources referred to (try [web archive](https://archive.org/) 
 ##### [#renaming_service](https://askubuntu.com/questions/9540/how-do-i-change-the-computer-name)
 ##### [#yummy_advice](https://unix.stackexchange.com/questions/587968/install-samba-client-smbclient-without-the-daemon)
 ##### [#nuking_tendency](https://serverfault.com/questions/777426/samba-operations-return-nt-status-invalid-sid-after-initial-setup)
+##### [#windows_domain_stuff](https://docs.microsoft.com/en-us/windows-server/identity/ad-fs/deployment/join-a-computer-to-a-domain)
+##### [#telnot](https://www.wikihow.com/Activate-Telnet-in-Windows-7)
+##### [#invitation_to_dance](https://www.thegeekdiary.com/how-to-add-or-delete-a-samba-user-under-linux/)
 
 ## Setting up a liberty server that works
 
@@ -695,7 +699,7 @@ Except they don't fit in the screen. You see, the VM by default is in a tiny scr
 Something like `640x480` or whatever.
 I guess we should at least make it widescreen before we continue.
 
-I right click the desktop and select display settings, which includes resolution.
+I right-click the desktop and select display settings, which includes resolution.
 It was actually `800x600`. And the lowest widescreen is... `1280x720`.
 Quite the jump. Oh well.
 Somehow the 'x' which closes the windows is still partially offscreen,
@@ -2346,7 +2350,7 @@ So the command should be
 Except that doesn't work because the file doesn't exist.
 Except it was just clearly listed and I can go to the folder and see it is there.
 
-I right click on the file, go to properties, then permissions tab,
+I right-click on the file, go to properties, then permissions tab,
 there I can change the settings for the group `openldap` to `read & write`,
 then restart again. Server works again!
 
@@ -4480,7 +4484,7 @@ I'm gonna go with the thing in the brackets then:
 Interestingly, their example seems to use a more LAN-like IP in brackets,
 which is, I suppose, what Samba is suggesting to use.
 But they use `8.8.8.8` in actuality, which is what MY Samba suggested.
-I'm guessing this come from the DNS file we created.
+I'm guessing this comes from the DNS file we created.
 
 > Administrator password:
 
@@ -4674,6 +4678,9 @@ All works. I can only guess there was an issue with `smbclient` previously
 because we didn't do `kinit`, and the issue with `kinit` was because
 we didn't run `sudo samba` after restart. What a fickle program!
 
+*Editor's note: later on I still had to call `sudo samba` but not `kinit`.
+No idea what broke in the first place.*
+
     sudo smbclient //localhost/netlogon -UAdministrator -c 'ls'
     
 Also works as expected. Impressive! This must be record time for a problem solved.
@@ -4741,6 +4748,199 @@ This happens from time to time with various websites when I access them
 for the first time in a while. After that it's reasonably OK.
 Although some pictures in, uh, let's say,
 certain niche websites fail to load half the time. Not good.
+
+### Dancing through the Windows
+
+So, next I suppose I need to do something on this computor running Windows 7.
+Unfortunately I have no idea where to begin. Do I need to install something?
+Is it part of default Windows 7 installation, or something extra? Etc.
+
+Based on Samba documentation, we could assume that I must install something
+here that would make this computer a `domain member`.
+Can't be Samba, that's Linux. But I'm not even sure about the assumption.
+I mean, for all I know, that's some special case which is not needed for basic
+interoperability. This is where the example I harshly demanded at the start
+would come in very very useful...
+
+First I try the suggestion in [this page](https://superuser.com/questions/115337/windows-7-connecting-to-samba-shares).
+I don't really think this will do anything, but might as well start somewhere.
+Predictably, nothing happens. It's related to connecting to Samba, sure,
+but we're missing some sort of fundamental connection to the "domain".
+
+[#windows_domain_stuff](#windows_domain_stuff) seems to give more detailed
+instructions. I almost miss the
+`Under Computer name, domain, and workgroup settings, click Change settings.`
+part. It's on the right side of the screen.
+
+I also accidentally change the workgroup instead of the domain into `GOODLIKE.EU`,
+which doesn't help :D
+
+Unfortunately, it doesn't seem like I can connect to the domain as is:
+
+> An Active Directory Domain Controller (AD DC) for the domain
+> "GOODLIKE.EU" could not be contracted.
+>
+> The error was: "No records found for given DNS query."
+> (error code 0x0000251D DNS_INFO_NO_RECORDS)
+> 
+> The query was for the SRV record for _ldap._tcp.dc._msdcs.GOODLIKE.EU
+
+Hmm, that looks quite similar to what we were poking at Samba with before!
+
+    sudo host -t SRV _ldap._tcp_.dc._msdcs.goodlike.eu
+
+> _ldap._tcp_.dc._msdcs.goodlike.eu has SRV record 0 100 389 mumkashi.goodlike.eu
+
+So as long as we can connect to our VM, this should work!
+And the error is not too cryptic: DNS couldn't find shit.
+I actually remember how to setup DNS for a connection from my previous
+network misadventures (DHCP, etc.):
+
+* Right-click network icon, select `Open Network and Sharing Center`
+* Click `Change adapter settings`
+* Right-click on the `host-only` adapter, select `Status`
+* Click `Properties`
+* Select `Internet Protocol Version 4 (TCP/IPv4)`
+* Click `Properties`
+* Make sure `Use the following DNS server addresses` is selected
+* Enter the IP of the DNS: `192.168.1.7` (our VM with Samba)
+
+I'm gonna leave the alternative DNS empty, we don't need it, honestly.
+
+Does the domain `GOODLIKE.EU` work now?
+It takes quite some time to get to the error:
+
+> An Active Directory Domain Controller (AD DC) for the domain
+> "GOODLIKE.EU" could not be contracted.
+>
+> DNS was successfully queried for the service location (SRV)
+> resource record used to locate a domain controller for domain "GOODLIKE.EU":
+> 
+> The query was for the SRV record for _ldap._tcp.dc._msdcs.GOODLIKE.EU
+> 
+> The following domain controllers were identified by the query:
+> mumkashi.goodlike.eu
+> 
+> However no domain controllers could be contacted.
+
+Hmm... almost there... this is where I recall that `GOODLIKE.EU` is the `realm`,
+not the `domain`! The domain was actually just `GOODLIKE`!
+
+Bingo! We get a login prompt! Let's use the `administrator`/`Passw0rd`!
+
+> Computer Name/Domain Changes
+>
+> The following error occurred attempting to join the domain "GOODLIKE":
+> The network path was not found.
+
+Gah! So close yet so far!
+
+[This page](https://www.beaming.co.uk/knowledge-base/techs-unable-join-domain-network-path-not-found/)
+tries to give some advice, but it seems off.
+The only network I see is my internet one.
+Even if I make it public and create a homegroup, nothing changes.
+
+[This page](https://docs.microsoft.com/en-us/answers/questions/224533/unable-to-join-domain-the-network-path-was-not-fou.html)
+has a similar error, but the advice doesn't seem to help.
+
+The firewall, on or off, doesn't make a difference.
+On Ubuntu side, `ufw` isn't even enabled, regards of `sudo ufw status`.
+
+Perhaps I could debug the issue? Well, you need `telnet` for that.
+Instead you get [#telnot](#telnot). I can't access it as a Windows feature,
+as we've established before that menu just doesn't work.
+
+    pkgmgr /iu:"TelnetClient"
+
+Does nothing after restart, `telnet` still not found.
+
+I try to use `PowerShell`, but it can't find `Test-netconnection` anyway.
+Seems to need Windows 8+? Blegh.
+
+In the `C:/Windows/debug/Netsetup.log` I can see this message:
+
+    06/20/2022 15:10:08:031 NetpDsGetDcName:
+    failed to find a DC having account 'GOODLIKEPC$': 0x525, last error is 0x0
+
+Perhaps I need to configure something on Samba first?
+
+The way to add accounts to Samba is described in [#invitation_to_dance](#invitation_to_dance).
+First we must have a local account. Well, we already got one, `mumkashi`.
+Let's see if that works?
+
+    sudo smbpasswd -a mumkashi
+
+I tried `uzakashi`, but it wasn't good enough, so we're back to `Passw0rd`.
+
+I modify the samba config next:
+
+    sudo chown mumkashi /etc/samba/smb.conf
+    
+    [share1]
+       comment = A Shared Directory
+       path = /home/mumkashi
+       valid users = mumkashi
+       public = no
+       writable = yes
+
+I just append those lines to the end of the file.
+
+    testparm
+    
+This prints out the contents of the file, but slightly differently formatted.
+I see no big issues so I proceed.
+
+    sudo systemctl reload smb
+    sudo service smb reload
+    
+Both of these fails, so I just restart the VM and run `sudo samba`, as usual.
+Then I repeat the procedure of joining a domain on Windows, but use `mumkashi`
+instead of `administrator`.
+
+However, the error doesn't change, so I try to add `goodlikepc` account next.
+
+    sudo useradd goodlikepc
+    sudo passwd goodlikepc
+
+When I am asked for the current password (twice), I just press `Enter`.
+`uzakashi` works for this step.
+
+    sudo smbpasswd -a goodlikepc
+    > Passw0rd
+    
+    *in /etc/samba/smb.conf*
+    valid users = mumkashi goodlikepc
+    
+After editing the file, I restart the VM again and run `sudo samba` again.
+Then I repeat the procedure again, this time with `goodlikepc`. Same error.
+
+I randomly try some things. For example, I fix the `hosts` file in the VM:
+
+    127.0.0.1       localhost
+    192.168.1.7     mumkashi.goodlike.eu     mumkashi
+
+I also try to `ping goodlike.eu`.
+Interestingly enough, it does not resolve to `192.168.1.7`!
+Somewhere out there `goodlike.eu` is a real place.
+Well, then I change the `C:\Windows\System32\drivers\etc\hosts` file as well:
+
+    192.168.1.7     goodlike.eu
+    192.168.1.7     mumkashi.goodlike.eu
+
+With this it will have no choice but use the local IP.
+What happens if we try to join the domain now? New error!
+
+> Computer Name/Domain Changes
+>
+> The join operation was not successful.
+> This could be because an existing computer account having name
+> "GoodlikePC" was previously created using a different set of credentials.
+> Use a different computer name, or contact your administrator
+> to remove any stale conflicting account. The error was:
+>
+> Access is denied.
+
+I tried a couple times just to eliminate possibility of typos.
 
 ## Summary in summary
 
