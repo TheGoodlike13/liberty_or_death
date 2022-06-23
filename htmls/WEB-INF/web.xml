@@ -7,6 +7,10 @@
         <role-name>wild</role-name>
     </security-role>
 
+    <security-role>
+        <role-name>SSORole</role-name>
+    </security-role>
+
     <security-constraint>
         <web-resource-collection>
             <web-resource-name>WhoCares</web-resource-name>
@@ -15,6 +19,7 @@
         </web-resource-collection>
         <auth-constraint>
             <role-name>wild</role-name>
+            <role-name>SSORole</role-name>
         </auth-constraint>
     </security-constraint>
 </web-app>

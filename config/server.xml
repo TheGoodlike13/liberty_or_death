@@ -3,28 +3,32 @@
         <feature>appSecurity-4.0</feature>
         <feature>servlet-5.0</feature>
         <feature>ldapRegistry-3.0</feature>
+        <feature>spnego-1.0</feature>
     </featureManager>
 
     <ldapRegistry id="LDAP" realm="GOODLIKE.EU"
-                  host="192.168.1.6" port="389"
+                  host="goodlike.eu" port="389"
                   baseDN="dc=goodlike,dc=eu"
-                  bindDN="cn=admin,dc=goodlike,dc=eu"
-                  bindPassword="uzakashi"
+                  bindDN="CN=Administrator,CN=Users,DC=goodlike,DC=eu"
+                  bindPassword="Passw0rd"
                   ldapType="Custom"
-                  recursiveSearch="true">
-        <customFilters
-                id="customFilters"
-                userFilter="&amp;(uid=%v)(objectClass=inetOrgPerson)"
-                groupFilter="&amp;(cn=%v)(objectClass=groupOfNames)"
-                userIdMap="*:uid"
-                groupMemberIdMap="groupOfNames:member"/>
-    </ldapRegistry>
+                  recursiveSearch="true"/>
+
+    <kerberos configFile="krb5.conf" keytab="gpc.keytab"/>
+
+    <spnego id="whocares"
+            servicePrincipalNames="HOST/GPC.goodlike.eu"/>
+
+    <webAppSecurity ssoDomainNames="localhost"/>
 
     <application location="${whereMyWarAt}" context-root="/">
         <application-bnd>
             <security-role name="wild">
                 <user name="cn=Bob,ou=people,dc=goodlike,dc=eu"/>
                 <user name="uid=testuser,ou=people,dc=goodlike,dc=eu"/>
+            </security-role>
+            <security-role name="SSORole">
+                <special-subject type="ALL_AUTHENTICATED_USERS"/>
             </security-role>
         </application-bnd>
     </application>

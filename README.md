@@ -5,7 +5,7 @@
 
 # Trying to setup SSO for a Liberty application (from zero)
 
-### [1. Setting up a liberty server that works](#setting-up-a-liberty-server-that-works)
+### [1. Setting up a Liberty server that works](#setting-up-a-liberty-server-that-works)
 #### [1.1. Dear diary,](#dear-diary)
 ##### [1.1.1. Liberty in summary](#liberty-in-summary)
 ### [2. The journey to hell](#the-journey-to-authentication-hell)
@@ -135,7 +135,7 @@ Links to various resources referred to (try [web archive](https://archive.org/) 
 ##### [#more_hideous_mess](https://lists.samba.org/archive/samba-technical/2012-December/089225.html)
 ##### [#dancing_keytabs](https://wiki.samba.org/index.php/Generating_Keytabs)
 
-## Setting up a liberty server that works
+## Setting up a Liberty server that works
 
 ### Dear diary,
 
@@ -394,7 +394,7 @@ Excellent to see how many resources are out there!
 There's so many it's hard to choose one from them :D
 
 Well, if we're gonna need a virtual machine, it may as well be Linux.
-I can't imagine the configuration on the liberty side would be any different
+I can't imagine the configuration on the Liberty side would be any different
 because of the OS of the machine the Kerberos server is running on.
 And ultimately, that's the goal of this whole shebang.
 I do hope we can get away with not running multiple VMs though...
@@ -1305,7 +1305,7 @@ Particularly with our track record, if something doesn't work,
 I'd like to flush it out now rather than getting distracted for a week again.
 
 The first non-IBM page I encounter is [#open_your_heart](#open_your_heart).
-It seems to relate specifically to some sort of *open* implementation of liberty.
+It seems to relate specifically to some sort of *open* implementation of Liberty.
 It can't be all that different,
 because it seems to use the familiar format in configuration.
 That being said, there's no knowing if this will work or not with what I'm doing.
@@ -1812,7 +1812,7 @@ Oh yeah? You think you got me fooled?
 I see right through your Indian scammer ways! Reported for phishing.
 Let the company figure that one out.
 
-So next I'm gonna try to either hook up LDAP to liberty,
+So next I'm gonna try to either hook up LDAP to Liberty,
 or at least test that it works somehow.
 All I have to go with for configuration is [#open_your_slap](#open_your_slap),
 which admittedly uses very similar XML to what I can see in working projects.
@@ -3795,7 +3795,7 @@ uses `objectclass`. And if I run the searches myself on the server:
     ldapsearch -x -b dc=goodlike,dc=eu -D cn=admin,dc=goodlike,dc=eu -W objectcategory=*
 
 They predictably return nothing. Which is to say, it seems like you can't
-just have whatever old LDAP setup and have it work with a liberty server.
+just have whatever old LDAP setup and have it work with a Liberty server.
 Furthermore, whatever the hell we did with Kerberos and LDAP is definitely
 not standard in any way shape or form.
 
@@ -4061,7 +4061,7 @@ Admin is usually of the form `cn=admin,dc=your,dc=configured,dc=domain`.
 The password was entered in step 1.
 4. Use `sudo ldappasswd -x -W -D {admin} -S {user}` to set passwords for users.
 Example user from [#ray_of_hope](#ray_of_hope): `uid=testuser,ou=people,o=ibm,c=in`.
-5. Configure `server.xml` of your liberty application as recommended by [#ray_of_hope](#ray_of_hope).
+5. Configure `server.xml` of your Liberty application as recommended by [#ray_of_hope](#ray_of_hope).
 Don't forget to set the correct IP, port, domain, etc. `baseDN` should be the domain.
 `bindDN` and `bindPassword` should be admin username and password.
 
@@ -5104,6 +5104,52 @@ makes every step needlessly complicated with more and more bullshit along the
 way. Know what? I'll just make the keytab file as is and move forward.
 If it doesn't work, it's just another step to the thousand or so that
 may or may not be broken in the final analysis when nothing works. Yay.
+
+    sudo samba-tool domain exportkeytab gpc.keytab --principal=gpc$
+
+So, off I go to modify Liberty files. In `server.xml`:
+
+    <feature>spnego-1.0</feature>
+
+    <ldapRegistry id="LDAP" realm="GOODLIKE.EU"
+                  host="goodlike.eu" port="389"
+                  baseDN="dc=goodlike,dc=eu"
+                  bindDN="CN=Administrator,CN=Users,DC=goodlike,DC=eu"
+                  bindPassword="Passw0rd"
+                  ldapType="Custom"
+                  recursiveSearch="true"/>
+    
+    <kerberos configFile="krb5.conf" keytab="gpc.keytab"/>
+    
+    <spnego id="whocares"
+                servicePrincipalNames="HOST/GPC.goodlike.eu"/>
+                
+    <webAppSecurity ssoDomainNames="localhost"/>
+    
+I add some security stuff while at it, based on whatever examples I find:
+
+    *in application-bnd*
+    <security-role name="SSORole">
+        <special-subject type="ALL_AUTHENTICATED_USERS"/>
+    </security-role>
+
+    *in web.xml*
+    
+    <security-role>
+        <role-name>SSORole</role-name>
+    </security-role>
+    
+    *under auth-constraint*
+    <role-name>SSORole</role-name>
+
+I cobble together a `krb.conf` file based on previous attempts.
+I do replace a lot of IP addresses with just `goodlike.eu`.
+After all, our Windows `hosts` file should resolve that just fine.
+
+Finally, I remove `@FormAuthenticationMechanismDefinition` from `TestServlet`.
+While it's on, SPNEGO can't do it's thing, I think.
+
+Does this work? Of course not. As predicted.
 
 ## Summary in summary
 
