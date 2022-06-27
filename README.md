@@ -143,6 +143,8 @@ Links to various resources referred to (try [web archive](https://archive.org/) 
 ##### [#dancing_logs](https://wiki.samba.org/index.php/Configuring_Logging_on_a_Samba_Server)
 ##### [#no_dancing_partner](https://samba.samba.narkive.com/nBFc1opg/kerberos-server-not-found-in-database-no-such-entry-found-in-hdb)
 ##### [#tree_of_fart](https://www.samba.org/samba/docs/current/man-html/smbtree.1.html)
+##### [#blasphemy](https://stackoverflow.com/questions/26257014/kinitv5-client-not-found-in-kerberos-database-while-getting-initial-credentia)
+##### [#more_german_science](https://help.univention.com/t/samba-4-does-not-find-service-principal-name/16370)
 
 ## Setting up a Liberty server that works
 
@@ -5513,6 +5515,22 @@ would tell me that the user had no SPNs, using the full LDAP name.
 
 In LDAP I can see `servicePrinicipalName` entries which are consistent with
 `sudo samba-tool spn list`. So everything *seems* in order. It just doesn't work.
+
+To add to further confusion, I uncover some [#blasphemy](#blasphemy).
+Namely a comment which says you cannot `kinit` with an SPN.
+Even though an answer in the previous question said you could...
+
+[#more_german_science](#more_german_science) has the issue while using
+some kind of entirely separate technology called `univention`.
+The solutions seem to involve scripts from this system, which I can't find anywhere.
+
+I do try to combine SPN and user into one `keytab`:
+
+    sudo samba-tool domain exportkeytab gpc8.keytab --principal=HTTP/mumkashi.goodlike.eu@GOODLIKE.EU
+    sudo samba-tool domain exportkeytab gpc8.keytab --principal=HTTP/mumkashi.goodlike.eu
+    sudo samba-tool domain exportkeytab gpc8.keytab --principal=mumkashi
+
+Still same error.
 
 ## Summary in summary
 
