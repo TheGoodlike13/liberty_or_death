@@ -145,6 +145,7 @@ Links to various resources referred to (try [web archive](https://archive.org/) 
 ##### [#tree_of_fart](https://www.samba.org/samba/docs/current/man-html/smbtree.1.html)
 ##### [#blasphemy](https://stackoverflow.com/questions/26257014/kinitv5-client-not-found-in-kerberos-database-while-getting-initial-credentia)
 ##### [#more_german_science](https://help.univention.com/t/samba-4-does-not-find-service-principal-name/16370)
+##### [#breakthrough](https://serverfault.com/questions/606189/keytab-auth-against-samba-4-dc-client-not-found-in-kerberos-database-while-gett)
 
 ## Setting up a Liberty server that works
 
@@ -5531,6 +5532,44 @@ I do try to combine SPN and user into one `keytab`:
     sudo samba-tool domain exportkeytab gpc8.keytab --principal=mumkashi
 
 Still same error.
+
+At last, a [#breakthrough](#breakthrough)!
+Turns out that Samba does not correctly modify the user entry!
+At least not for the network we're working with here.
+This can be verified using `ldapsearch`.
+
+Looking back to [this page](https://stackoverflow.com/questions/40071466/why-cant-i-do-a-kinit-with-an-spn),
+you can sort of see that the SPN features a lot more than once.
+The `uid` itself is supposed to be like the SPN!
+
+The [#breakthrough](#breakthrough) suggest we will have to add the UPN manually.
+Looks like The Fiddler is back on the case!
+
+    sudo ldapmodify -H ldapi:/// -D CN=Administrator,CN=Users,DC=goodlike,DC=eu -x -W
+    > dn: CN=GPC,CN=Computers,DC=goodlike,DC=eu
+    > changetype: modify
+    > add: userPrincipalName
+    > userPrincipalName: HTTP/gpc.goodlike.eu@GOODLIKE.EU
+    >
+
+We successfully modify `GPC` computer/user.
+That is the computer Liberty is running on, after all, so we should use it if we can.
+I clean up the old SPNs and use the commands from [#breakthrough](#breakthrough):
+
+    sudo samba-tool user setexpiry --noexpiry gpc$
+    
+    sudo samba-tool spn add HTTP/gpc.goodlike.eu gpc$
+    sudo samba-tool spn add HTTP/gpc gpc$
+    
+    sudo samba-tool domain exportkeytab gpc9.keytab --principal=HTTP/gpc.goodlike.eu
+    sudo samba-tool domain exportkeytab gpc9.keytab --principal=HTTP/gpc
+
+And what do you know? The user is finally findable!
+
+Unfortunately, we have to face a different error next.
+
+> Caused by: javax.security.auth.login.LoginException:
+> KrbException: Message stream modified (41)
 
 ## Summary in summary
 
