@@ -142,6 +142,7 @@ Links to various resources referred to (try [web archive](https://archive.org/) 
 ##### [#dancing_instructions](https://www.samba.org/samba/docs/current/man-html/samba-tool.8.html)
 ##### [#dancing_logs](https://wiki.samba.org/index.php/Configuring_Logging_on_a_Samba_Server)
 ##### [#no_dancing_partner](https://samba.samba.narkive.com/nBFc1opg/kerberos-server-not-found-in-database-no-such-entry-found-in-hdb)
+##### [#tree_of_fart](https://www.samba.org/samba/docs/current/man-html/smbtree.1.html)
 
 ## Setting up a Liberty server that works
 
@@ -5412,6 +5413,42 @@ Maybe there's something wrong with `goodlikepc`? Let's try `mumkashi` instead:
 All of the `keytabs` fail, same error.
 Only in the case of `gpc5.keytab`, we end up with the previous error:
 `Unable to obtain password from user`.
+
+I begin suspecting some issue with domain connectivity itself.
+The only thing I can think of is that *I* think that we're connected to the domain,
+but we're probably not *connected* for some definition of *connected*.
+This is an idea born from browsing the [#hideous_mess](#hideous_mess).
+
+So I try to investigate:
+
+    sudo smbtree
+
+> gensec_spnego_client_negTokenTarg_step: SPNEGO(ntlmssp) login failed: NT_STATUS_INVALID_PARAMETER
+>
+> Password for [GOODLIKE\root]:
+
+No matter what I enter for the password, nothing happens.
+I'm also not sure what does this have to do with SPNEGO?
+I'm just looking at the domain, not connecting via HTTP or anything.
+At least I think so...
+
+In any case, the problem might be the usage of `sudo` without an explicit user.
+This is similar to the issue we had when messing around with `kadmin`.
+We shall use the instructions from [#tree_of_fart](#tree_of_fart)!
+
+    sudo smbtree -U Administrator
+    
+> gensec_spnego_client_negTokenTarg_step: SPNEGO(ntlmssp) login failed: NT_STATUS_INVALID_PARAMETER
+>
+> Password for [GOODLIKE\Administrator]:
+
+Once again, no input for the password provides anything.
+
+I'm suspecting this is not gonna bring any fruit.
+We're not really sharing any file-systems anyway.
+So there's no way to understand if there's an error,
+or it just prints nothing because there is nothing.
+And I'm not about to set out on a journey to share something over this network.
 
 ## Summary in summary
 
