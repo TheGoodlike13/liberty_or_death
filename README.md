@@ -38,6 +38,7 @@
 #### [3.2. Get ready to dance](#get-ready-to-dance)
 #### [3.3. Dancing through the Windows](#dancing-through-the-windows)
 #### [3.4. Breakdown of negotiations](#breakdown-of-negotiations)
+#### [3.5. Apotheosis](#apotheosis)
 ### [4. Summary in summary](#summary-in-summary)
 
 Links to various resources referred to (try [web archive](https://archive.org/) if down, should work for most):
@@ -134,6 +135,7 @@ Links to various resources referred to (try [web archive](https://archive.org/) 
 ##### [#spnego_open](https://openliberty.io/docs/latest/configuring-spnego-authentication.html)
 ##### [#more_hideous_mess](https://lists.samba.org/archive/samba-technical/2012-December/089225.html)
 ##### [#dancing_keytabs](https://wiki.samba.org/index.php/Generating_Keytabs)
+##### [#strict_dancing_required](https://community.nethserver.org/t/ldap-result-code-8-strong-auth-required-bindsimple-transport-encryption-required/13376)
 
 ## Setting up a Liberty server that works
 
@@ -5105,6 +5107,7 @@ way. Know what? I'll just make the keytab file as is and move forward.
 If it doesn't work, it's just another step to the thousand or so that
 may or may not be broken in the final analysis when nothing works. Yay.
 
+    sudo samba-tool spn add HOST/GPC.goodlike.eu@GOODLIKE.EU gpc$
     sudo samba-tool domain exportkeytab gpc.keytab --principal=gpc$
 
 So, off I go to modify Liberty files. In `server.xml`:
@@ -5150,6 +5153,106 @@ Finally, I remove `@FormAuthenticationMechanismDefinition` from `TestServlet`.
 While it's on, SPNEGO can't do it's thing, I think.
 
 Does this work? Of course not. As predicted.
+
+### [Apotheosis](https://www.youtube.com/watch?v=nymN2DUDCtM&list=PLh0Ul3zO7LAgPNk1HsHCrO_dmozfuNWu4)
+
+After the previous failure, I've decided to do a bunch of lightning round changes.
+I still kept notes, but this entire chapter is re-created from them.
+I can't be sure about the exact order of the events so bear with me.
+
+The first thing I remember doing was watching a video about [single sign-on](https://www.youtube.com/watch?v=GYWrUL7bgB8).
+I thought, we need to brush up on the basics here.
+Otherwise we're heading straight to another hell.
+
+Unfortunately, the video didn't give me much more than what I had already gathered.
+I don't wanna say it's completely useless or anything,
+but definitely nothing that could help with our setup here.
+
+The biggest thing to note is the flow at the end.
+I'll focus on the first few steps, as they are interesting.
+So a client (such as a browser), performs a request to a server (such as Liberty).
+The server responds with `HTTP 401` and a header which basically says `Negotiate`.
+This is exactly the type of info that I want.
+If every guide was written at this level of detail, we'd be done months ago.
+
+Sadly, even this isn't quite enough though, as the question becomes
+"but where would I go to negotiate?" In a `HTTP` redirect,
+you at least get the URL to go to. Here you get nothing.
+So how does a browser know what and where to `Negotiate`?
+
+Maybe it's obvious in practice, but from the diagram alone I simply cannot tell.
+It's incomplete. Alas, back to messing with the Liberty configuration.
+
+So what's wrong? I don't have the exact error, but it was something like
+
+> Error: LDAP Result Code 8 “Strong Auth Required”:
+> BindSimple: Transport encryption required.
+
+Seems like [#strict_dancing_required](#strict_dancing_required).
+Not for us though! We can just edit `/etc/samba/smb.conf`:
+
+    ldap server require strong auth = no
+
+followed by resetting the VM as usual. But it's only one of many errors facing us.
+
+> CWWKS4308E: Can not create a GSSCredential for service principal name:
+> HTTP/HOST/GPC.goodlike.eu. A GSSException was received:
+> GSSException: No valid credentials provided
+> (Mechanism level: Attempt to obtain new ACCEPT credentials failed!)
+>
+> javax.security.auth.login.LoginException: Unable to obtain password from user
+
+At first I thought there was something wrong with the principal we were using.
+And there was, notably, it wasn't prefixed with `HTTP`, so Liberty did it for us.
+
+So I tried a few different SPNs:
+
+    servicePrincipalNames="GPC.goodlike.eu"
+    
+> HTTP/GPC.goodlike.eu
+
+    servicePrincipalNames="mumkashi.goodlike.eu"
+    
+> HTTP/mumkashi.goodlike.eu
+    
+    servicePrincipalNames="mumkashi.goodlike.eu@GOODLIKE.EU"
+   
+> HTTP/mumkashi.goodlike.eu@GOODLIKE.EU
+    
+    servicePrincipalNames="http/mumkashi.goodlike.eu@GOODLIKE.EU"
+   
+> HTTP/mumkashi.goodlike.eu@GOODLIKE.EU
+
+I settled on 
+
+    servicePrincipalNames="gpc.goodlike.eu@GOODLIKE.EU"
+
+The issue wasn't just the principal, it was that my `keytab` contained
+credentials for `gpc$`. However the principal used with Kerberos was the SPN.
+So it couldn't find any credentials to use.
+
+Let's export the correct credentials then:
+
+    sudo samba-tool domain exportkeytab gpc2.keytab --principal=gpc.goodlike.eu@GOODLIKE.EU
+
+After re-configuring and re-launching the Liberty app, it would not redirect me.
+I had to manually navigate to `/test`. And we get a new error:
+
+> CWWKS4308E: Can not create a GSSCredential for service principal name:
+> HTTP/gpc.goodlike.eu@GOODLIKE.EU. A GSSException was received:
+> GSSException: No valid credentials provided
+> (Mechanism level: Attempt to obtain new ACCEPT credentials failed!)
+>
+> Caused by: javax.security.auth.login.LoginException: Receive timed out
+> Caused by: java.net.SocketTimeoutException: Receive timed out
+>
+> CWWKS4309E: Can not create a GSSCredential for any of the service principal names.
+> All requests will not use SPNEGO authentication.
+
+The last part is particularly pernicious,
+because it means I have to reset Liberty after every SPNEGO failure. Ugh.
+
+So the reason I was not redirected was a timeout. Not good.
 
 ## Summary in summary
 
