@@ -138,6 +138,8 @@ Links to various resources referred to (try [web archive](https://archive.org/) 
 ##### [#strict_dancing_required](https://community.nethserver.org/t/ldap-result-code-8-strong-auth-required-bindsimple-transport-encryption-required/13376)
 ##### [#useless_logging](https://openliberty.io/docs/latest/log-trace-configuration.html#settings)
 ##### [#debug_spnego](https://backstage.forgerock.com/knowledge/kb/article/a30365344)
+##### [#nice_book](https://steveloughran.gitbooks.io/kerberos_and_hadoop/content/sections/errors.html)
+##### [#dancing_instructions](https://www.samba.org/samba/docs/current/man-html/samba-tool.8.html)
 
 ## Setting up a Liberty server that works
 
@@ -5235,7 +5237,7 @@ So it couldn't find any credentials to use.
 
 Let's export the correct credentials then:
 
-    sudo samba-tool domain exportkeytab gpc2.keytab --principal=gpc.goodlike.eu@GOODLIKE.EU
+    sudo samba-tool domain exportkeytab gpc2.keytab --principal=HTTP/gpc.goodlike.eu@GOODLIKE.EU
 
 After re-configuring and re-launching the Liberty app, it would not redirect me.
 I had to manually navigate to `/test`. And we get a new error:
@@ -5286,7 +5288,7 @@ I try explicit `HTTP` just in case
     
 but the issue remains.
 
-This is quite the stumper, as I'm very certain we did create an `SPN` in Samba.
+This is quite the stumper, as I'm very certain we did create an SPN in Samba.
 Followed the instructions and all. I decided I need more information first.
 
 I tried to add [#useless_logging](#useless_logging) to the application:
@@ -5304,6 +5306,45 @@ There is a better way, however!
 
 The resulting logs don't give much insight on the issue itself.
 But they clearly point to the fact that the error is coming from the other side.
+
+Of course, on the other side is Samba with its shenanigans.
+I need to identify the issue before I go poking around deeper.
+I found this [#nice_book](#nice_book) containing some error codes.
+It's nice to see I'm not the only person going nuts over these sort of problems.
+Although I'm order of magnitudes less classy :D
+
+The part which refers to our error is this:
+
+> kinit: Client not found in Kerberos database while getting initial credentials
+>
+> This is fun: it means that the user is not known. Possible causes:
+>
+> The user isn't in the database.
+>
+> You are trying to connect to a different KDC
+> than the one you thought you were using.
+>
+> You aren't who you thought you were.
+
+I'm not sure if the last comment is a joke or a technical description.
+We are talking about authentication, an identity mechanism, after all.
+
+I think we can rule out using the wrong KDC easily.
+There are logs on the VM which indicate receiving the request.
+So the only remaining explanation is `The user isn't in the database.`
+
+But, like I said, I definitely added the SPN.
+I did add it to `gpc$`, which is technically a computer, not a user.
+Perhaps that's the problem?
+
+I poke around using [#dancing_instructions](#dancing_instructions)
+to verify the state of things. Then I try to add the SPN to `goodlikepc` user:
+
+    sudo samba-tool spn delete HTTP/gpc.goodlike.eu@GOODLIKE.EU
+    sudo samba-tool spn add HTTP/gpc.goodlike.eu@GOODLIKE.EU goodlikepc
+    sudo samba-tool domain exportkeytab gpc3.keytab --principal=HTTP/gpc.goodlike.eu@GOODLIKE.EU
+
+Same error as before.
 
 ## Summary in summary
 
