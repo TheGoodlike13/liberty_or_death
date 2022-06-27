@@ -5373,6 +5373,20 @@ and restarting the VM like I said. This fixes the issue.
 It makes every command in the command line print the logs too though o.0
 Very spammy!
 
+I launch the Liberty again and check all logs to find this in `log.samba`:
+
+>       {"timestamp": "2022-06-22T17:07:54.643649+0300", "type": "Authentication", "Authentication": {"version": {"major": 1,
+>     "minor": 2}, "eventId": 4625, "logonId": "e91b42a0699a4a4b", "logonType": 2, "status": "NT_STATUS_NO_SUCH_USER",
+>     "localAddress": null, "remoteAddress": "ipv4:192.168.1.1:55891", "serviceDescription": "Kerberos KDC", "authDescription": "ENC-
+>     TS Pre-authentication", "clientDomain": null, "clientAccount": "HTTP/gpc.goodlike.eu@GOODLIKE.EU", "workstation": null,
+>     "becameAccount": null, "becameDomain": null, "becameSid": null, "mappedAccount": null, "mappedDomain": null,
+>     "netlogonComputer": null, "netlogonTrustAccount": null, "netlogonNegotiateFlags": "0x00000000", "netlogonSecureChannelType": 0,
+>     "netlogonTrustAccountSid": null, "passwordType": null, "duration": 1006}}
+
+Well, this serves as undeniable truth that Kerberos is being called,
+that it's called with `HTTP/gpc.goodlike.eu@GOODLIKE.EU`
+and that it's not found in Kerberos, even though we just added it.
+
 ## Summary in summary
 
 These are links to summaries throughout the entire document, in order:
