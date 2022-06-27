@@ -5608,6 +5608,39 @@ I get an error:
 
 So close, yet so far...
 
+Wait! Who's that in the distance? It can't be... it's ~~Frieza~~ IBM!
+Remember [#spnego_sad](#spnego_sad) from all the way back?
+Near the bottom we can find this note:
+
+> Note: If you are prompted multiple times for a user ID and password,
+> make sure that you enabled SPNEGO support on your client browser
+> by following the previous instructions.
+> You must also make sure that the disableFailOverToAppAuthType attribute
+> in the <spnego> configuration is set to false.
+
+Well, it can't hurt to try!
+
+    <spnego id="whocares"
+            servicePrincipalNames="HTTP/gpc.goodlike.eu@GOODLIKE.EU"
+            disableFailOverToAppAuthType="false"/>
+            
+And what do you know? It works! It redirects me `/test`!
+It still asks me the password a second time, but now we can see an error:
+
+> Caused by: com.ibm.wsspi.security.wim.exception.WIMSystemException:
+> CWIML4520E: The LDAP operation could not be completed.
+> The LDAP naming exception javax.naming.PartialResultException:
+> Unprocessed Continuation Reference(s); remaining name 'dc=goodlike,dc=eu'
+
+So this is no longer an issue with SPNEGO, but LDAP user registry.
+Perhaps it would work if we just remove it? Nope.
+
+> CWIMK0011E: The user registry operation could not be completed.
+> A valid user registry was not found.
+> Add or correct the registry definition in the server.xml file.
+
+I see how it is. The final boss of this fight is LDAP. So be it.
+
 ## Summary in summary
 
 These are links to summaries throughout the entire document, in order:

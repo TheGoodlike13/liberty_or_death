@@ -1,0 +1,6 @@
+-Djava.security.krb5.kdc=mumkashi.goodlike.eu
+-Djava.security.krb5.realm=GOODLIKE.EU
+-Dsun.security.krb5.debug=true
+-Dsun.security.jgss.debug=true
+-Dsun.security.spnego.debug=true
+-Dsun.security.krb5.disableReferrals=true
