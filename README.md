@@ -146,6 +146,7 @@ Links to various resources referred to (try [web archive](https://archive.org/) 
 ##### [#blasphemy](https://stackoverflow.com/questions/26257014/kinitv5-client-not-found-in-kerberos-database-while-getting-initial-credentia)
 ##### [#more_german_science](https://help.univention.com/t/samba-4-does-not-find-service-principal-name/16370)
 ##### [#breakthrough](https://serverfault.com/questions/606189/keytab-auth-against-samba-4-dc-client-not-found-in-kerberos-database-while-gett)
+##### [#case_matters](https://stackoverflow.com/questions/21001950/krbexception-message-stream-modified-41-when-connecting-to-smb-share-using-k)
 
 ## Setting up a Liberty server that works
 
@@ -5570,6 +5571,42 @@ Unfortunately, we have to face a different error next.
 
 > Caused by: javax.security.auth.login.LoginException:
 > KrbException: Message stream modified (41)
+
+According to the web, [#case_matters](#case_matters).
+There is also [this page](https://sourceforge.net/p/spnego/discussion/1003769/thread/99b3ff67/)
+which is used as the source for the claims.
+So I go ahead and make some modifications in `krb.conf`:
+
+    admin_server = goodlike.eu
+    default_domain = GOODLIKE.EU
+    
+    goodlike.eu = GOODLIKE.EU
+    
+Same error. The next answer uses [this page](https://bugs.centos.org/view.php?id=17000)
+as the source and suggests adding another JVM option:
+
+    -Dsun.security.krb5.disableReferrals=true
+    
+And what do you know? The browser finally asks me to log in!
+
+I did modify the browser a little at some point.
+I followed the instructions from [#spnego_open](#spnego_open) for `firefox`:
+* go to `about:config`
+* type in `network.n`
+* for `network.negotiate-auth.trusted-uris` enter the domains.
+I used `localhost,goodlike.eu` just to be sure
+* restart `firefox`
+
+So, what happens if I enter username and password, e.g. `mumkashi` & `Passw0rd`?
+Uh, it just asks for it again. No error in logs. If I click cancel,
+I get an error:
+
+> CWWKS4307E: Your client browser configuration is correct,
+> but you have not logged into a supported Windows Domain.
+>
+> Please login to the supported Windows Domain.. 
+
+So close, yet so far...
 
 ## Summary in summary
 
