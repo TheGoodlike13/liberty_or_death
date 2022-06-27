@@ -5450,6 +5450,36 @@ So there's no way to understand if there's an error,
 or it just prints nothing because there is nothing.
 And I'm not about to set out on a journey to share something over this network.
 
+I decide to review [#dancing_keytabs](#dancing_keytabs) and notice
+it has a `discussion` link.
+It informs me that my `keytab` may be using very specific key type.
+One which is not configured in the application.
+
+    sudo klist -ke gpc.keytab
+    
+This says `aes256-cts-hmac-sha1-96` is within, but also `arcfour-hmac`.
+I add this type to `krb.conf`:
+
+    default_tkt_enctypes = arcfour-hmac aes256-cts-hmac-sha1-96
+    default_tgs_enctypes = arcfour-hmac aes256-cts-hmac-sha1-96
+
+No change.
+
+Now that we've returned to using `klist`, I decide to try `kinit` too:
+
+    sudo kinit -V HTTP/mumkashi.goodlike.eu
+    
+> Using default cache: /tmp/krb5cc_0
+>
+> Using principal: HTTP/mumkashi.goodlike.eu@GOODLIKE.EU
+>
+> kinit: Client 'HTTP/mumkashi.goodlike.eu@GOODLIKE.EU'
+> not found in Kerberos database while getting initial credentials
+
+The first two lines are from the increased logging.
+The last one seems to be indicating that the error is precisely at Kerberos level.
+If `kinit` can't find such a user, then it's no wonder it doesn't work from Liberty.
+
 ## Summary in summary
 
 These are links to summaries throughout the entire document, in order:
