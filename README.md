@@ -140,6 +140,7 @@ Links to various resources referred to (try [web archive](https://archive.org/) 
 ##### [#debug_spnego](https://backstage.forgerock.com/knowledge/kb/article/a30365344)
 ##### [#nice_book](https://steveloughran.gitbooks.io/kerberos_and_hadoop/content/sections/errors.html)
 ##### [#dancing_instructions](https://www.samba.org/samba/docs/current/man-html/samba-tool.8.html)
+##### [#dancing_logs](https://wiki.samba.org/index.php/Configuring_Logging_on_a_Samba_Server)
 
 ## Setting up a Liberty server that works
 
@@ -5345,6 +5346,32 @@ to verify the state of things. Then I try to add the SPN to `goodlikepc` user:
     sudo samba-tool domain exportkeytab gpc3.keytab --principal=HTTP/gpc.goodlike.eu@GOODLIKE.EU
 
 Same error as before.
+
+Maybe we need more logging from Samba itself?
+[#dancing_logs](#dancing_logs) seems to have some info.
+It even finally teaches me how to reload the config!
+
+    sudo smbconfig all reload-config
+    
+Unfortunately, while it seems to work for some things, it's not consistent.
+I get better results restarting the VM and running `sudo samba` manually.
+
+The logging config is a bit weird, so I settle for a simple one:
+
+    log file = /var/log/samba/%m.log
+    log level = 10
+
+Aha, so that's where samba logs will go. Upon inspection, the folder already exists.
+It even has some stuff in it. It also has `%m.log` file, which is a bit awkward.
+I thought that was supposed to be a pattern for replacement...
+
+I go ahead and restart Liberty to see what would happen, but I get bupkis.
+Can't find anything in the logs :(
+
+I end up removing `log file = /var/log/samba/%m.log` as the defaults seem fine,
+and restarting the VM like I said. This fixes the issue.
+It makes every command in the command line print the logs too though o.0
+Very spammy!
 
 ## Summary in summary
 
