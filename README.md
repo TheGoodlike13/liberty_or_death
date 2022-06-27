@@ -5377,6 +5377,8 @@ Very spammy!
 
 I launch the Liberty again and check all logs to find this in `log.samba`:
 
+>     kerberos: UNKNOWN -- HTTP/gpc.goodlike.eu@GOODLIKE.EU: no such entry found in hdb
+>
 >       {"timestamp": "2022-06-22T17:07:54.643649+0300", "type": "Authentication", "Authentication": {"version": {"major": 1,
 >     "minor": 2}, "eventId": 4625, "logonId": "e91b42a0699a4a4b", "logonType": 2, "status": "NT_STATUS_NO_SUCH_USER",
 >     "localAddress": null, "remoteAddress": "ipv4:192.168.1.1:55891", "serviceDescription": "Kerberos KDC", "authDescription": "ENC-
@@ -5410,7 +5412,8 @@ Maybe there's something wrong with `goodlikepc`? Let's try `mumkashi` instead:
     sudo samba-tool domain exportkeytab gpc6.keytab --principal=HTTP/mumkashi.goodlike.eu
     sudo samba-tool domain exportkeytab gpc7.keytab --principal=HTTP/mumkashi.goodlike.eu@GOODLIKE.EU
 
-All of the `keytabs` fail, same error.
+I try all of the `keytab` options and related SPN configurations in `server.xml`.
+All fail with the same old error.
 Only in the case of `gpc5.keytab`, we end up with the previous error:
 `Unable to obtain password from user`.
 
@@ -5479,6 +5482,37 @@ Now that we've returned to using `klist`, I decide to try `kinit` too:
 The first two lines are from the increased logging.
 The last one seems to be indicating that the error is precisely at Kerberos level.
 If `kinit` can't find such a user, then it's no wonder it doesn't work from Liberty.
+
+I try to investigate, but find nothing conclusive.
+[This page](https://stackoverflow.com/questions/40071466/why-cant-i-do-a-kinit-with-an-spn)
+indicates a potential problem with certain SPNs,
+but my SPN does have a "sub-domain" and it still doesn't work.
+
+It does contain an `LDIF` example. We could contrast it with our LDAP entries.
+
+    sudo ldapsearch -x
+    
+Doesn't exist.
+Well, this was a fresh VM, and I guess LDAP utils were not installed with Samba.
+
+    sudo apt install ldap-utils
+    
+I also don't forget to modify `/etc/ldap/ldap.conf`:
+
+    BASE    dc=goodlike,dc=eu
+    URI     ldap://mumkashi.goodlike.eu ldap://mumkashi.goodlike.eu:389
+    
+I have to admit, there's a certain allure to using actual names instead of IPs.
+Probably not worth the hassle in general, though :P
+
+    sudo ldapsearch -x -D cn=Administrator,cn=Users,dc=goodlike,dc=eu -W
+    
+I found the admin user when playing with `samba-tool`.
+Specifically `sudo samba-tool spn list administrator`
+would tell me that the user had no SPNs, using the full LDAP name.
+
+In LDAP I can see `servicePrinicipalName` entries which are consistent with
+`sudo samba-tool spn list`. So everything *seems* in order. It just doesn't work.
 
 ## Summary in summary
 
