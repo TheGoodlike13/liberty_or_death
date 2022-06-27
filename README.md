@@ -136,6 +136,8 @@ Links to various resources referred to (try [web archive](https://archive.org/) 
 ##### [#more_hideous_mess](https://lists.samba.org/archive/samba-technical/2012-December/089225.html)
 ##### [#dancing_keytabs](https://wiki.samba.org/index.php/Generating_Keytabs)
 ##### [#strict_dancing_required](https://community.nethserver.org/t/ldap-result-code-8-strong-auth-required-bindsimple-transport-encryption-required/13376)
+##### [#useless_logging](https://openliberty.io/docs/latest/log-trace-configuration.html#settings)
+##### [#debug_spnego](https://backstage.forgerock.com/knowledge/kb/article/a30365344)
 
 ## Setting up a Liberty server that works
 
@@ -5253,6 +5255,55 @@ The last part is particularly pernicious,
 because it means I have to reset Liberty after every SPNEGO failure. Ugh.
 
 So the reason I was not redirected was a timeout. Not good.
+That explains why I wasn't redirected, I guess:
+the app was loading something in the background.
+
+That's not much to go on, but I did notice the following:
+* the error is in `javax.security`
+* it is related to trying to connect
+
+I recalled seeing something like that in [#spnego_open](#spnego_open).
+Specifically, providing JVM options via `jvm.options` file.
+I created such a file in `/config`:
+
+    -Djava.security.krb5.kdc=mumkashi.goodlike.eu
+    -Djava.security.krb5.realm=GOODLIKE.EU
+    
+Following this change, the redirect works again, and we have a new error!
+
+> CWWKS4308E: Can not create a GSSCredential for service principal name:
+> HTTP/gpc.goodlike.eu@GOODLIKE.EU. A GSSException was received:
+> GSSException: No valid credentials provided
+> (Mechanism level: Attempt to obtain new ACCEPT credentials failed!)
+>
+> Caused by: javax.security.auth.login.LoginException:
+> Caused by: KrbException: Client not found in Kerberos database (6)
+> KrbException: Identifier doesn't match expected value (906)
+
+I try explicit `HTTP` just in case
+
+    servicePrincipalNames="HTTP/gpc.goodlike.eu@GOODLIKE.EU"
+    
+but the issue remains.
+
+This is quite the stumper, as I'm very certain we did create an `SPN` in Samba.
+Followed the instructions and all. I decided I need more information first.
+
+I tried to add [#useless_logging](#useless_logging) to the application:
+
+    <logging traceSpecification="*=fine"/>
+    
+Adding this to `server.xml` seems to have no effect. Figures.
+
+There is a better way, however!
+[#debug_spnego](#debug_spnego) suggests using `jvm.options`:
+
+    -Dsun.security.krb5.debug=true
+    -Dsun.security.jgss.debug=true
+    -Dsun.security.spnego.debug=true
+
+The resulting logs don't give much insight on the issue itself.
+But they clearly point to the fact that the error is coming from the other side.
 
 ## Summary in summary
 
