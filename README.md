@@ -141,6 +141,7 @@ Links to various resources referred to (try [web archive](https://archive.org/) 
 ##### [#nice_book](https://steveloughran.gitbooks.io/kerberos_and_hadoop/content/sections/errors.html)
 ##### [#dancing_instructions](https://www.samba.org/samba/docs/current/man-html/samba-tool.8.html)
 ##### [#dancing_logs](https://wiki.samba.org/index.php/Configuring_Logging_on_a_Samba_Server)
+##### [#no_dancing_partner](https://samba.samba.narkive.com/nBFc1opg/kerberos-server-not-found-in-database-no-such-entry-found-in-hdb)
 
 ## Setting up a Liberty server that works
 
@@ -5386,6 +5387,31 @@ I launch the Liberty again and check all logs to find this in `log.samba`:
 Well, this serves as undeniable truth that Kerberos is being called,
 that it's called with `HTTP/gpc.goodlike.eu@GOODLIKE.EU`
 and that it's not found in Kerberos, even though we just added it.
+
+Perplexed, I google `samba spn no such user` and find [#no_dancing_partner](#no_dancing_partner).
+Interestingly enough, the suggestion is to remove the domain part,
+which in our case is `@GOODLIKE.EU`, from the SPN.
+
+    sudo samba-tool spn delete HTTP/gpc.goodlike.eu@GOODLIKE.EU
+    sudo samba-tool spn add HTTP/gpc.goodlike.eu goodlikepc
+    sudo samba-tool domain exportkeytab gpc4.keytab --principal=HTTP/gpc.goodlike.eu
+    
+    *in server.xml*
+    servicePrincipalNames="HTTP/gpc.goodlike.eu"
+
+Same error. In fact, looking through logs, it behaves identically to `@GOODLIKE.EU`.
+
+Maybe there's something wrong with `goodlikepc`? Let's try `mumkashi` instead:
+
+    sudo samba-tool spn add HTTP/mumkashi.goodlike.eu mumkashi
+    sudo samba-tool spn add HTTP/mumkashi.goodlike.eu@GOODLIKE.EU mumkashi
+    sudo samba-tool domain exportkeytab gpc5.keytab --principal=mumkashi
+    sudo samba-tool domain exportkeytab gpc6.keytab --principal=HTTP/mumkashi.goodlike.eu
+    sudo samba-tool domain exportkeytab gpc7.keytab --principal=HTTP/mumkashi.goodlike.eu@GOODLIKE.EU
+
+All of the `keytabs` fail, same error.
+Only in the case of `gpc5.keytab`, we end up with the previous error:
+`Unable to obtain password from user`.
 
 ## Summary in summary
 
