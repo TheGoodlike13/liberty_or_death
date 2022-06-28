@@ -39,6 +39,7 @@
 #### [3.3. Dancing through the Windows](#dancing-through-the-windows)
 #### [3.4. Breakdown of negotiations](#breakdown-of-negotiations)
 #### [3.5. Apotheosis](#apotheosis)
+#### [3.6. The final boss](#the-final-boss)
 ### [4. Summary in summary](#summary-in-summary)
 
 Links to various resources referred to (try [web archive](https://archive.org/) if down, should work for most):
@@ -147,6 +148,7 @@ Links to various resources referred to (try [web archive](https://archive.org/) 
 ##### [#more_german_science](https://help.univention.com/t/samba-4-does-not-find-service-principal-name/16370)
 ##### [#breakthrough](https://serverfault.com/questions/606189/keytab-auth-against-samba-4-dc-client-not-found-in-kerberos-database-while-gett)
 ##### [#case_matters](https://stackoverflow.com/questions/21001950/krbexception-message-stream-modified-41-when-connecting-to-smb-share-using-k)
+##### [#bizarre_resolution](https://stackoverflow.com/questions/16412236/how-to-resolve-javax-naming-partialresultexception)
 
 ## Setting up a Liberty server that works
 
@@ -5640,6 +5642,25 @@ Perhaps it would work if we just remove it? Nope.
 > Add or correct the registry definition in the server.xml file.
 
 I see how it is. The final boss of this fight is LDAP. So be it.
+
+### The final boss
+
+So what do we do know? First I google the error and find a [#bizarre_resolution](#bizarre_resolution).
+In `server.xml` `ldapRegistry` element I set `port="3268"`.
+This changes the error to another familiar one:
+
+> CWIML4537E: The login operation could not be completed.
+> The specified principal name mumkashi is not found in the back-end repository.
+
+Do we really must use the full DN here too? That would be super weird.
+
+> cn=mumkashi,cn=users,dc=goodlike,dc=eu is not found in the back-end repository.
+
+That DEFINITELY exists. I have `ldapsearch` to prove it.
+
+I set `host="mumkashi.goodlike.eu"`, which is more specific. No change.
+
+I set `baseDN="CN=Users,DC=goodlike,DC=eu"`. No effect. I change it back.
 
 ## Summary in summary
 
