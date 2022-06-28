@@ -149,6 +149,7 @@ Links to various resources referred to (try [web archive](https://archive.org/) 
 ##### [#breakthrough](https://serverfault.com/questions/606189/keytab-auth-against-samba-4-dc-client-not-found-in-kerberos-database-while-gett)
 ##### [#case_matters](https://stackoverflow.com/questions/21001950/krbexception-message-stream-modified-41-when-connecting-to-smb-share-using-k)
 ##### [#bizarre_resolution](https://stackoverflow.com/questions/16412236/how-to-resolve-javax-naming-partialresultexception)
+##### [#change_identity](https://www.itsupportguides.com/knowledge-base/windows-7/windows-7-run-program-as-a-different-user/)
 
 ## Setting up a Liberty server that works
 
@@ -5661,6 +5662,60 @@ That DEFINITELY exists. I have `ldapsearch` to prove it.
 I set `host="mumkashi.goodlike.eu"`, which is more specific. No change.
 
 I set `baseDN="CN=Users,DC=goodlike,DC=eu"`. No effect. I change it back.
+
+Stepping back a little, why are we asked for a password in the first place?
+I guess it's because we're technically not "logged in", whatever that means.
+
+The only place for logging in is when you just start the computer, though.
+That isn't even connected to the domain, as the domain controller is on the VM.
+It must be some sort of local account that's being used.
+
+If I try to log out, that shuts down the VM.
+That means I can't use any account on the domain for logging in,
+at least through this method.
+
+I explore the options of using other accounts, but all I find is
+people warning how Windows 7 license does not allow two accounts at once.
+What a stupid approach to software.
+It's on my computer, so if I find a way, it's none of their business.
+Though I'm sure copyright lawyers would disagree :D
+
+Anyway, as I keep on looking, I stumble on another [~~Frieza~~ IBM support page](https://www.ibm.com/support/pages/how-do-i-login-different-user-when-active-directory-sso-enabled).
+It mentions `Run as different user`, but it doesn't seem to be working for me.
+Still, I'm intrigued, so I find another page to help me [#change_identity](#change_identity).
+
+The issue was that I tried to use the quick-start icon, which works differently.
+I don't even have a browser shortcut to use, so I find the real program,
+shift-right-click and then I have the option at least.
+
+When I click on the option, I am asked to login to the domain! Nice!
+I use `mumkashi` & `Passw0rd`, which then opens a fresh `firefox` window!
+
+If I navigate to `localhost:8090`, I get an error:
+
+> CWWKS4306E: SPNEGO authentication is not supported on this client browser..
+
+The browser settings have been completely reset to default,
+presumably because I'm using a different user. Cool.
+
+I go to `about:config` and add the network configuration like before.
+I restart the browser, logging into `mumkashi` again.
+The changes are preserved! This is a cool way to hide a specific browser setup :D
+
+Unfortunately, I'm still asked to login when I go to `localhost:8090`.
+Furthermore, I get the same errors as before if I try to use `mumkashi` :(
+
+Finally, I verified that `firefox` does not open when the user or password
+are wrong in the domain. I just get an error:
+
+> Logon failure: unknown user name or bad password
+
+So we can deduce that
+* `mumkashi` is an account on the domain
+* we do know its password
+* we can login to it
+* the SSO mechanisms ignores this for some reason
+* the account cannot be found by our LDAP configuration
 
 ## Summary in summary
 
