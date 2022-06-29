@@ -8,13 +8,19 @@
 
     <logging traceSpecification="*=fine"/>
 
-    <!--<ldapRegistry id="LDAP" realm="GOODLIKE.EU"-->
-                  <!--host="goodlike.eu" port="389"-->
-                  <!--baseDN="dc=goodlike,dc=eu"-->
-                  <!--bindDN="CN=Administrator,CN=Users,DC=goodlike,DC=eu"-->
-                  <!--bindPassword="Passw0rd"-->
-                  <!--ldapType="Custom"-->
-                  <!--recursiveSearch="true"/>-->
+    <ldapRegistry id="LDAP" realm="GOODLIKE.EU"
+                  host="mumkashi.goodlike.eu" port="3268"
+                  baseDN="DC=goodlike,DC=eu"
+                  bindDN="CN=Administrator,CN=Users,DC=goodlike,DC=eu"
+                  bindPassword="Passw0rd"
+                  ldapType="Microsoft Active Directory"
+                  recursiveSearch="true">
+        <activedFilters userFilter="&amp;(cn=%v)(objectClass=person)"
+                        groupFilter="&amp;(cn=%v)(objectClass=group)"
+                        userIdMap="*:cn"
+                        groupIdMap="*:cn"
+                        groupMemberIdMap="group:member"/>
+    </ldapRegistry>
 
     <kerberos configFile="krb5.conf" keytab="working.keytab"/>
 
@@ -26,11 +32,7 @@
 
     <application location="${whereMyWarAt}" context-root="/">
         <application-bnd>
-            <security-role name="wild">
-                <user name="cn=Bob,ou=people,dc=goodlike,dc=eu"/>
-                <user name="uid=testuser,ou=people,dc=goodlike,dc=eu"/>
-            </security-role>
-            <security-role name="SSORole">
+            <security-role name="TheWorld">
                 <special-subject type="ALL_AUTHENTICATED_USERS"/>
             </security-role>
         </application-bnd>

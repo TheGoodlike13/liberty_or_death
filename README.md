@@ -5691,7 +5691,7 @@ shift-right-click and then I have the option at least.
 When I click on the option, I am asked to login to the domain! Nice!
 I use `mumkashi` & `Passw0rd`, which then opens a fresh `firefox` window!
 
-If I navigate to `localhost:8090`, I get an error:
+If I navigate to `localhost:9080`, I get an error:
 
 > CWWKS4306E: SPNEGO authentication is not supported on this client browser..
 
@@ -5702,7 +5702,7 @@ I go to `about:config` and add the network configuration like before.
 I restart the browser, logging into `mumkashi` again.
 The changes are preserved! This is a cool way to hide a specific browser setup :D
 
-Unfortunately, I'm still asked to login when I go to `localhost:8090`.
+Unfortunately, I'm still asked to login when I go to `localhost:9080`.
 Furthermore, I get the same errors as before if I try to use `mumkashi` :(
 
 Finally, I verified that `firefox` does not open when the user or password
@@ -5716,6 +5716,40 @@ So we can deduce that
 * we can login to it
 * the SSO mechanisms ignores this for some reason
 * the account cannot be found by our LDAP configuration
+
+I try a different account, `Administrator`. No dice.
+
+I explore the state of LDAP entries a bit and come up with these custom filters:
+
+    <customFilters id="customFilters"
+                   userFilter="&amp;(cn=%v)(objectClass=user)"
+                   groupFilter="&amp;(cn=%v)(objectClass=group)"
+                   userIdMap="*:cn"
+                   groupMemberIdMap="group:member"/>
+
+No dice. I decide to try a slightly different approach.
+Samba is supposed to be something like a stand-in for Microsoft AD,
+so perhaps using that would work?
+
+    ldapType="Microsoft Active Directory"
+    
+    <activedFilters userFilter="&amp;(cn=%v)(objectClass=person)"
+                    groupFilter="&amp;(cn=%v)(objectClass=group)"
+                    userIdMap="*:cn"
+                    groupIdMap="*:cn"
+                    groupMemberIdMap="group:member"/>
+
+And finally after all of this messing around...
+`CN=mumkashi,CN=Users,DC=goodlike,DC=eu` works as a username.
+
+I'm gonna guess I don't have to explain how that's just not right xD
+
+It seems that SPNEGO is not working properly at some level.
+If it did, I wouldn't even need to enter a username & password,
+let alone using a full name from LDAP.
+All that we've achieved is using LDAP for authentication again.
+
+I cleanup old authorization code and leave it at that for now.
 
 ## Summary in summary
 

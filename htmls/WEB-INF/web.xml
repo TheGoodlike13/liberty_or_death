@@ -4,11 +4,7 @@
          xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
          version="3.1">
     <security-role>
-        <role-name>wild</role-name>
-    </security-role>
-
-    <security-role>
-        <role-name>SSORole</role-name>
+        <role-name>TheWorld</role-name>
     </security-role>
 
     <security-constraint>
@@ -18,8 +14,7 @@
             <http-method>GET</http-method>
         </web-resource-collection>
         <auth-constraint>
-            <role-name>wild</role-name>
-            <role-name>SSORole</role-name>
+            <role-name>TheWorld</role-name>
         </auth-constraint>
     </security-constraint>
 </web-app>
