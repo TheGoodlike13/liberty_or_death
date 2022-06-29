@@ -6194,5 +6194,8 @@ And finally, at the very end I want to thank you, `reader`.
 If you got this far, you are a man among men.
 Even if you are a woman, I don't care. Be proud!
 
+My final note on SSO: don't do it. Just don't. It's not worth it.
+Nothing is worth this much effort, except maybe sex.
+
 Achievement unlocked: NO CLIPBOARD.
 That's right. I never setup any clipboard share between the VM and host. Take that!
