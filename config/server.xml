@@ -6,7 +6,7 @@
         <feature>spnego-1.0</feature>
     </featureManager>
 
-    <logging traceSpecification="*=fine"/>
+    <logging traceSpecification="com.ibm.ws.webcontainer.*=fine:com.ibm.ws.http.*=fine:com.ibm.ws.genericbnf.*=fine"/>
 
     <ldapRegistry id="LDAP" realm="GOODLIKE.EU"
                   host="mumkashi.goodlike.eu" port="3268"

@@ -5808,6 +5808,11 @@ I was using different users after all...
 
 I add `goodlike.eu` to `ssoDomainNames` in `server.xml` just in case. No effect.
 
+I cleanup the logging config a little to reduce spam. It's very unwieldy.
+For example, I want to print ALL logs, except certain ones.
+Well, that's not allowed. If you set to print all logs, that's all logs.
+Other config is ignored. I hope I won't miss anything important!
+
 ## Summary in summary
 
 These are links to summaries throughout the entire document, in order:
