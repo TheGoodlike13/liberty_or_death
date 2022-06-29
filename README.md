@@ -5768,6 +5768,34 @@ I set the file to `krb5.conf` in config, but the actual file was `krb.conf`.
 `krb5.conf` must've been a remainder from all the way back.
 Although fixing this doesn't seem to change anything. Huh.
 
+It seems that ~~Frieza~~ IBM has misled us one more time!
+The `disableFailOverToAppAuthType="false"` option seems to be the reason
+why SPNEGO gives up and goes for LDAP login instead.
+Although, flipping it back doesn't really fix things,
+but we can now check what the issue is in logs.
+
+> Basic realm="The token included in the HttpServletRequest is not a valid SPNEGO token"
+
+When I connect, the app correctly sends `HTTP 401` with a `Negotiate` instruction.
+Then the browser automatically sends back an authorization token
+`Negotiate {insert base64 nonsense here}`.
+And it is really nonsense - even when decoded,
+the only part that is readable is `GPCGOODLIKE` at the end.
+It produces the above error.
+
+If I enter any username/password, the authorization header turns into
+`Basic {base64(username:password)}`.
+It gets exactly the same error about not being a valid SPNEGO token.
+Hmm... now that I think about it,
+the SPNEGO docs always say they would show a login form.
+But they never said they'd log you in using the same mechanism as the SPNEGO login.
+So technically it might be the case that you *want* it to fallback to LDAP
+if SPNEGO fails. If only someone would bother to go into detail...
+
+With this in mind, I think we should only pursue the "automatic" login via SPNEGO.
+If we reach the point where we no longer get a login form because
+the initial SPNEGO token actually goes through, I'm calling it a day.
+
 ## Summary in summary
 
 These are links to summaries throughout the entire document, in order:

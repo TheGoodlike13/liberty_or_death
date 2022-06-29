@@ -25,8 +25,7 @@
     <kerberos configFile="krb.conf" keytab="working.keytab"/>
 
     <spnego id="whocares"
-            servicePrincipalNames="HTTP/gpc.goodlike.eu@GOODLIKE.EU"
-            disableFailOverToAppAuthType="false"/>
+            servicePrincipalNames="HTTP/gpc.goodlike.eu@GOODLIKE.EU"/>
 
     <webAppSecurity ssoDomainNames="localhost"/>
 
