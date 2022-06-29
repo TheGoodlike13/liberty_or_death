@@ -151,6 +151,8 @@ Links to various resources referred to (try [web archive](https://archive.org/) 
 ##### [#case_matters](https://stackoverflow.com/questions/21001950/krbexception-message-stream-modified-41-when-connecting-to-smb-share-using-k)
 ##### [#bizarre_resolution](https://stackoverflow.com/questions/16412236/how-to-resolve-javax-naming-partialresultexception)
 ##### [#change_identity](https://www.itsupportguides.com/knowledge-base/windows-7/windows-7-run-program-as-a-different-user/)
+##### [#desperate_times_call_for_desperate_actions](https://www.adaltas.com/en/2019/11/04/windows-krb5-client-spnego/)
+##### [#ipv4_lyfe](https://theitbros.com/ping-returns-ipv6-address-ping-ipv4/)
 
 ## Setting up a Liberty server that works
 
@@ -5832,6 +5834,96 @@ The only difference is that it immediately crashes if I use a different user.
 Looking at `log.samba` back in the VM,
 I can see that logging in with `mumkashi` when running `firefox`
 produces a Kerberos ticket. Nothing else happens afterwards.
+
+[#desperate_times_call_for_desperate_actions](#desperate_times_call_for_desperate_actions).
+That's right, we're installing MIT Kerberos (client?) into the Windows machine.
+If `firefox` can't figure out how to do it, I'll do it myself. Mostly myself.
+
+I install `MIT Kerberos Version 4.1` from [their page](https://web.mit.edu/kerberos/dist/).
+I choose the 64-bit version.
+I don't let it start on start-up or renew things automatically.
+I'll do everything manually, thanks.
+
+I don't wanna mess with the environment needlessly, so I take the config approach.
+Surprisingly, there already exists a file `C:\ProgramData\MIT\Kerberos5\krb5.ini`.
+It's been there since the installation of Windows. Who and why put it there?
+Who knows. I copy the contents from `C:\Windows\krb5.ini`,
+which is now actually `krb5-ini-pre-kfw4` for no reason.
+I add this to both files while at it:
+
+    C:\Users\Public\krb5cache
+
+Since it's in `Public`, chances are there will be no issues with rights.
+It's also easy to find.
+I consider adding it to `krb.conf` of the project too, but for now I won't.
+I'll do it if it seems to be necessary.
+Otherwise it will be weird, as that's a Windows specific directory.
+
+Next, let's configure `firefox` again.
+Only the instance when running as `mumkashi`, of course.
+These are the settings I change:
+
+    network.auth.use-sspi: false
+    network.negotiate-auth.using-native-gsslib: false
+    network.negotiate-auth.gsslib: C:\Program Files\MIT\Kerberos\bin\gssapi64.dll
+    network.negotiate-auth.allow-non-fqdn: true
+
+Others were already changed from before.
+Also, the `gsslib` is accurate as that's where 64-bit installed by default.
+
+So, now that I made all those changes and reset the `firefox`, does it work?
+Not quite. It's definitely different. The `Negotiate` token is like 3 times longer.
+I'm still met with an error, however:
+
+> CWWKS4315E: Can not find a GSSCredential for the service principal name HTTP/127.0.0.1.
+
+That's obviously `localhost` address, but why on earth is it here?
+Is it because we're using `localhost` to connect?
+I try to connect using `gpc.goodlike.eu:9080/test`, but it doesn't work.
+
+    ping gpc.goodlike.eu
+    
+Uses IPv6, so I can't tell if it's right or not.
+
+[#ipv4_lyfe](#ipv4_lyfe) instructs me on how to force IPv4:
+
+    ping gpc.goodlike.eu -4
+    
+And the IP address is... my internet address! Interesting!
+Indeed, if I use `localhost`, I can connect, but not via my IP.
+
+[This page](https://stackoverflow.com/questions/18953391/ibm-websphere-liberty-profilehow-to-map-public-ip-address-in-websphere)
+reveals that the `httpEndpoint` tag we deleted long time ago is needed.
+Makes sense: it exposes the server for serious HTTP requests.
+I add it to `server.xml`:
+
+    <httpEndpoint host="*" httpPort="9080" httpsPort="9443" id="defaultHttpEndpoint"/>
+
+When I run the application now, it figures out on its own to use `gpc.goodlike.eu`,
+even in the logs printing the base link! How obnoxiously smart!
+If only this app would put that kind of effort into making sense...
+
+So does it work now, if I access `gpc.goolike.eu:9080/test`? Nope.
+
+> CWWKS4315E: Can not find a GSSCredential for the service principal name HTTP/GPC.goodlike.eu.
+
+What. It obviously changes the way we expect but STILL doesn't work.
+I mean, it's a shot in the dark, but there's only one thing I can think of:
+
+    servicePrincipalNames="HTTP/GPC.goodlike.eu@GOODLIKE.EU"
+
+I uppercase the `GPC` in the `server.xml` config and... it works... OK.
+
+Well, I say it works, but it just gives me `Error 403: AuthenticationFailed`.
+That's in the browser by the way. So what is happening?
+SPNEGO is clearly working all the way up to the authorization step.
+
+Deep in the trace logs I find this:
+
+> javax.naming.directory.InvalidSearchFilterException:
+> invalid attribute description; remaining name 'DC=goodlike,DC=eu'
+
+DAMN YOU LDAP!
 
 ## Summary in summary
 
