@@ -5721,7 +5721,10 @@ I see how it is. The final boss of this fight is LDAP. So be it.
 `gpc$` is the computer where the "service" is on (must have joined domain already).
 `$` separates it from normal users, like `mumkashi`.
 2. I also added SPN `HTTP/gpc` just in case. Same computer.
-3. I exported the `keytab` with both SPNs. Command for the first one:
+3. I manually edited `userPrincipalName` for the computer in LDAP.
+I set it to `HTTP/gpc.goodlike.eu@GOODLIKE.EU` using `ldapmodify`.
+`GOODLIKE.EU` is my Kerberos realm.
+4. I exported the `keytab` with both SPNs. Command for the first one:
 `sudo samba-tool domain exportkeytab gpc9.keytab --principal=HTTP/gpc.goodlike.eu`
 
 ### The final boss
