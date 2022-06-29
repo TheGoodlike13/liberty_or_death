@@ -4999,7 +4999,7 @@ What happens if we try to join the domain now? New error!
 
 I tried a couple times just to eliminate the possibility of typos.
 
-This is all quite odd, since I have to user both `username` and `password`
+This is all quite odd, since I have to use both `username` and `password`
 to login. I thought they *had* to match the PC name for this to work,
 but it seems like it's the opposite? Very weird.
 
