@@ -6155,7 +6155,7 @@ Also, I technically don't know if you made it or not,
 since it was taken down and all.
 If not, just pass on the thanks to the right guy.
 
-Thanks, `666thehearless666` for your `Call of Cthulhu` let's play.
+Thanks, `666theheartless666` for your `Call of Cthulhu` let's play.
 Very inspirational. Haven't seen it for years, but I still remember it!
 
 Thanks, `porn`. Nothing like some porn to relax after a stressful day of work.
