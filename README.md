@@ -6169,7 +6169,7 @@ Fuck you, `VMWare`. You and your Windows 8 requirement.
 While we're at it, fuck you, `Windows 8`.
 
 Fuck you, `linux devs`. I've written enough `sudo` and `chown`
-to never want to touch `linux` ever again.
+to never want to touch Linux ever again.
 
 Fuck you, `IBM`. Your guides suck. Even when it seems that they're helpful,
 they're just misleading you into an even greater mess. You make Frieza proud.
