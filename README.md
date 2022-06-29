@@ -6077,6 +6077,12 @@ They are likely the result of my insane setup of having the DC on the VM.
 Or perhaps using the same computer for the service and the client.
 Some things are better left unknown. But here we go!
 
+First and foremost, I disabled SSL for Samba (`/etc/samba/smb.conf`):
+
+    ldap server require strong auth = no
+    
+It's just a can of worms I'm not willing to touch. Good luck setting that up!
+
 1. Follow [#spnego_open](#spnego_open). [SPN in summary](#spn-in-summary) for SPN.
 2. The `krb5` files should probably be in the system,
 but I configured them into Liberty instead.
