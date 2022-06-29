@@ -3368,6 +3368,7 @@ any references to a web folder there. Maybe it's somewhere in the project?
 I delete the `NoCacheFilter`. I muck around with pages, they don't seem to be cached.
 
 *Editor's note: Some pages (namely index.html) were cached. Better not delete this!*
+
 *Editor's note 2: Some pages are cached with or without it. I give up*
 
 Replacing the redirect with this code
