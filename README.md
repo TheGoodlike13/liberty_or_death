@@ -47,6 +47,7 @@
 #### [3.8. The super secret final boss](#the-super-secret-final-boss)
 ##### [3.8.1. Liberty SPNEGO in summary](#liberty-spnego-in-summary)
 ### [4. Summary in summary](#summary-in-summary)
+### [5. A word of thanks](#a-word-of-thanks)
 
 Links to various resources referred to (try [web archive](https://archive.org/) if down, should work for most):
 
@@ -6061,6 +6062,14 @@ So let's add a new role:
 
 And what do you know? It just works. Even the application has had enough :D
 
+`mumkashi` logs in without problems, whereas `goodlikepc` get the error:
+
+> CWWKS9104A: Authorization failed for user goodlikepc
+> while invoking liberty_or_death on /test.
+> The user is not granted access to any of the required roles: [CoolGuysOnly].
+
+Looks like my job is done here.
+
 #### Liberty SPNEGO in summary
 
 This summary involves shenanigans of the highest degree.
@@ -6120,3 +6129,64 @@ These are links to summaries throughout the entire document, in order:
 * [Joining the domain as Windows 7 in summary](#joining-the-domain-as-windows-7-in-summary)
 * [SPN in summary](#spn-in-summary)
 * [Liberty SPNEGO in summary](#liberty-spnego-in-summary)
+
+## A word of thanks
+
+As a final note, I'd like to thank the various things that kept me going through
+this insane journey!
+
+Thanks, `VirtualBox`, for making a VM program what works on Windows 7.
+
+Thanks, `apt`. You're a real pal.
+I can't even imagine how hard it would be without you!
+
+Thanks, `random people on stackoverflow and equivalent`.
+It wouldn't be possible without your brave contributions.
+
+Thanks, `TheOneK`. That `Yujiro vs Baki MMV`, or rather the OST for it
+kept me going through the hardest parts of it.
+Also, I technically don't know if you made it or not,
+since it was taken down and all.
+If not, just pass on the thanks to the right guy.
+
+Thanks, `666thehearless666` for your `Call of Cthulhu` let's play.
+Very inspirational. Haven't seen it for years, but I still remember it!
+
+Thanks, `porn`. Nothing like some porn to relax after a stressful day of work.
+
+Thanks, `every swearword I used, ever`. You are the real MVPs of this project.
+
+I'd also like to NOT thank some things that definitely didn't help.
+
+Fuck you, `VMWare`. You and your Windows 8 requirement.
+
+While we're at it, fuck you, `Windows 8`.
+
+Fuck you, `linux devs`. I've written enough `sudo` and `chown`
+to never want to touch `linux` ever again.
+
+Fuck you, `IBM`. Your guides suck. Even when it seems that they're helpful,
+they're just misleading you into an even greater mess. You make Frieza proud.
+
+Fuck you, `university`. It's not because you didn't teach me this stuff.
+I probably would've never picked up this shit even if I had to, back then.
+No, it's just because you suck. Everything I learned, I learned from like 2 books.
+Neither of which was recommended by university. What a waste of time.
+
+Fuck you, `social media`. What a useless fucking distraction.
+I hope all social media sites go down simultaneously and forever one day.
+That will be a good day. Unless, like, the world explodes or something, I guess.
+
+Fuck you, `Vivec`. I don't make no promises, even to save Vvardenfell.
+
+Honorable mentions go to `Samba devs`.
+I have to admit, you have something that works.
+I still have no idea what Samba is though.
+So you're getting no thanks from me.
+
+And finally, at the very end I want to thank you, `reader`.
+If you got this far, you are a man among men.
+Even if you are a woman, I don't care. Be proud!
+
+Achievement unlocked: NO CLIPBOARD.
+That's right. I never setup any clipboard share between the VM and host. Take that!
