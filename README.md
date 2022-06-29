@@ -4248,7 +4248,7 @@ Support whatever you like, as long as it works. Fresh VM should have no problems
 > Select a host name for your AD DC.
     
 Hmm... what would be a typical host name then?
-`PDC` and `BDC` are NOT suggested to be used, but that means someone would use them,
+`PDC` and `BDC` are suggested to NOT be used, but that means someone would use them,
 they would just be a dum dum. So we need something along those lines, but better
 in a way that is not described. Let's go with `JANMASHI`.
 
