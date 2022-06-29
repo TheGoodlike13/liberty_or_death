@@ -3302,7 +3302,7 @@ You can see in the link above that I added the `-finish` suffix in `pom.xml`:
 
 This is very logical. After all, the guide has two versions of the project.
 One that's "just started" (it's clearly not JUST started), one that's "finished".
-If I import them both to IntelliJ idea, they end up under the same name.
+If I import them both to IntelliJ Idea, they end up under the same name.
 And I need to run the `mvn` commands through there, so it would be very confusing
 and error prone to keep it this way. What could we do to avoid issues?
 I know! I'll add `-start` and `-finish` suffixes to their names!
