@@ -8,28 +8,21 @@
 
     <logging traceSpecification="com.ibm.ws.webcontainer.*=fine:com.ibm.ws.http.*=fine:com.ibm.ws.genericbnf.*=fine"/>
 
-    <ldapRegistry id="LDAP" realm="GOODLIKE.EU"
+    <ldapRegistry id="MotherOfAllProblems" realm="GOODLIKE.EU"
                   host="mumkashi.goodlike.eu" port="3268"
                   baseDN="DC=goodlike,DC=eu"
                   bindDN="CN=Administrator,CN=Users,DC=goodlike,DC=eu"
                   bindPassword="Passw0rd"
-                  ldapType="Microsoft Active Directory"
-                  recursiveSearch="true">
-        <activedFilters userFilter="&amp;(cn=%v)(objectClass=person)"
-                        groupFilter="&amp;(cn=%v)(objectClass=group)"
-                        userIdMap="*:cn"
-                        groupIdMap="*:cn"
-                        groupMemberIdMap="group:member"/>
-    </ldapRegistry>
+                  ldapType="Microsoft Active Directory"/>
 
     <kerberos configFile="krb.conf" keytab="working.keytab"/>
 
     <spnego id="whocares"
             servicePrincipalNames="HTTP/GPC.goodlike.eu@GOODLIKE.EU"/>
 
-    <webAppSecurity ssoDomainNames="localhost,goodlike.eu"/>
+    <webAppSecurity ssoDomainNames="goodlike.eu"/>
 
-    <httpEndpoint host="*" httpPort="9080" httpsPort="9443" id="defaultHttpEndpoint"/>
+    <httpEndpoint host="gpc.goodlike.eu" httpPort="9080" httpsPort="9443" id="weNeedThisSoWeCanUseActualHostnameNotLocalhost"/>
 
     <application location="${whereMyWarAt}" context-root="/">
         <application-bnd>

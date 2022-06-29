@@ -40,7 +40,8 @@
 #### [3.4. Breakdown of negotiations](#breakdown-of-negotiations)
 #### [3.5. Apotheosis](#apotheosis)
 #### [3.6. The final boss](#the-final-boss)
-#### [3.7. The secret_final boss](#the-secret-final-boss)
+#### [3.7. The secret final boss](#the-secret-final-boss)
+#### [3.8. The super secret final boss](#the-super-secret-final-boss)
 ### [4. Summary in summary](#summary-in-summary)
 
 Links to various resources referred to (try [web archive](https://archive.org/) if down, should work for most):
@@ -5924,6 +5925,35 @@ Deep in the trace logs I find this:
 > invalid attribute description; remaining name 'DC=goodlike,DC=eu'
 
 DAMN YOU LDAP!
+
+### The super secret final boss
+
+We're on a third health bar here, I'm not very happy.
+I might just take desperate measures.
+
+I remove `baseDN="DC=goodlike,DC=eu"` entirely, but that just breaks the config.
+
+Changing to `baseDN="CN=Users,DC=goodlike,DC=eu"` still does nothing.
+
+Removing random params or using `389` port again does nothing.
+
+I add `ignoreCase="true"`. Nothing.
+
+I change the `userIdMap="user:sAMAccountName"` to be more specific. Nothing.
+
+I try with `goodlikepc`. Same issue.
+
+In an act of complete madness I comment out the useless `activedFilters` tag.
+Entirely. And it starts working. I double check it by cleaning up, etc.
+Ironic that the thing that made LDAP work previously was now breaking it...
+
+It's a bit awkward if you try to use multiple users still,
+as I'm not sure it switches between correctly, but hey.
+We fucking did it. WE FUCKING DID IT OMG SSO WORKS.
+I honestly lost hope at least a dozen times up to this point.
+That's the power of will (and curse-words) for you!
+
+I make a quick cleanup of stuff (e.g. `localhost`, old id names, etc.)
 
 ## Summary in summary
 
