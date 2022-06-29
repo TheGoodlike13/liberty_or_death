@@ -36,12 +36,16 @@
 ### [3. (SPN)EGO death](#spnego-death)
 #### [3.1. It's over 4000!](#its-over-4000)
 #### [3.2. Get ready to dance](#get-ready-to-dance)
+##### [3.2.1. Samba in summary](#samba-in-summary)
 #### [3.3. Dancing through the Windows](#dancing-through-the-windows)
+##### [3.3.1. Joining the domain as Windows 7 in summary](#joining-the-domain-as-windows-7-in-summary)
 #### [3.4. Breakdown of negotiations](#breakdown-of-negotiations)
 #### [3.5. Apotheosis](#apotheosis)
+##### [3.5.1. SPN in summary](#spn-in-summary)
 #### [3.6. The final boss](#the-final-boss)
 #### [3.7. The secret final boss](#the-secret-final-boss)
 #### [3.8. The super secret final boss](#the-super-secret-final-boss)
+##### [3.8.1. Liberty SPNEGO in summary](#liberty-spnego-in-summary)
 ### [4. Summary in summary](#summary-in-summary)
 
 Links to various resources referred to (try [web archive](https://archive.org/) if down, should work for most):
@@ -4774,6 +4778,32 @@ for the first time in a while. After that it's reasonably OK.
 Although some pictures in, uh, let's say,
 certain niche websites fail to load half the time. Not good.
 
+#### Samba in summary
+
+1. For the most part you can follow instructions in [#awkwardly_dancing_dummy_coder](#awkwardly_dancing_dummy_coder)
+and you'll be fine. The rest of this summary goes into details on some of the steps.
+2. Selecting a hostname means naming your PC. `/etc/hostname` contains the name.
+Make sure it's simple and not longer than 15 chars, or Samba will complain.
+The one used in their example is `DC1`, the one I used was `mumkashi`.
+3. To disable `resolvconf`, follow the instructions in [#resolutionary_fight](#resolutionary_fight).
+You will want to make sure `/etc/resolv.conf` exists in the end.
+Without it and a working DNS, all internet queries will fail.
+They will simply be unable to map the URL to an IP address.
+I used `8.8.8.8`, which is Google public DNS in this case, but there are better.
+4. `/etc/hosts` might already contain an entry for your hostname as `127.0.1.1`.
+It seems that it can be safely replaced.
+5. I installed Samba using unofficial packages from `apt`.
+If you pick this option, you'll be asked to input values for Kerberos.
+Input the chosen realm and the IP address of the VM.
+I input `GOODLIKE.EU` and `192.168.1.7` twice.
+Finally, you may also need to install Samba client: `sudo apt install samba-client`.
+6. Make sure to bind only the network interface which connects to the host.
+In my case I used `--option="interfaces=lo enp0s8"`
+and `--option="bind interfaces only=yes"`.
+7. If the provisioning fails and asks to remove some file, do so, then repeat it.
+8. I avoided optional steps.
+9. After installation or future changes, I'd restart the VM and run `sudo samba`.
+
 ### Dancing through the Windows
 
 So, next I suppose I need to do something on this computor running Windows 7.
@@ -5003,6 +5033,40 @@ Can't connect to it, but it's there, technically!
 
 So now that we're in the domain, can we use this bitch to connect via SPNEGO?
 I sure hope so...
+
+#### Joining the domain as Windows 7 in summary
+
+This probably doesn't work in `Home` editions. Fucking Microsoft.
+
+Also, this could possibly brick your computer.
+It didn't brick my computer, but I have the devil's own luck. Have fun!
+
+1. Follow the instructions from [#windows_domain_stuff](#windows_domain_stuff).
+2. The domain is not the realm. It should've been set during Samba provisioning.
+In my case realm: `GOODLIKE.EU`, domain: `GOODLIKE`.
+3. Enter administrator username and password when logging in.
+4. After restarting, you'll be asked to ALT+CTRL+DELETE to login.
+I'm not sure if this is supposed to happen or not, but in my case the login
+was password-less and logged me into a local account.
+I can't vouch for a less insane setup working like that, sadly.
+
+If you fail to connect to the domain,
+make sure your VM adapter is configure to use the VM as DNS:
+
+1. Right-click network icon, select `Open Network and Sharing Center`.
+2. Click `Change adapter settings`.
+3. Right-click on the `host-only` adapter, select `Status`.
+4. Click `Properties`.
+5. Select `Internet Protocol Version 4 (TCP/IPv4)`.
+6. Click `Properties`.
+7. Make sure `Use the following DNS server addresses` is selected
+8. Enter the IP of the VM/DNS. In my case: `192.168.1.7`.
+
+If it still fails, just edit your `hosts` file.
+In my case I added these lines:
+
+    192.168.1.7     goodlike.eu
+    192.168.1.7     mumkashi.goodlike.eu
 
 ### Breakdown of negotiations
 
@@ -5648,6 +5712,17 @@ Perhaps it would work if we just remove it? Nope.
 
 I see how it is. The final boss of this fight is LDAP. So be it.
 
+#### SPN in summary
+
+1. I added my SPN like this: `sudo samba-tool spn add HTTP/gpc.goodlike.eu gpc$`.
+`HTTP` is the typical prefix for SPNEGO (required by Liberty).
+`GPC` is sub-domain, allegedly required to work (`goodlike.eu` is the domain).
+`gpc$` is the computer where the "service" is on (must have joined domain already).
+`$` separates it from normal users, like `mumkashi`.
+2. I also added SPN `HTTP/gpc` just in case. Same computer.
+3. I exported the `keytab` with both SPNs. Command for the first one:
+`sudo samba-tool domain exportkeytab gpc9.keytab --principal=HTTP/gpc.goodlike.eu`
+
 ### The final boss
 
 So what do we do know? First I google the error and find a [#bizarre_resolution](#bizarre_resolution).
@@ -5954,8 +6029,9 @@ I honestly lost hope at least a dozen times up to this point.
 That's the power of will (and curse-words) for you!
 
 I make a quick cleanup of stuff (e.g. `localhost`, old id names, etc.)
+Even the standard LDAP port `389` works!
 
-Let's add a finishing touch: filter authorization by group.
+Let's add an extra finishing touch: filter authorization by group.
 
 While exploring Samba LDAP for purposes of setting it up,
 I actually created a custom group and added `mumkashi` to it:
@@ -5985,6 +6061,51 @@ So let's add a new role:
 
 And what do you know? It just works. Even the application has had enough :D
 
+#### Liberty SPNEGO in summary
+
+This summary involves shenanigans of the highest degree.
+They are likely the result of my insane setup of having the DC on the VM.
+Or perhaps using the same computer for the service and the client.
+Some things are better left unknown. But here we go!
+
+1. Follow [#spnego_open](#spnego_open). [SPN in summary](#spn-in-summary) for SPN.
+2. The `krb5` files should probably be in the system,
+but I configured them into Liberty instead.
+3. In `krb5.conf`, make sure to keep the realm uppercase.
+4. Make sure the `enctypes` used are present in the `keytab` file.
+`sudo klist -ke {keytab}` to check.
+5. `jvm.options` should be in config directory.
+You may need to add `-Dsun.security.krb5.disableReferrals=true`
+even if you don't need the other options.
+Though there might be other ways, see [here](https://bugs.centos.org/view.php?id=17000).
+6. In `server.xml`, make sure to add `httpEndpoint` with your host address.
+It should be the same as the SPN sub-domain.
+7. Make sure you add `<webAppSecurity ssoDomainNames="goodlike.eu"/>` equivalent.
+It should have your domain in there.
+8. `servicePrincipalNames` can be pretty capricious regarding case sensitivity.
+It might give errors, just adjust accordingly.
+
+The instructions to make `firefox` or other browsers work may be enough.
+In my case I had to install a Kerberos client locally and use it instead.
+[#desperate_times_call_for_desperate_actions](#desperate_times_call_for_desperate_actions)
+has a good guide on how to do that and setup `firefox` to use.
+The step for creating a ticket was not needed in my case.
+
+If you're insane enough to run the server and try to login with the same machine,
+`shift-right-click` on an application (not docked in start menu) allows to run it
+as a different user. This only worked with `firefox` for me.
+
+If you're using custom filters for LDAP, everything might not work at all.
+Tough luck.
+
+Finally, if you want to use & filter by group, you can. Just add them on Samba:
+
+    sudo samba-tool group add GROUP_NAME
+    sudo samba-tool group addmembers GROUP_NAME --member-dn=FULL_DN_OF_USER
+
+Then filter them in `server.xml` by creating a security role with
+`<group name="GROUP_NAME"/>` within.
+
 ## Summary in summary
 
 These are links to summaries throughout the entire document, in order:
@@ -5994,4 +6115,8 @@ These are links to summaries throughout the entire document, in order:
 * [Shared folder in summary](#shared-folder-in-summary)
 * [VM network in summary](#vm-network-in-summary)
 * [Liberty authentication in summary](#liberty-authentication-in-summary)
-* [Hell in summary](#authentication-hell-in-summary)
+* [~~Hell in summary~~](#authentication-hell-in-summary) - this step can be ignored, as Samba replaces it
+* [Samba in summary](#samba-in-summary)
+* [Joining the domain as Windows 7 in summary](#joining-the-domain-as-windows-7-in-summary)
+* [SPN in summary](#spn-in-summary)
+* [Liberty SPNEGO in summary](#liberty-spnego-in-summary)
