@@ -22,7 +22,7 @@
                         groupMemberIdMap="group:member"/>
     </ldapRegistry>
 
-    <kerberos configFile="krb5.conf" keytab="working.keytab"/>
+    <kerberos configFile="krb.conf" keytab="working.keytab"/>
 
     <spnego id="whocares"
             servicePrincipalNames="HTTP/gpc.goodlike.eu@GOODLIKE.EU"

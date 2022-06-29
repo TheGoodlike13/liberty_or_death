@@ -40,6 +40,7 @@
 #### [3.4. Breakdown of negotiations](#breakdown-of-negotiations)
 #### [3.5. Apotheosis](#apotheosis)
 #### [3.6. The final boss](#the-final-boss)
+#### [3.7. The secret_final boss](#the-secret-final-boss)
 ### [4. Summary in summary](#summary-in-summary)
 
 Links to various resources referred to (try [web archive](https://archive.org/) if down, should work for most):
@@ -5750,6 +5751,22 @@ let alone using a full name from LDAP.
 All that we've achieved is using LDAP for authentication again.
 
 I cleanup old authorization code and leave it at that for now.
+
+### The secret final boss
+
+First things first. I finally remembered that logs can be found in `.build` dir.
+So when I said that there was no effect to `trace` log configuration,
+I was wrong: it simply didn't print to the console.
+
+Here's what I find there:
+
+> E CWWKS4303E: The specified Kerberos configuration file
+> `C:\Code Projects\liberty_or_death\.build\wlp\usr\servers\defaultServer\krb5.conf`
+> could not be found.
+
+I set the file to `krb5.conf` in config, but the actual file was `krb.conf`.
+`krb5.conf` must've been a remainder from all the way back.
+Although fixing this doesn't seem to change anything. Huh.
 
 ## Summary in summary
 
