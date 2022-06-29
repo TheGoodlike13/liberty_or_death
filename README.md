@@ -5813,6 +5813,26 @@ For example, I want to print ALL logs, except certain ones.
 Well, that's not allowed. If you set to print all logs, that's all logs.
 Other config is ignored. I hope I won't miss anything important!
 
+I try some random things. I add `mumkashi.goodlike.eu` to trusted hosts.
+I found `klist`/`kinit` and used those to create a ticket.
+They exist somewhere near JDKs actually.
+To create a ticked I had to copy `krb.conf` contents into `C:/Windows/krb5.ini`.
+Then a ticket cache was created in my user directory.
+It is not recognized by `klist` for some reason.
+All of this achieves nothing, of course.
+
+I try to use `Google Chrome` instead. I have to setup `Internet Options` first.
+I found those in `Control Panel -> Network and Internet`.
+The setup itself is described in [#spnego_open](#spnego_open).
+It's same as for `Internet Explorer`.
+
+The browser behaves exactly the same as `firefox` and produces same logs.
+The only difference is that it immediately crashes if I use a different user.
+
+Looking at `log.samba` back in the VM,
+I can see that logging in with `mumkashi` when running `firefox`
+produces a Kerberos ticket. Nothing else happens afterwards.
+
 ## Summary in summary
 
 These are links to summaries throughout the entire document, in order:
