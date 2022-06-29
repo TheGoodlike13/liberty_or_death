@@ -5955,6 +5955,36 @@ That's the power of will (and curse-words) for you!
 
 I make a quick cleanup of stuff (e.g. `localhost`, old id names, etc.)
 
+Let's add a finishing touch: filter authorization by group.
+
+While exploring Samba LDAP for purposes of setting it up,
+I actually created a custom group and added `mumkashi` to it:
+
+    sudo samba-tool group add SSOBoys
+    sudo samba-tool group addmembers SSOBoys --member-dn=CN=mumkashi,CN=Users,DC=goodlike,DC=eu
+    
+All I recall is that I had to use `--member-dn` and it was case sensitive.
+So, in other words, a bitch.
+
+So let's add a new role:
+
+    *in server.xml, inside application-bnd*
+    <security-role name="CoolGuysOnly">
+         <group name="SSOBoys"/>
+    </security-role>
+    
+    *in web.xml*
+    <security-role>
+        <role-name>CoolGuysOnly</role-name>
+    </security-role>
+
+    *in security-constraint for /test*
+    <auth-constraint>
+        <role-name>CoolGuysOnly</role-name>
+    </auth-constraint>
+
+And what do you know? It just works. Even the application has had enough :D
+
 ## Summary in summary
 
 These are links to summaries throughout the entire document, in order:

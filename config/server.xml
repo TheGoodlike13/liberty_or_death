@@ -29,6 +29,9 @@
             <security-role name="TheWorld">
                 <special-subject type="ALL_AUTHENTICATED_USERS"/>
             </security-role>
+            <security-role name="CoolGuysOnly">
+                <group name="SSOBoys"/>
+            </security-role>
         </application-bnd>
     </application>
 </server>

@@ -7,6 +7,10 @@
         <role-name>TheWorld</role-name>
     </security-role>
 
+    <security-role>
+        <role-name>CoolGuysOnly</role-name>
+    </security-role>
+
     <security-constraint>
         <web-resource-collection>
             <web-resource-name>WhoCares</web-resource-name>
@@ -14,7 +18,7 @@
             <http-method>GET</http-method>
         </web-resource-collection>
         <auth-constraint>
-            <role-name>TheWorld</role-name>
+            <role-name>CoolGuysOnly</role-name>
         </auth-constraint>
     </security-constraint>
 </web-app>
