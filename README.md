@@ -6168,7 +6168,7 @@ Fuck you, `VMWare`. You and your Windows 8 requirement.
 
 While we're at it, fuck you, `Windows 8`.
 
-Fuck you, `linux devs`. I've written enough `sudo` and `chown`
+Fuck you, `Linux devs`. I've written enough `sudo` and `chown`
 to never want to touch Linux ever again.
 
 Fuck you, `IBM`. Your guides suck. Even when it seems that they're helpful,
