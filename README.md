@@ -6176,7 +6176,7 @@ they're just misleading you into an even greater mess. You make Frieza proud.
 
 Fuck you, `university`. It's not because you didn't teach me this stuff.
 I probably would've never picked up this shit even if I had to, back then.
-No, it's just because you suck. Everything I learned, I learned from like 2 books.
+No, it's just because you suck. Everything I know, I learned from like 2 books.
 Neither of which was recommended by university. What a waste of time.
 
 Fuck you, `social media`. What a useless fucking distraction.
