@@ -6024,7 +6024,7 @@ Entirely. And it starts working. I double check it by cleaning up, etc.
 Ironic that the thing that made LDAP work previously was now breaking it...
 
 It's a bit awkward if you try to use multiple users still,
-as I'm not sure it switches between correctly, but hey.
+as I'm not sure it switches between them correctly, but hey.
 We fucking did it. WE FUCKING DID IT OMG SSO WORKS.
 I honestly lost hope at least a dozen times up to this point.
 That's the power of will (and curse-words) for you!
@@ -6062,7 +6062,7 @@ So let's add a new role:
 
 And what do you know? It just works. Even the application has had enough :D
 
-`mumkashi` logs in without problems, whereas `goodlikepc` get the error:
+`mumkashi` logs in without problems, whereas `goodlikepc` gets the error:
 
 > CWWKS9104A: Authorization failed for user goodlikepc
 > while invoking liberty_or_death on /test.
