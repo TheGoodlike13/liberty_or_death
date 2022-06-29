@@ -9,7 +9,7 @@
     <logging traceSpecification="com.ibm.ws.webcontainer.*=fine:com.ibm.ws.http.*=fine:com.ibm.ws.genericbnf.*=fine"/>
 
     <ldapRegistry id="MotherOfAllProblems" realm="GOODLIKE.EU"
-                  host="mumkashi.goodlike.eu" port="3268"
+                  host="mumkashi.goodlike.eu" port="389"
                   baseDN="DC=goodlike,DC=eu"
                   bindDN="CN=Administrator,CN=Users,DC=goodlike,DC=eu"
                   bindPassword="Passw0rd"
