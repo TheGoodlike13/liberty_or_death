@@ -5980,7 +5980,7 @@ When I run the application now, it figures out on its own to use `gpc.goodlike.e
 even in the logs printing the base link! How obnoxiously smart!
 If only this app would put that kind of effort into making sense...
 
-So does it work now, if I access `gpc.goolike.eu:9080/test`? Nope.
+So does it work now, if I access `gpc.goodlike.eu:9080/test`? Nope.
 
 > CWWKS4315E: Can not find a GSSCredential for the service principal name HTTP/GPC.goodlike.eu.
 
