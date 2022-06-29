@@ -27,7 +27,7 @@
     <spnego id="whocares"
             servicePrincipalNames="HTTP/gpc.goodlike.eu@GOODLIKE.EU"/>
 
-    <webAppSecurity ssoDomainNames="localhost"/>
+    <webAppSecurity ssoDomainNames="localhost,goodlike.eu"/>
 
     <application location="${whereMyWarAt}" context-root="/">
         <application-bnd>

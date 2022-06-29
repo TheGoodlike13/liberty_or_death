@@ -5780,7 +5780,7 @@ When I connect, the app correctly sends `HTTP 401` with a `Negotiate` instructio
 Then the browser automatically sends back an authorization token
 `Negotiate {insert base64 nonsense here}`.
 And it is really nonsense - even when decoded,
-the only part that is readable is `GPCGOODLIKE` at the end.
+the only part that is readable is `NTLMSSP` and `GPCGOODLIKE` at the end.
 It produces the above error.
 
 If I enter any username/password, the authorization header turns into
@@ -5795,6 +5795,18 @@ if SPNEGO fails. If only someone would bother to go into detail...
 With this in mind, I think we should only pursue the "automatic" login via SPNEGO.
 If we reach the point where we no longer get a login form because
 the initial SPNEGO token actually goes through, I'm calling it a day.
+
+I try running firefox as `Administrator` and `goodlikepc` to see the difference.
+But for some reason now it always runs the same browser as `mumkashi`???
+Yesterday it ran a completely separate configuration for every time?
+
+Turns out, I had one open in the background.
+As long as one is open, all of them will be the same. Blegh.
+
+Even so, in all cases the `Negotiate` token is exactly the same, which is odd.
+I was using different users after all...
+
+I add `goodlike.eu` to `ssoDomainNames` in `server.xml` just in case. No effect.
 
 ## Summary in summary
 
