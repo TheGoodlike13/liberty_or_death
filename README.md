@@ -5336,7 +5336,7 @@ I had to manually navigate to `/test`. And we get a new error:
 The last part is particularly pernicious,
 because it means I have to reset Liberty after every SPNEGO failure. Ugh.
 
-So the reason I was not redirected was a timeout. Not good.
+So there was a timeout. Not good.
 That explains why I wasn't redirected, I guess:
 the app was loading something in the background.
 
@@ -5495,7 +5495,8 @@ Only in the case of `gpc5.keytab`, we end up with the previous error:
 `Unable to obtain password from user`.
 
 I begin suspecting some issue with domain connectivity itself.
-The only thing I can think of is that *I* think that we're connected to the domain,
+The only thing I can think of is that
+**I** think that we're connected to the domain,
 but we're probably not *connected* for some definition of *connected*.
 This is an idea born from browsing the [#hideous_mess](#hideous_mess).
 
