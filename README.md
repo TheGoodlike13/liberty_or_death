@@ -1238,7 +1238,7 @@ and it just didn't tell me. Well, only one way to find out.
 
     sudo klist
 
-It actually lists my ticket, nice.I'll note that if you inspect the guide
+It actually lists my ticket, nice. I'll note that if you inspect the guide
 extremely carefully, there's blocks of text that actually technically tell you
 how to do everything in detail. And by detail I mean
 you can't tell that's what they do at a glance, which makes them pretty bad.
